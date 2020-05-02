@@ -11,7 +11,7 @@
   },
   "background": {
     "page": "src/background/background.html",
-    "persistent": false
+    "persistent": true
   },
   "browser_action": {
     "default_title": "Workspaces",

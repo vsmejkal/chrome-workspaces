@@ -1,92 +1,91 @@
-export default {
-  async create({ title, windowId = null }) {
+import { randomString, assert } from "./Utils.js"
+import WorkspaceList from "./WorkspaceList.js"
+import WorkspaceTab from "./WorkspaceTab.js"
+import OpenWorkspaces from "./OpenWorkspaces.js"
+import Storage from "./Storage.js"
+import OpenTabs from "./OpenTabs.js"
+
+const WORKSPACE_ID_PREFIX = "workspace_"
+
+const Workspace = {
+  async create({ title, tabs }) {
     const workspace = {
-      id: `workspace_${randomString(8)}`,
+      id: WORKSPACE_ID_PREFIX + randomString(8),
       title,
-      windowId,
-      index: 0,
-      tabs: [],
-    }
-    
-    const workspaces = await this.getAll()
-    if (workspaces.length > 0) {
-      workspace.index = Math.max(...workspaces.map(ws => ws.index)) + 1
-    }
-    if (windowId) {
-      workspace.tabs = await this._captureTabs(windowId)
+      tabs: tabs.map(tab => tab.id ?? tab)
     }
 
-    this.save(workspace)
+    await Workspace.save(workspace)
+    await WorkspaceList.add(workspace.id)
 
     return workspace
   },
 
-  async getAll() {
-    const data = await chrome.storage.local.get(null)
-    
-    return Object.keys(data)
-      .filter(key => key.startsWith("workspace_"))
-      .map(key => data[key])
-      .sort((ws1, ws2) => ws1.index - ws2.index)
-  },
-
-  async getByWindow(windowId) {
-    const workspaces = await this.getAll()
-
-    return workspaces.find(ws => ws.windowId === windowId)
-  },
-
-  async sync(windowId) {
-    const workspace = await this.getByWindow(windowId)
-    if (workspace) {
-      workspace.tabs = await this._captureTabs()
-      this.save(workspace)
-    }
+  async get(workspaceId) {
+    return await Storage.get(workspaceId)
   },
   
   async save(workspace) {
-    return await chrome.storage.local.set({[workspace.id]: workspace})
+    assert(Array.isArray(workspace.tabs))
+    assert(workspace.tabs.every(tab => typeof tab === "string"))
+
+    await Storage.set(workspace.id, workspace)
   },
 
-  async activate(workspace, windowId) {
-    const oldTabs = await chrome.tabs.query({ windowId })
-    const oldWorkspace = await this.getByWindow(windowId)
+  async open(workspaceId) {
+    if (await OpenWorkspaces.contains(workspaceId)) {
+      await Workspace.focus(workspaceId)
+      return
+    }
+
+    const workspaceTabs = await Workspace.getTabs(workspaceId)
+    if (workspaceTabs.length === 0) {
+      return
+    }
     
-    if (oldWorkspace) {
-      oldWorkspace.tabs = this._captureTabs(windowId)
-      oldWorkspace.windowId = null
-      this.save(oldWorkspace)
-    }
+    const { id: oldWindowId, left, top, width, height } = await chrome.windows.getLastFocused()
 
-    const newTabs = workspace.tabs
-    if (newTabs.length === 0) {
-      newTabs.push({ url: "chrome://newtab/" })
-    }
-  
-    debugger
-    for (const tab of newTabs) {
-      chrome.tabs.create(tab)
-    }
-  
-    for (const tab of oldTabs) {
-      chrome.tabs.remove(tab.id)
-    }
-  
-    workspace.windowId = windowId
-    this.save(workspace)
+    const newWindow = await chrome.windows.create({
+      url: workspaceTabs.map(tab => tab.url),
+      focused: true,
+      left, top, width, height
+    })
+
+    await OpenWorkspaces.add(newWindow.id, workspaceId)
+    await OpenWorkspaces.remove({ windowId: oldWindowId })
+    await chrome.windows.remove(oldWindowId)
   },
 
-  async _captureTabs(windowId) {
-    const windowTabs = await chrome.tabs.query({ windowId })
-  
-    return windowTabs.map(tab => {
-      const { url, pinned = false, active = false } = tab
+  async getTabs(workspaceId) {
+    const workspace = await Workspace.get(workspaceId)
+    const tabs = await Storage.getAll(workspace.tabs)
 
-      return { url, pinned, active }
-    })
-  }
+    return tabs.filter(Boolean)
+  },
+
+  async addTab(workspaceId, workspaceTabId, position) {
+    const workspace = await Workspace.get(workspaceId)
+
+    workspace.tabs.splice(position, 0, workspaceTabId)
+
+    await Workspace.save(workspace)
+  },
+
+  async removeTab(workspaceId, workspaceTabId) {
+    const workspace = await Workspace.get(workspaceId)
+
+    workspace.tabs = workspace.tabs.filter(tabId => tabId !== workspaceTabId)
+
+    await Workspace.save(workspace)
+  },
+
+  async focus(workspaceId) {
+    const { windowId } = await OpenWorkspaces.find({ workspaceId })
+
+    if (windowId) {
+      await chrome.windows.update(parseInt(windowId), { focused: true })
+    }
+  },
 }
 
-function randomString(length) {
-  return Math.round((Math.pow(36, length + 1) - Math.random() * Math.pow(36, length))).toString(36).slice(1);
-}
+export default Workspace
