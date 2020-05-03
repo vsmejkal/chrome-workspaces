@@ -4,35 +4,37 @@ import OpenTabs from "../OpenTabs.js"
 import OpenWorkspaces from "../OpenWorkspaces.js"
 
 chrome.runtime.onMessage.addListener(handleMessage)
-// chrome.tabs.onUpdated.addListener(handleTabUpdate)
-// chrome.tabs.onRemoved.addListener(handleTabRemove)
+// chrome.runtime.onInstalled.addListener(handleInstall)
+chrome.tabs.onUpdated.addListener(handleTabUpdate)
+chrome.tabs.onRemoved.addListener(handleTabRemove)
 // chrome.tabs.onAttached.addListener(handleTabAttach)
 // chrome.tabs.onDetached.addListener(handleTabDetach)
-// chrome.windows.onCreated.addListener(handleWindowOpen)
-// chrome.windows.onRemoved.addListener(handleWindowClose)
-// chrome.runtime.onInstalled.addListener(handleInstall)
+chrome.windows.onCreated.addListener(handleWindowOpen)
+chrome.windows.onRemoved.addListener(handleWindowClose)
 
 async function handleMessage(request, sender, sendResponse) {
   if (request.type === "OPEN_WORKSPACE") {
     Workspace.open(request.workspaceId)
   }
 
+  // Always send response
   sendResponse({ status: "ok"})
 }
 
 async function handleTabUpdate(tabId, changeInfo, tab) {
-  console.log("TAB UPDATE", changeInfo)
-
   const workspaceTabId = await OpenTabs.find(tabId)
   
   if (workspaceTabId) {
+    console.log("TAB UPDATE", changeInfo)
     await WorkspaceTab.update(workspaceTabId, changeInfo)
     return
   }
 
   const { workspaceId } = await OpenWorkspaces.find({ windowId: tab.windowId })
 
-  if (workspaceId) {
+  if (workspaceId && changeInfo.status === "complete") {
+    console.log("TAB CREATE", changeInfo)
+
     const workspaceTab = await WorkspaceTab.create(tab)
     await Workspace.addTab(workspaceId, workspaceTab.id, tab.index)
     await OpenTabs.add(tabId, workspaceTab.id)
@@ -77,7 +79,14 @@ async function handleWindowOpen(window) {
 }
 
 async function handleWindowClose(windowId) {
+  const { workspaceId } = await OpenWorkspaces.find({ windowId })
 
+  if (workspaceId) {
+    const workspace = await Workspace.get(workspaceId)
+    workspace?.tabs?.forEach(workspaceTabId => OpenTabs.remove({ workspaceTabId }))
+  }
+
+  await OpenWorkspaces.remove({ windowId })
 }
 
 async function handleInstall() {

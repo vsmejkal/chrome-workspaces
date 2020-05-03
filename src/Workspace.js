@@ -40,9 +40,9 @@ const Workspace = {
 
     const workspaceTabs = await Workspace.getTabs(workspaceId)
     if (workspaceTabs.length === 0) {
-      return
+      workspaceTabs.push(await WorkspaceTab.createEmpty())
     }
-    
+
     const { id: oldWindowId, left, top, width, height } = await chrome.windows.getLastFocused()
 
     const newWindow = await chrome.windows.create({
@@ -51,9 +51,15 @@ const Workspace = {
       left, top, width, height
     })
 
+    const newTabs = await chrome.tabs.query({ windowId: newWindow.id })
+
+    await OpenTabs.addAll(newTabs.map(tab => tab.id), workspaceTabs.map(tab => tab.id))
     await OpenWorkspaces.add(newWindow.id, workspaceId)
-    await OpenWorkspaces.remove({ windowId: oldWindowId })
     await chrome.windows.remove(oldWindowId)
+  },
+
+  async close(workspaceId) {
+
   },
 
   async getTabs(workspaceId) {

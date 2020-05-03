@@ -19,7 +19,7 @@ const OpenTabs = {
 
     for (let browserTabId of Object.keys(openTabs)) {
       if (openTabs[browserTabId] === workspaceTabId) {
-        return browserTabId
+        return parseInt(browserTabId)
       }
     }
   },

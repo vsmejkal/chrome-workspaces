@@ -9,10 +9,12 @@ const WorkspaceTab = {
     const workspaceTab = {
       id: TAB_ID_PREFIX + randomString(10),
       title: tabInfo.title?.slice(0, 40),
-      url: tabInfo.url || tabInfo.pendingUrl,
-      favicon: tabInfo.favIconUrl
+      url: tabInfo.url || tabInfo.pendingUrl
     }
 
+    if (tabInfo.favIconUrl) {
+      workspaceTab.favIconUrl = tabInfo.favIconUrl
+    }
     if (tabInfo.pinned) {
       workspaceTab.pinned = true
     }
