@@ -15,12 +15,12 @@ chrome.windows.onRemoved.addListener(handleWindowClose)
 
 async function handleMessage(request, sender, sendResponse) {
   if (request.type === "OPEN_WORKSPACE") {
-    await Workspace.open(request.workspaceId)
+    Workspace.open(request.workspaceId, request.closeCurrent).then()
   }
 
   // Always send response
   sendResponse({ status: "ok" })
-  
+
   return true
 }
 

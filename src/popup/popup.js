@@ -34,7 +34,7 @@ async function renderItems(workspaces) {
 		const element = createElement(templateItem, {title: workspace.title})
 		element.classList.toggle("item-selected", workspace.id === currentWorkspaceId)
 		element.onclick = () => openWorkspace(workspace.id)
-		
+		element.onauxclick = (e) => openWorkspace(workspace.id, e.button !== 1)
 		container.appendChild(element)
 	}
 }
@@ -75,9 +75,9 @@ async function setupWorkspaces() {
 	return [workspace1, workspace2]
 }
 
-async function openWorkspace(workspaceId) {
+async function openWorkspace(workspaceId, closeCurrent = true) {
 	await chrome.runtime.sendMessage({
 		type: "OPEN_WORKSPACE",
-		workspaceId
+		workspaceId, closeCurrent
 	});
 }
