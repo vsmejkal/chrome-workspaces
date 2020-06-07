@@ -7,12 +7,9 @@ const WorkspaceTab = {
     const workspaceTab = {
       id: `${Storage.TAB_PREFIX}_${randomString(10)}`,
       title: tabInfo.title?.slice(0, 40),
-      url: tabInfo.url || tabInfo.pendingUrl
+      url: tabInfo.url ?? tabInfo.pendingUrl
     }
 
-    if (tabInfo.favIconUrl) {
-      workspaceTab.favIconUrl = tabInfo.favIconUrl
-    }
     if (tabInfo.pinned) {
       workspaceTab.pinned = true
     }
@@ -51,7 +48,7 @@ const WorkspaceTab = {
 
   async update(workspaceTabId, data) {
     const workspaceTab = await WorkspaceTab.get(workspaceTabId)
-    const properties = ["title", "url", "favIconUrl", "pinned"]
+    const properties = ["title", "url", "pinned"]
     let changed = false
 
     for (const property of properties) {
