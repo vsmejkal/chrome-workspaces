@@ -1,10 +1,8 @@
 import Storage from "./Storage.js"
 
-const WORKSPACES_KEY = "workspaces"
-
 const WorkspaceList = {
   async getIds() {
-    return await Storage.get(WORKSPACES_KEY) ?? []
+    return await Storage.get(Storage.WORKSPACES) ?? []
   },
 
   async getWorkspaces() {
@@ -16,7 +14,7 @@ const WorkspaceList = {
   async add(workspaceId) {
     const ids = await WorkspaceList.getIds()
 
-    await Storage.set(WORKSPACES_KEY, [...ids, workspaceId])
+    await Storage.set(Storage.WORKSPACES, [...ids, workspaceId])
   }
 }
 

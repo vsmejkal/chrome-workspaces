@@ -16,7 +16,7 @@ async function main() {
 		workspaces = await setupWorkspaces();
 	}
 
-	renderItems(workspaces)
+	await renderItems(workspaces)
 
 	document.querySelector("#reload").onclick = () => {
 		chrome.storage.local.clear()
@@ -53,8 +53,8 @@ function createElement(template, props) {
 
 async function setupWorkspaces() {
 	const windowId = (await chrome.windows.getLastFocused()).id
-	const browserTabs = await chrome.tabs.query({ windowId })
-	const workspaceTabs = await Promise.all(browserTabs.map(WorkspaceTab.create))
+	const windowTabs = await chrome.tabs.query({ windowId })
+	const workspaceTabs = await Promise.all(windowTabs.map(WorkspaceTab.create))
 
 	const workspace1 = await Workspace.create({
 		title: "Workspace 1",
@@ -65,18 +65,18 @@ async function setupWorkspaces() {
 		title: "Workspace 2",
 		tabs: [await WorkspaceTab.createEmpty()]
 	})
+
+	const windowTabIds = windowTabs.map(tab => tab.id)
+	const workspaceTabIds = workspaceTabs.map(tab => tab.id)
 	
 	await OpenWorkspaces.add(windowId, workspace1.id)
-	await OpenTabs.addAll(
-		browserTabs.map(tab => tab.id),
-		workspaceTabs.map(tab => tab.id)
-	)
+	await OpenTabs.addAll(windowTabIds, workspaceTabIds)
 
 	return [workspace1, workspace2]
 }
 
-function openWorkspace(workspaceId) {
-	chrome.runtime.sendMessage({
+async function openWorkspace(workspaceId) {
+	await chrome.runtime.sendMessage({
 		type: "OPEN_WORKSPACE",
 		workspaceId
 	});

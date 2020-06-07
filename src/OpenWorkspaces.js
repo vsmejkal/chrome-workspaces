@@ -1,11 +1,9 @@
 import Storage from "./Storage.js"
 import { assert } from "./Utils.js"
 
-const OPEN_WORKSPACES_KEY = "openWorkspaces"
-
 const OpenWorkspaces = {
   async getAll() {
-    return await Storage.get(OPEN_WORKSPACES_KEY) ?? {}
+    return await Storage.get(Storage.OPEN_WORKSPACES) ?? {}
   },
 
   async save(openWorkspaces) {
@@ -14,7 +12,7 @@ const OpenWorkspaces = {
       assert(workspaceId)
     })
 
-    await Storage.set(OPEN_WORKSPACES_KEY, openWorkspaces)
+    await Storage.set(Storage.OPEN_WORKSPACES, openWorkspaces)
   },
 
   async contains(workspaceId) {
@@ -44,13 +42,15 @@ const OpenWorkspaces = {
   },
 
   async remove({ windowId, workspaceId }) {
+    assert(windowId ?? workspaceId)
+
     const openWorkspaces = await OpenWorkspaces.getAll()
 
     if (!windowId) {
       windowId = (await OpenWorkspaces.find({ workspaceId }))?.windowId
     }
 
-    if (windowId) {
+    if (windowId in openWorkspaces) {
       delete openWorkspaces[windowId]
       await OpenWorkspaces.save(openWorkspaces)
     }

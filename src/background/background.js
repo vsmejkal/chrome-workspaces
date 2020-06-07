@@ -2,6 +2,7 @@ import Workspace from "../Workspace.js"
 import WorkspaceTab from "../WorkspaceTab.js"
 import OpenTabs from "../OpenTabs.js"
 import OpenWorkspaces from "../OpenWorkspaces.js"
+import Options from "../Options.js"
 
 chrome.runtime.onMessage.addListener(handleMessage)
 // chrome.runtime.onInstalled.addListener(handleInstall)
@@ -14,27 +15,28 @@ chrome.windows.onRemoved.addListener(handleWindowClose)
 
 async function handleMessage(request, sender, sendResponse) {
   if (request.type === "OPEN_WORKSPACE") {
-    Workspace.open(request.workspaceId)
+    await Workspace.open(request.workspaceId)
   }
 
   // Always send response
-  sendResponse({ status: "ok"})
+  sendResponse({ status: "ok" })
+  
+  return true
 }
 
 async function handleTabUpdate(tabId, changeInfo, tab) {
-  const workspaceTabId = await OpenTabs.find(tabId)
-  
+  console.log("TAB UPDATE", changeInfo)
+
+  const { workspaceTabId } = await OpenTabs.find({ windowTabId: tabId })
+
   if (workspaceTabId) {
-    console.log("TAB UPDATE", changeInfo)
     await WorkspaceTab.update(workspaceTabId, changeInfo)
     return
   }
 
   const { workspaceId } = await OpenWorkspaces.find({ windowId: tab.windowId })
 
-  if (workspaceId && changeInfo.status === "complete") {
-    console.log("TAB CREATE", changeInfo)
-
+  if (workspaceId && changeInfo.status === "loading") {
     const workspaceTab = await WorkspaceTab.create(tab)
     await Workspace.addTab(workspaceId, workspaceTab.id, tab.index)
     await OpenTabs.add(tabId, workspaceTab.id)
@@ -45,19 +47,19 @@ async function handleTabRemove(tabId, removeInfo) {
   console.log("TAB REMOVE", removeInfo)
 
   const { workspaceId } = await OpenWorkspaces.find({ windowId: removeInfo.windowId })
-  const workspaceTabId = await OpenTabs.find(tabId)
+  const { workspaceTabId } = await OpenTabs.find({ windowTabId: tabId })
 
   if (workspaceId && workspaceTabId && !removeInfo.isWindowClosing) {
     await Workspace.removeTab(workspaceId, workspaceTabId)
     await WorkspaceTab.remove(workspaceTabId)
   }
 
-  await OpenTabs.remove({ browserTabId: tabId })
+  await OpenTabs.remove({ windowTabId: tabId })
 }
 
 async function handleTabAttach(tabId, attachInfo) {
   const { workspaceId } = await OpenWorkspaces.find({ windowId: attachInfo.newWindowId })
-  const workspaceTabId = await OpenTabs.find(tabId)
+  const { workspaceTabId } = await OpenTabs.find({ windowTabId: tabId })
   const position = attachInfo.newPosition
 
   if (workspaceId && workspaceTabId) {
@@ -67,26 +69,71 @@ async function handleTabAttach(tabId, attachInfo) {
 
 async function handleTabDetach(tabId, detachInfo) {
   const { workspaceId } = await OpenWorkspaces.find({ windowId: detachInfo.oldWindowId })
-  const workspaceTabId = await OpenTabs.find(tabId)
+  const { workspaceTabId } = await OpenTabs.find({ windowTabId: tabId })
 
   if (workspaceId && workspaceTabId) {
     await Workspace.removeTab(workspaceId, workspaceTabId)
   }
 }
 
-async function handleWindowOpen(window) {
+async function matchWindowToWorkspace(windowId, workspaceId) {
+  const windowTabs = await chrome.tabs.query({ windowId })
+  const workspaceTabs = await Workspace.getTabs(workspaceId)
 
+  if (windowTabs.length !== workspaceTabs.length) {
+    console.log('NOT MATCHED (length)')
+    return false
+  }
+
+  let matched = true
+
+  for (let i = 0; i < windowTabs.length; i++) {
+    if (windowTabs[i].url !== workspaceTabs[i].url) {
+      console.log('NOT MATCHED (urls)', windowTabs[i].url, workspaceTabs[i].url)
+    }
+  }
+
+  if (!matched) {
+    return false
+  }
+
+  const windowTabIds = windowTabs.map(tab => tab.id)
+  const workspaceTabIds = workspaceTabs.map(tab => tab.id)
+
+  await OpenTabs.addAll(windowTabIds, workspaceTabIds)
+  await OpenWorkspaces.add(windowId, workspaceId)
+
+  console.log('MATCHED :)')
+
+  return true
+}
+
+async function handleWindowOpen(window) {
+  const lastWorkspaceId = await Options.get(Options.LAST_WORKSPACE_ID)
+  const windows = await chrome.windows.getAll({
+    windowTypes: ["normal"]
+  })
+
+  // Opening first window
+  if (windows.length === 1 && lastWorkspaceId) {
+    await matchWindowToWorkspace(window.id, lastWorkspaceId)
+  }
 }
 
 async function handleWindowClose(windowId) {
   const { workspaceId } = await OpenWorkspaces.find({ windowId })
+  const windows = await chrome.windows.getAll({
+    windowTypes: ["normal"]
+  })
 
   if (workspaceId) {
-    const workspace = await Workspace.get(workspaceId)
-    workspace?.tabs?.forEach(workspaceTabId => OpenTabs.remove({ workspaceTabId }))
+    await Workspace.dispose(workspaceId)
   }
 
-  await OpenWorkspaces.remove({ windowId })
+  // Closing last window
+  if (windows.length === 0) {
+    await Options.set(Options.LAST_WORKSPACE_ID, workspaceId)
+  }
 }
 
 async function handleInstall() {

@@ -1,4 +1,11 @@
 const Storage = {
+  OPEN_TABS: "openTabs",
+  OPEN_WORKSPACES: "openWorkspaces",
+  OPTIONS: "options",
+  WORKSPACES: "workspaces",
+  WORKSPACE_PREFIX: "workspace",
+  TAB_PREFIX: "tab",
+
   async get(key) {
     const data = await chrome.storage.local.get(key)
 

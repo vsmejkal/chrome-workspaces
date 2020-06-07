@@ -5,12 +5,10 @@ import OpenWorkspaces from "./OpenWorkspaces.js"
 import Storage from "./Storage.js"
 import OpenTabs from "./OpenTabs.js"
 
-const WORKSPACE_ID_PREFIX = "workspace_"
-
 const Workspace = {
   async create({ title, tabs }) {
     const workspace = {
-      id: WORKSPACE_ID_PREFIX + randomString(8),
+      id: `${Storage.WORKSPACE_PREFIX}_${randomString(8)}`,
       title,
       tabs: tabs.map(tab => tab.id ?? tab)
     }
@@ -58,12 +56,21 @@ const Workspace = {
     await chrome.windows.remove(oldWindowId)
   },
 
-  async close(workspaceId) {
+  async dispose(workspaceId) {
+    const workspace = await Workspace.get(workspaceId)
+    workspace?.tabs?.forEach(workspaceTabId =>
+        OpenTabs.remove({ workspaceTabId })
+    )
 
+    await OpenWorkspaces.remove({ workspaceId })
   },
 
   async getTabs(workspaceId) {
     const workspace = await Workspace.get(workspaceId)
+    if (!workspace) {
+      return []
+    }
+
     const tabs = await Storage.getAll(workspace.tabs)
 
     return tabs.filter(Boolean)

@@ -1,69 +1,62 @@
 import Storage from "./Storage.js"
 import { assert } from "./Utils.js"
 
-const OPEN_TABS_KEY = "openTabs"
-
 const OpenTabs = {
   async _getAll() {
-    return await Storage.get(OPEN_TABS_KEY) ?? {}
+    return await Storage.get(Storage.OPEN_TABS) ?? {}
   },
 
-  async find(browserTabId) {
+  async find({ windowTabId, workspaceTabId }) {
+    assert(windowTabId ?? workspaceTabId)
+
     const openTabs = await OpenTabs._getAll()
 
-    return openTabs[browserTabId]
-  },
-
-  async findBrowserTabId(workspaceTabId) {
-    const openTabs = await OpenTabs._getAll()
-
-    for (let browserTabId of Object.keys(openTabs)) {
-      if (openTabs[browserTabId] === workspaceTabId) {
-        return parseInt(browserTabId)
-      }
+    if (!windowTabId) {
+      windowTabId = Object.keys(openTabs).find(windowTabId => openTabs[windowTabId] === workspaceTabId)
     }
+
+    return { windowTabId: parseInt(windowTabId), workspaceTabId: openTabs[windowTabId] }
   },
 
   async save(openTabs) {
-    Object.entries(openTabs).forEach(([browserTabId, workspaceTabId]) => {
-      assert(browserTabId)
-      assert(workspaceTabId)
+    Object.keys(openTabs).forEach(windowTabId => {
+      assert(windowTabId)
+      assert(openTabs[windowTabId])
     })
 
-    await Storage.set(OPEN_TABS_KEY, openTabs)
+    await Storage.set(Storage.OPEN_TABS, openTabs)
   },
 
-  async add(browserTabId, workspaceTabId) {
+  async add(windowTabId, workspaceTabId) {
     const openTabs = await OpenTabs._getAll()
     
-    openTabs[browserTabId] = workspaceTabId
+    openTabs[windowTabId] = workspaceTabId
 
     await OpenTabs.save(openTabs)
   },
 
-  async addAll(browserTabIds, workspaceTabIds) {
-    assert(browserTabIds.length === workspaceTabIds.length)
+  async addAll(windowTabIds, workspaceTabIds) {
+    assert(windowTabIds.length === workspaceTabIds.length)
 
     let openTabs = await OpenTabs._getAll()
     
-    browserTabIds.forEach((browserTabId, i) =>
-      openTabs[browserTabId] = workspaceTabIds[i]
+    windowTabIds.forEach((windowTabId, i) =>
+      openTabs[windowTabId] = workspaceTabIds[i]
     )
     
     await OpenTabs.save(openTabs)
   },
 
-  async remove({ workspaceTabId, browserTabId }) {
+  async remove({ workspaceTabId, windowTabId }) {
+    assert(windowTabId ?? workspaceTabId)
+
+    if (!windowTabId) {
+      windowTabId = (await OpenTabs.find({ workspaceTabId }))?.windowTabId
+    }
+
     const openTabs = await OpenTabs._getAll()
-
-    if (!browserTabId) {
-      browserTabId = await OpenTabs.findBrowserTabId(workspaceTabId)
-    }
-
-    if (browserTabId) {
-      delete openTabs[browserTabId]
-      await OpenTabs.save(openTabs)
-    }
+    delete openTabs[windowTabId]
+    await OpenTabs.save(openTabs)
   },
 }
 

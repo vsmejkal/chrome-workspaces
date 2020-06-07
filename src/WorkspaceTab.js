@@ -2,12 +2,10 @@ import { randomString } from "./Utils.js"
 import OpenTabs from "./OpenTabs.js"
 import Storage from "./Storage.js"
 
-const TAB_ID_PREFIX = "tab_"
-
 const WorkspaceTab = {
   async create(tabInfo) {
     const workspaceTab = {
-      id: TAB_ID_PREFIX + randomString(10),
+      id: `${Storage.TAB_PREFIX}_${randomString(10)}`,
       title: tabInfo.title?.slice(0, 40),
       url: tabInfo.url || tabInfo.pendingUrl
     }
@@ -42,13 +40,13 @@ const WorkspaceTab = {
   },
 
   async open(workspaceTab) {
-    const browserTab = await chrome.tabs.create({
+    const windowTab = await chrome.tabs.create({
       url: workspaceTab.url,
       pinned: workspaceTab.pinned ?? false,
       active: workspaceTab.active ?? false,
     })
 
-    await OpenTabs.add(browserTab.id, workspaceTab.id)
+    await OpenTabs.add(windowTab.id, workspaceTab.id)
   },
 
   async update(workspaceTabId, data) {
