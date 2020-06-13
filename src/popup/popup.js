@@ -5,7 +5,7 @@ import WorkspaceTab from "../WorkspaceTab.js"
 import OpenTabs from "../OpenTabs.js"
 
 const container = document.querySelector("#container")
-const templateItem = document.querySelector("#template-item")
+const templateItem = document.querySelector("#tmpl-item")
 
 main()
 
@@ -18,10 +18,13 @@ async function main() {
 
 	await renderItems(workspaces)
 
-	document.querySelector("#reload").onclick = () => {
-		chrome.storage.local.clear()
-		chrome.storage.sync.clear()
-		chrome.runtime.reload()
+	// Debug
+	document.onkeypress = (e) => {
+		if (e.key === "R") {
+			chrome.storage.local.clear()
+			chrome.storage.sync.clear()
+			chrome.runtime.reload()
+		}
 	}
 }
 

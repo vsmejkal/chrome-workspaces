@@ -5,13 +5,23 @@
 		<link rel="stylesheet" href="popup.css">
 		<script defer src="../lib/chrome-extension-async.js"></script>
 		<script defer type="module" src="popup.js"></script>
-	</head>
-	<body>
-		<div id="container">loading...</div>
-		<button id="reload">reload</button>
 
-		<template id="template-item">
+		<template id="tmpl-item">
 			<div class="item">{title}</div>
 		</template>
+
+		<template id="tmpl-create-item">
+			<div class="item item-new">Add new</div>
+		</template>
+
+		<template id="tmpl-new-item-dialog">
+			<input type="text" id="tmpl-new-item-dialog-title" />
+			<div class="item"></div>
+		</template>
+	</head>
+	<body>
+		<h1>Workspaces</h1>
+
+		<div id="container">loading...</div>
 	</body>
 </html>

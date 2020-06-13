@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "manifest_version": 2,
   "description": "Organize your tabs into workspaces",
-  "homepage_url": "",
+  "homepage_url": "https://github.com/vsmejkal/chrome-workspaces",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
