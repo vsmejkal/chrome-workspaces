@@ -23,10 +23,16 @@ h1 {
   cursor: pointer;
   border-radius: 5px;
 }
+.item:hover {
+  background: #eeeeee;
+}
 
 .item-selected {
-  background: #1e90ff;
+  background: #2979ff;
   color: #ffffff;
   box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, .06);
   text-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+}
+.item-selected:hover {
+  background: #2979ff;
 }
