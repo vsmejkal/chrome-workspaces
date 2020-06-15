@@ -3,6 +3,7 @@ body {
   margin: 0;
   padding: 0;
   color: #1A202C;
+  font-size: 14px;
 }
 
 h1 {
@@ -15,9 +16,11 @@ h1 {
 }
 
 .item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin: 4px 0;
-  padding: 10px 15px;
-  font-size: 14px;
+  padding: 5px 10px;
   font-weight: 500;
   font-family: "Open Sans", Arial, "Lucida Grande", sans-serif;
   cursor: pointer;
@@ -35,4 +38,22 @@ h1 {
 }
 .item-selected:hover {
   background: #2979ff;
+}
+
+.item-more-button {
+  width: 24px;
+  height: 24px;
+  background: url("../../icons/more_horiz-black-18dp.svg") center center no-repeat;
+  background-size: contain;
+  opacity: 0;
+  visibility: hidden;
+}
+.item:hover .item-more-button {
+  visibility: visible;
+  opacity: 0.5;
+  transition: visibility 0s 0.5s, opacity 0.25s 0.5s;
+}
+
+.item-selected .item-more-button {
+  filter: invert(1);
 }

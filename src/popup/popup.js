@@ -38,6 +38,10 @@ async function renderItems(workspaces) {
 		element.classList.toggle("item-selected", workspace.id === currentWorkspaceId)
 		element.onclick = () => openWorkspace(workspace.id)
 		element.onauxclick = (e) => openWorkspace(workspace.id, e.button !== 1)
+
+		const moreButton = element.querySelector(".item-more-button")
+		moreButton.onclick = () => {}
+
 		container.appendChild(element)
 	}
 }

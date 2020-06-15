@@ -7,7 +7,10 @@
 		<script defer type="module" src="popup.js"></script>
 
 		<template id="tmpl-item">
-			<div class="item">{title}</div>
+			<div class="item">
+				<div class="item-title">{title}</div>
+				<img src="../../icons/more_horiz-black-18dp.svg" class="item-more-button" alt="Actions"/>
+			</div>
 		</template>
 
 		<template id="tmpl-create-item">
@@ -15,13 +18,15 @@
 		</template>
 
 		<template id="tmpl-new-item-dialog">
-			<input type="text" id="tmpl-new-item-dialog-title" />
-			<div class="item"></div>
+			<div class="new-item-dialog">
+				<label for="new-item-dialog-title">Name</label>
+				<input type="text" id="new-item-dialog-title" />
+			</div>
 		</template>
 	</head>
+
 	<body>
 		<h1>Workspaces</h1>
-
 		<div id="container">loading...</div>
 	</body>
 </html>
