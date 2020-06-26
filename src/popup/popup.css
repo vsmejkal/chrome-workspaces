@@ -11,11 +11,29 @@ h1 {
   margin: 20px 15px;
 }
 
-#container {
+.view {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  opacity: 1;
+  transition: transform 250ms, opacity 250ms;
+}
+.view-hidden {
+  transform: translateX(200px);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.item-list {
   margin: 10px;
 }
 
-.item {
+/* Workspace list */
+.item, #new-workspace-button {
+  min-height: 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -29,6 +47,9 @@ h1 {
 .item:hover {
   background: #eeeeee;
 }
+.item:active {
+  background: #e0e0e0;
+}
 
 .item-selected {
   background: #2979ff;
@@ -39,6 +60,9 @@ h1 {
 .item-selected:hover {
   background: #2979ff;
 }
+.item-selected:active {
+  background: #2962ff;
+}
 
 .item-more-button {
   width: 24px;
@@ -47,7 +71,15 @@ h1 {
   background-size: contain;
   opacity: 0;
   visibility: hidden;
+  border-radius: 5px;
 }
+.item-more-button:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.item-more-button:active {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
 .item:hover .item-more-button {
   visibility: visible;
   opacity: 0.5;
@@ -56,4 +88,8 @@ h1 {
 
 .item-selected .item-more-button {
   filter: invert(1);
+}
+
+#new-workspace-button {
+  color: #888;
 }

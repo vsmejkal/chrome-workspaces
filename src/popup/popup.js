@@ -3,9 +3,11 @@ import WorkspaceList from "../WorkspaceList.js"
 import OpenWorkspaces from "../OpenWorkspaces.js"
 import WorkspaceTab from "../WorkspaceTab.js"
 import OpenTabs from "../OpenTabs.js"
+import { assert } from "../Utils.js";
 
-const container = document.querySelector("#container")
-const templateItem = document.querySelector("#tmpl-item")
+const list = document.querySelector(".item-list")
+const templateItem = document.querySelector("#template-item")
+const newWorkspaceButton = document.querySelector("#new-workspace-button")
 
 main()
 
@@ -17,6 +19,7 @@ async function main() {
 	}
 
 	await renderItems(workspaces)
+	setupNewWorkspaceButton()
 
 	// Debug
 	document.onkeypress = (e) => {
@@ -31,19 +34,27 @@ async function main() {
 async function renderItems(workspaces) {
 	const currentWindowId = (await chrome.windows.getLastFocused()).id
 	const currentWorkspaceId = (await OpenWorkspaces.find({ windowId: currentWindowId }))?.workspaceId
-	container.innerHTML = ""
 
 	for (const workspace of workspaces) {
 		const element = createElement(templateItem, {title: workspace.title})
 		element.classList.toggle("item-selected", workspace.id === currentWorkspaceId)
-		element.onclick = () => openWorkspace(workspace.id)
-		element.onauxclick = (e) => openWorkspace(workspace.id, e.button !== 1)
+		element.onclick = () => console.log("click")//openWorkspace(workspace.id)
+		element.onauxclick = (e) => console.log("auxclick")//openWorkspace(workspace.id, e.button !== 1)
 
 		const moreButton = element.querySelector(".item-more-button")
-		moreButton.onclick = () => {}
+		moreButton.onclick = (e) => {
+			e.stopPropagation();
+			alert("EDIT");
+		}
 
-		container.appendChild(element)
+		list.insertBefore(element, newWorkspaceButton)
 	}
+}
+
+function setupNewWorkspaceButton() {
+    newWorkspaceButton.onclick = () => {
+		openView("new")
+    }
 }
 
 function createElement(template, props) {
@@ -87,4 +98,18 @@ async function openWorkspace(workspaceId, closeCurrent = true) {
 		type: "OPEN_WORKSPACE",
 		workspaceId, closeCurrent
 	});
+}
+
+function getView(viewName) {
+	const view = document.querySelector(`#view-${viewName}`)
+	assert(view, `Could not find view '${viewName}'`)
+	return view
+}
+
+function openView(viewName) {
+	getView(viewName).classList.remove("view-hidden")
+}
+
+function closeView(viewName) {
+	getView(viewName).classList.add("view-hidden")
 }

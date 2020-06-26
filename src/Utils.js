@@ -1,6 +1,6 @@
-export function assert(condition) {
+export function assert(condition, message) {
   if (!condition) {
-    throw "AssertError: actual value is " + condition
+    throw message ?? ("AssertError: actual value is " + condition)
   }
 }
 

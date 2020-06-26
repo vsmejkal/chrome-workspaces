@@ -5,28 +5,30 @@
 		<link rel="stylesheet" href="popup.css">
 		<script defer src="../lib/chrome-extension-async.js"></script>
 		<script defer type="module" src="popup.js"></script>
-
-		<template id="tmpl-item">
-			<div class="item">
-				<div class="item-title">{title}</div>
-				<img src="../../icons/more_horiz-black-18dp.svg" class="item-more-button" alt="Actions"/>
-			</div>
-		</template>
-
-		<template id="tmpl-create-item">
-			<div class="item item-new">Add new</div>
-		</template>
-
-		<template id="tmpl-new-item-dialog">
-			<div class="new-item-dialog">
-				<label for="new-item-dialog-title">Name</label>
-				<input type="text" id="new-item-dialog-title" />
-			</div>
-		</template>
 	</head>
 
 	<body>
-		<h1>Workspaces</h1>
-		<div id="container">loading...</div>
+		<div>
+			<h1>Workspaces</h1>
+			<div class="item-list">
+				<div id="new-workspace-button">Add new</div>
+			</div>
+
+			<template id="template-item">
+				<div class="item">
+					<div class="item-title">{title}</div>
+					<img src="../../icons/more_horiz-black-18dp.svg" class="item-more-button" alt="Actions"/>
+				</div>
+			</template>
+		</div>
+
+		<div id="view-new" class="view view-hidden">
+			<h1>New Workspace</h1>
+
+			<label for="new-workspace-title">Name</label>
+			<input type="text" id="new-workspace-title" />
+
+			<button id="new-workspace-save">Save</button>
+		</div>
 	</body>
 </html>
