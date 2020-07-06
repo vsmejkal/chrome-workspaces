@@ -1,4 +1,4 @@
-import { randomString } from "./Utils.js"
+import { randomString } from "../Utils.js"
 import OpenTabs from "./OpenTabs.js"
 import Storage from "./Storage.js"
 

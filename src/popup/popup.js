@@ -1,87 +1,71 @@
-import Workspace from "../Workspace.js"
-import WorkspaceList from "../WorkspaceList.js"
-import OpenWorkspaces from "../OpenWorkspaces.js"
-import WorkspaceTab from "../WorkspaceTab.js"
-import OpenTabs from "../OpenTabs.js"
-import { assert } from "../Utils.js";
+import Workspace from "../data/Workspace.js"
+import WorkspaceList from "../data/WorkspaceList.js"
+import OpenWorkspaces from "../data/OpenWorkspaces.js"
+import WorkspaceTab from "../data/WorkspaceTab.js"
+import OpenTabs from "../data/OpenTabs.js"
+import ListView from "./view/ListView.js"
+import DetailView from "./view/DetailView.js";
 
-const list = document.querySelector(".item-list")
-const templateItem = document.querySelector("#template-item")
-const newWorkspaceButton = document.querySelector("#new-workspace-button")
+init().then(render)
 
-main()
 
-async function main() {
-	let workspaces = await WorkspaceList.getWorkspaces()
+async function init() {
+	let items = await WorkspaceList.getIds()
 
-	if (workspaces.length === 0) {
-		workspaces = await setupWorkspaces();
+	if (items.length === 0) {
+		await createInitialWorkspaces();
 	}
+}
 
-	await renderItems(workspaces)
-	setupNewWorkspaceButton()
+async function render() {
+	const listView = new ListView({
+		viewId: "view-list",
+		addItem: () => newView.show(),
+		editItem: (id) => editView.show({ workspaceId: id })
+	})
 
-	// Debug
-	document.onkeypress = (e) => {
-		if (e.key === "R") {
-			chrome.storage.local.clear()
-			chrome.storage.sync.clear()
-			chrome.runtime.reload()
+	const newView = new DetailView({
+		viewId: "view-new",
+		saveItem: async ({ name }) => {
+			await Workspace.createEmpty({ name })
+			listView.show()
 		}
-	}
-}
+	})
 
-async function renderItems(workspaces) {
-	const currentWindowId = (await chrome.windows.getLastFocused()).id
-	const currentWorkspaceId = (await OpenWorkspaces.find({ windowId: currentWindowId }))?.workspaceId
+	const editView = new DetailView({
+		viewId: "view-new",
+		saveItem: async ({ workspaceId, name }) => {
+			const workspace = await Workspace.get(workspaceId)
+			workspace.name = name
+			await Workspace.save(workspace)
 
-	for (const workspace of workspaces) {
-		const element = createElement(templateItem, {title: workspace.title})
-		element.classList.toggle("item-selected", workspace.id === currentWorkspaceId)
-		element.onclick = () => console.log("click")//openWorkspace(workspace.id)
-		element.onauxclick = (e) => console.log("auxclick")//openWorkspace(workspace.id, e.button !== 1)
+			listView.show()
+		},
+		deleteItem: async ({ workspaceId }) => {
+			const workspace = await Workspace.get(workspaceId)
 
-		const moreButton = element.querySelector(".item-more-button")
-		moreButton.onclick = (e) => {
-			e.stopPropagation();
-			alert("EDIT");
+			if (confirm(`Really remove workspace ${workspace.name}?`)) {
+				await Workspace.remove(workspaceId)
+				listView.show()
+			}
 		}
+	})
 
-		list.insertBefore(element, newWorkspaceButton)
-	}
+	await listView.render()
 }
 
-function setupNewWorkspaceButton() {
-    newWorkspaceButton.onclick = () => {
-		openView("new")
-    }
-}
-
-function createElement(template, props) {
-	let html = template.innerHTML.trim()
-	for (const propName in props) {
-		html = html.replace(`{${propName}}`, props[propName])
-	}
-
-	const renderTemplate = document.createElement('template')
-	renderTemplate.innerHTML = html
-
-	return renderTemplate.content.firstChild
-}
-
-async function setupWorkspaces() {
+async function createInitialWorkspaces() {
 	const windowId = (await chrome.windows.getLastFocused()).id
 	const windowTabs = await chrome.tabs.query({ windowId })
 	const workspaceTabs = await Promise.all(windowTabs.map(WorkspaceTab.create))
 
 	const workspace1 = await Workspace.create({
-		title: "Workspace 1",
+		name: "Workspace 1",
 		tabs: workspaceTabs
 	})
 
-	const workspace2 = await Workspace.create({
-		title: "Workspace 2",
-		tabs: [await WorkspaceTab.createEmpty()]
+	const workspace2 = await Workspace.createEmpty({
+		name: "Workspace 2",
 	})
 
 	const windowTabIds = windowTabs.map(tab => tab.id)
@@ -93,23 +77,11 @@ async function setupWorkspaces() {
 	return [workspace1, workspace2]
 }
 
-async function openWorkspace(workspaceId, closeCurrent = true) {
-	await chrome.runtime.sendMessage({
-		type: "OPEN_WORKSPACE",
-		workspaceId, closeCurrent
-	});
-}
-
-function getView(viewName) {
-	const view = document.querySelector(`#view-${viewName}`)
-	assert(view, `Could not find view '${viewName}'`)
-	return view
-}
-
-function openView(viewName) {
-	getView(viewName).classList.remove("view-hidden")
-}
-
-function closeView(viewName) {
-	getView(viewName).classList.add("view-hidden")
+// Debug
+document.onkeypress = (e) => {
+	if (e.key === "R" && confirm("Clear all data?")) {
+		chrome.storage.local.clear()
+		chrome.storage.sync.clear()
+		chrome.runtime.reload()
+	}
 }

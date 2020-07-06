@@ -1,34 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="popup.css">
 		<script defer src="../lib/chrome-extension-async.js"></script>
 		<script defer type="module" src="popup.js"></script>
+		<title>Workspaces</title>
 	</head>
 
 	<body>
-		<div>
+		<div id="view-list" class="view view-active">
 			<h1>Workspaces</h1>
-			<div class="item-list">
-				<div id="new-workspace-button">Add new</div>
-			</div>
-
-			<template id="template-item">
-				<div class="item">
-					<div class="item-title">{title}</div>
-					<img src="../../icons/more_horiz-black-18dp.svg" class="item-more-button" alt="Actions"/>
-				</div>
-			</template>
+			<div id="workspace-list">...</div>
 		</div>
 
-		<div id="view-new" class="view view-hidden">
-			<h1>New Workspace</h1>
+		<div id="view-detail" class="view">
+			<h1>Edit Workspace</h1>
 
-			<label for="new-workspace-title">Name</label>
-			<input type="text" id="new-workspace-title" />
+			<label for="workspace-name">Name</label>
+			<input type="text" id="workspace-name" />
 
-			<button id="new-workspace-save">Save</button>
+			<div class="buttons">
+				<button id="workspace-remove">Remove</button>
+				<button class="submit" id="workspace-save">Done</button>
+			</div>
 		</div>
 	</body>
 </html>

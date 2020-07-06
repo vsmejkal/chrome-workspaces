@@ -1,4 +1,4 @@
-import { randomString, assert } from "./Utils.js"
+import { randomString, assert } from "../Utils.js"
 import WorkspaceList from "./WorkspaceList.js"
 import WorkspaceTab from "./WorkspaceTab.js"
 import OpenWorkspaces from "./OpenWorkspaces.js"
@@ -6,10 +6,10 @@ import Storage from "./Storage.js"
 import OpenTabs from "./OpenTabs.js"
 
 const Workspace = {
-  async create({ title, tabs }) {
+    async create({ name, tabs }) {
     const workspace = {
       id: `${Storage.WORKSPACE_PREFIX}_${randomString(8)}`,
-      title,
+      name,
       tabs: tabs.map(tab => tab.id ?? tab)
     }
 
@@ -17,6 +17,12 @@ const Workspace = {
     await WorkspaceList.add(workspace.id)
 
     return workspace
+  },
+
+  async createEmpty(args) {
+    const newTab = await WorkspaceTab.createEmpty()
+
+    await Workspace.create({ ...args, tabs: [newTab] })
   },
 
   async get(workspaceId) {
@@ -28,6 +34,12 @@ const Workspace = {
     assert(workspace.tabs.every(tab => typeof tab === "string"))
 
     await Storage.set(workspace.id, workspace)
+  },
+
+  async remove(workspaceId) {
+    await WorkspaceList.remove(workspaceId)
+    await Workspace.dispose(workspaceId)
+    await Storage.remove(workspaceId)
   },
 
   async open(workspaceId, closeCurrent = true) {

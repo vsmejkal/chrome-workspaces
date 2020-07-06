@@ -1,8 +1,8 @@
-import Workspace from "../Workspace.js"
-import WorkspaceTab from "../WorkspaceTab.js"
-import OpenTabs from "../OpenTabs.js"
-import OpenWorkspaces from "../OpenWorkspaces.js"
-import Options from "../Options.js"
+import Workspace from "../data/Workspace.js"
+import WorkspaceTab from "../data/WorkspaceTab.js"
+import OpenTabs from "../data/OpenTabs.js"
+import OpenWorkspaces from "../data/OpenWorkspaces.js"
+import Options from "../data/Options.js"
 
 chrome.runtime.onMessage.addListener(handleMessage)
 // chrome.runtime.onInstalled.addListener(handleInstall)

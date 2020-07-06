@@ -15,6 +15,12 @@ const WorkspaceList = {
     const ids = await WorkspaceList.getIds()
 
     await Storage.set(Storage.WORKSPACES, [...ids, workspaceId])
+  },
+
+  async remove(workspaceId) {
+    const ids = await WorkspaceList.getIds()
+
+    await Storage.set(Storage.WORKSPACES, ids.filter(id => id !== workspaceId))
   }
 }
 

@@ -1,5 +1,5 @@
 import Storage from "./Storage.js"
-import { assert } from "./Utils.js"
+import { assert } from "../Utils.js"
 
 const OpenWorkspaces = {
   async getAll() {
