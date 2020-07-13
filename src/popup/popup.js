@@ -81,8 +81,11 @@ async function createInitialWorkspaces() {
 }
 
 // Debug
-document.onkeypress = (e) => {
-	if (e.key === "R" && confirm("Clear all data?")) {
+document.onkeypress = async (e) => {
+	const extensionInfo = await chrome.management.getSelf()
+	const isDevelopment = extensionInfo.installType === "development"
+
+	if (isDevelopment && e.key === "R" && confirm("Clear all data?")) {
 		chrome.storage.local.clear()
 		chrome.storage.sync.clear()
 		chrome.runtime.reload()

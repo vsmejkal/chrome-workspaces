@@ -52,13 +52,17 @@ input[type=text] {
   font-size: 1em;
 }
 
+button {
+  outline: none;
+  cursor: pointer;
+}
+
 .button {
   display: inline-block;
   min-width: 60px;
   padding: 5px 10px;
   border: 1px solid #e0e0e0;
   border-radius: var(--border-radius);
-  cursor: pointer;
   color: #212121;
   background-color: transparent;
   font-weight: 600;
@@ -66,9 +70,6 @@ input[type=text] {
 }
 .button:hover {
   background-color: #fafafa;
-}
-.button:focus {
-  outline: none;
 }
 
 .button.primary {

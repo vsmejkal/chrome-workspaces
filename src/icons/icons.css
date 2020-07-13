@@ -8,6 +8,7 @@
 }
 
 .bi-three-dots { background-image: url("three-dots.svg"); }
+.bi-plus { background-image: url("plus.svg"); }
 
 /* Workspace icons */
 .bi-home { background-image: url("house.svg"); }

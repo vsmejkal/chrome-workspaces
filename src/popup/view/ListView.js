@@ -12,12 +12,11 @@ class ListView extends View {
     }
 
     async render() {
-        const listElement = this.getElement("#workspace-list")
-
         const workspaces = await WorkspaceList.getWorkspaces()
         const currentWindowId = (await chrome.windows.getLastFocused()).id
         const currentWorkspaceId = (await OpenWorkspaces.find({ windowId: currentWindowId }))?.workspaceId
 
+        const listElement = this.getElement("#workspace-list")
         listElement.innerHTML = ""
 
         for (const workspace of workspaces) {
@@ -26,7 +25,8 @@ class ListView extends View {
             listElement.appendChild(item)
         }
 
-        listElement.appendChild(this._createAddButton())
+        const addButton = this.getElement("#new-workspace-button")
+        addButton.onclick = () => this._addItem();
     }
 
     _createItem({ id, name, icon, selected }) {
@@ -56,15 +56,6 @@ class ListView extends View {
         item.appendChild(itemButton)
 
         return item
-    }
-
-    _createAddButton() {
-        const button = document.createElement("div")
-        button.id = "new-workspace-button"
-        button.innerText = "Add New"
-        button.onclick = () => this._addItem();
-
-        return button
     }
 }
 

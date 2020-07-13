@@ -60,9 +60,21 @@
 .item:hover .item-more-button {
     visibility: visible;
     opacity: 0.5;
-    transition: visibility 0s 0.5s, opacity 0.25s 0.5s;
+    transition: visibility 0s 0.5s, opacity 0.2s 0.5s;
 }
 
 #new-workspace-button {
-    color: #888;
+    margin: 6px 4px;
+    padding: 4px;
+    color: #333;
+    opacity: 0.4;
+    background: none;
+    border: none;
+    transition: opacity 0.2s;
+}
+#new-workspace-button:hover {
+    opacity: 0.8;
+}
+#new-workspace-button i {
+    margin-right: 4px;
 }
