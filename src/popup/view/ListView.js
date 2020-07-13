@@ -29,15 +29,18 @@ class ListView extends View {
         listElement.appendChild(this._createAddButton())
     }
 
-    _createItem({ id, name, selected }) {
+    _createItem({ id, name, icon, selected }) {
+        const itemIcon = document.createElement("i")
+        if (icon) {
+            itemIcon.classList.add("item-icon", "bi", `bi-${icon}`)
+        }
+
         const itemName = document.createElement("div")
         itemName.classList.add("item-name")
         itemName.innerText = name
 
-        const itemButton = document.createElement("img")
-        itemButton.classList.add("item-more-button")
-        itemButton.src = "../../icons/more_horiz_24px.svg"
-        itemButton.alt = "Actions"
+        const itemButton = document.createElement("i")
+        itemButton.classList.add("bi", "bi-three-dots", "item-more-button")
         itemButton.onclick = (e) => {
             e.stopPropagation();
             this._editItem(id);
@@ -48,6 +51,7 @@ class ListView extends View {
         item.classList.toggle("item-selected", selected)
         item.onclick = () => Action.openWorkspace(id)
         item.onauxclick = (e) => Action.openWorkspace(id, e.button !== 1)
+        item.appendChild(itemIcon)
         item.appendChild(itemName)
         item.appendChild(itemButton)
 

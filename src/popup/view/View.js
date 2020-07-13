@@ -15,6 +15,10 @@ class View {
         return this.root.querySelector(selector)
     }
 
+    getElements(selector) {
+        return this.root.querySelectorAll(selector)
+    }
+
     show(props = {}) {
         const activeClass = "view-active"
 

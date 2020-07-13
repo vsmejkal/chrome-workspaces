@@ -6,10 +6,10 @@ import Storage from "./Storage.js"
 import OpenTabs from "./OpenTabs.js"
 
 const Workspace = {
-    async create({ name, tabs }) {
+  async create({ name, icon, tabs }) {
+    const id = `${Storage.WORKSPACE_PREFIX}_${randomString(8)}`
     const workspace = {
-      id: `${Storage.WORKSPACE_PREFIX}_${randomString(8)}`,
-      name,
+      id, name, icon,
       tabs: tabs.map(tab => tab.id ?? tab)
     }
 

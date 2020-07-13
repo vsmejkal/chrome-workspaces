@@ -1,3 +1,37 @@
+#workspace-icon-picker {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    column-gap: 8px;
+    row-gap: 6px;
+}
+#workspace-icon-picker .icon {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    margin: auto;
+    border: none;
+    border-radius: var(--border-radius);
+    background-position: center;
+    background-size: 32px 32px;
+    background-repeat: no-repeat;
+    background-color: #eceff1;
+    cursor: pointer;
+}
+#workspace-icon-picker .icon i {
+    opacity: 0.9;
+}
+#workspace-icon-picker .icon:active:not(.icon-selected) {
+    background-color: #cfd8dc;
+}
+#workspace-icon-picker .icon-selected {
+    background-color: #2979ff;
+}
+#workspace-icon-picker .icon-selected i {
+    opacity: 1;
+    filter: invert(1);
+}
+
 #workspace-remove {
     margin-right: auto;
     color: #c62828;
@@ -13,4 +47,5 @@
 }
 #workspace-remove:active {
     background-color: #c62828;
+    color: #ffffff;
 }

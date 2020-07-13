@@ -1,19 +1,23 @@
+#workspace-list {
+    margin-top: 20px;
+}
+
 .item, #new-workspace-button {
     min-height: 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin: 4px 0;
-    padding: 5px 10px;
+    padding: 6px 8px;
     font-weight: 500;
     cursor: pointer;
     border-radius: var(--border-radius);
 }
 .item:hover {
-    background: #eeeeee;
+    background: #eceff1;
 }
 .item:active {
-    background: #e0e0e0;
+    background: #cfd8dc;
 }
 
 .item-selected {
@@ -28,10 +32,20 @@
 .item-selected:active {
     background: #2962ff;
 }
+.item-selected .item-icon,
+.item-selected .item-more-button {
+    filter: invert(1);
+}
+
+.item-icon {
+    margin-right: 8px;
+}
+
+.item-name {
+    flex-grow: 1;
+}
 
 .item-more-button {
-    width: 24px;
-    height: 24px;
     opacity: 0;
     visibility: hidden;
     border-radius: 5px;
@@ -47,10 +61,6 @@
     visibility: visible;
     opacity: 0.5;
     transition: visibility 0s 0.5s, opacity 0.25s 0.5s;
-}
-
-.item-selected .item-more-button {
-    filter: invert(1);
 }
 
 #new-workspace-button {
