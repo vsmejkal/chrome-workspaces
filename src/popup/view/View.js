@@ -8,7 +8,9 @@ class View {
     }
 
     get root() {
-        return document.querySelector(this.#selector)
+        const root = document.querySelector(this.#selector)
+        assert(root, `View ${this.#selector} not found`)
+        return root
     }
 
     getElement(selector) {
@@ -25,15 +27,13 @@ class View {
         const oldView = document.querySelector(`.${activeClass}`)
         oldView?.classList?.remove(activeClass)
 
-        const newView = document.querySelector(this.#selector)
-        newView?.classList?.add(activeClass)
-
-        assert(newView, `View ${this.#selector} not found`)
+        const newView = this.root
+        newView.classList.add(activeClass)
 
         this.render(props)
     }
 
-    async render() {}
+    async render(props) {}
 }
 
 export default View

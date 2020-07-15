@@ -19,13 +19,11 @@ async function init() {
 
 async function render() {
 	const listView = new ListView({
-		viewId: "view-list",
 		addItem: () => newView.show(),
 		editItem: (id) => editView.show({ workspaceId: id })
 	})
 
 	const newView = new DetailView({
-		viewId: "view-new",
 		saveItem: async ({ name, icon }) => {
 			await Workspace.createEmpty({ name, icon })
 			listView.show()
@@ -33,7 +31,6 @@ async function render() {
 	})
 
 	const editView = new DetailView({
-		viewId: "view-new",
 		saveItem: async ({ workspaceId, name, icon }) => {
 			const workspace = await Workspace.get(workspaceId)
 			workspace.name = name

@@ -26,7 +26,7 @@ class ListView extends View {
         }
 
         const addButton = this.getElement("#new-workspace-button")
-        addButton.onclick = () => this._addItem();
+        addButton.onclick = () => this._addItem()
     }
 
     _createItem({ id, name, icon, selected }) {

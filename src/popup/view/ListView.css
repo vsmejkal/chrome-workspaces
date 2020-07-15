@@ -68,12 +68,9 @@
     padding: 2px 8px 2px 4px;
     color: #333;
     opacity: 0.4;
-    background: none;
-    border: none;
-    transition: opacity 0.2s;
 }
 #new-workspace-button:hover {
-    opacity: 0.8;
+    opacity: 0.6;
 }
 #new-workspace-button i {
     margin-right: 4px;
