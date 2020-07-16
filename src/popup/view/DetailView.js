@@ -21,7 +21,7 @@ class DetailView extends View {
         this._heading.innerText = workspace ? "Edit Workspace" : "New Workspace"
 
         this._nameField.value = workspace?.name ?? ""
-        this._nameField.onkeypress = (e) => {
+        this._nameField.onkeydown = (e) => {
             if (e.key === "Enter") {
                 this._saveButton.click()
             }
@@ -29,7 +29,6 @@ class DetailView extends View {
 
         this._icons.forEach(element => {
             element.onclick = () => this._selectIcon(element.dataset.icon)
-            element.onkeypress = (e) => this._onIconKeyPress(e)
         })
         this._selectIcon(workspace?.icon)
 
@@ -46,6 +45,27 @@ class DetailView extends View {
         this._nameField.focus()
     }
 
+    keyPressed({ key }) {
+        const offsetMap = {
+            "ArrowLeft": -1,
+            "ArrowRight": 1,
+            "ArrowUp": -5,
+            "ArrowDown": 5
+        }
+
+        const offset = offsetMap[key]
+        const index = this._icons.indexOf(document.activeElement)
+
+        if (!offset || index === -1) {
+            return
+        }
+
+        const nextIndex = index + offset
+        if (nextIndex >= 0 && nextIndex < this._icons.length) {
+            this._icons[nextIndex].focus()
+        }
+    }
+
     _validate() {
         if (this._nameField.value.length === 0) {
             this._nameField.focus()
@@ -53,21 +73,6 @@ class DetailView extends View {
         }
 
         return true
-    }
-
-    _renderIcons() {
-        for (const iconName of iconNames) {
-            const icon = document.createElement("button")
-            icon.classList.add("workspace-icon")
-            icon.style.backgroundImage = 'url(/icons/workspace/${iconName}.svg)'
-            icon.title = iconName
-
-            this._iconPicker.appendChild(icon)
-        }
-    }
-
-    _onIconKeyPress(e) {
-
     }
 
     _selectIcon(iconName) {

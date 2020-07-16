@@ -4,12 +4,13 @@
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="popup.css">
 		<script defer src="../lib/chrome-extension-async.js"></script>
+		<script defer src="../lib/focus-visible.js"></script>
 		<script defer type="module" src="popup.js"></script>
 		<title>Workspaces</title>
 	</head>
 
 	<body>
-		<div id="view-list" class="view view-active">
+		<div id="view-list" class="view">
 			<h1>Workspaces</h1>
 			<div id="workspace-list">...</div>
 			<button id="new-workspace-button"><i class="bi bi-plus"></i>Add New</button>

@@ -15,17 +15,20 @@
     background-position: center;
     background-size: 32px 32px;
     background-repeat: no-repeat;
-    background-color: #eceff1;
+    background-color: var(--color-bluegray-50);
     cursor: pointer;
 }
 #workspace-icon-picker .icon i {
     opacity: 0.9;
 }
 #workspace-icon-picker .icon:active:not(.icon-selected) {
-    background-color: #cfd8dc;
+    background-color: var(--color-bluegray-100);
 }
 #workspace-icon-picker .icon-selected {
-    background-color: #2979ff;
+    background-color: var(--color-primary);
+}
+#workspace-icon-picker .icon-selected:active {
+    background-color: var(--color-primary-dark);
 }
 #workspace-icon-picker .icon-selected i {
     opacity: 1;
@@ -34,18 +37,18 @@
 
 #workspace-remove {
     margin-right: auto;
-    color: #c62828;
+    color: var(--color-red-800);
 }
 #workspace-remove:hover,
-#workspace-remove:active,
-#workspace-remove:focus-visible {
-    background-color: #e53935;
-    border-color: #c62828;
+#workspace-remove:active {
+    background-color: var(--color-red-600);
+    border-color: var(--color-red-800);
     color: #ffffff;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    outline: none;
 }
 #workspace-remove:active {
-    background-color: #c62828;
+    background-color: var(--color-red-800);
     color: #ffffff;
 }

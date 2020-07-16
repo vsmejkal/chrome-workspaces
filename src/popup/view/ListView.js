@@ -46,9 +46,9 @@ class ListView extends View {
             this._editItem(id);
         }
 
-        const item = document.createElement("div")
+        const item = document.createElement("button")
         item.classList.add("item")
-        item.classList.toggle("item-selected", selected)
+        item.classList.toggle(selectedClass, selected)
         item.onclick = () => Action.openWorkspace(id)
         item.onauxclick = (e) => Action.openWorkspace(id, e.button !== 1)
         item.appendChild(itemIcon)
@@ -57,6 +57,23 @@ class ListView extends View {
 
         return item
     }
+
+    keyPressed({ key }) {
+        const items = this.getElements(".item")
+        const focusedItem = this.getElement(".item:focus")
+        const selectedItem = this.getElement(`.${selectedClass}`)
+        const currentItem = focusedItem ?? selectedItem
+        const prevItem = currentItem ? currentItem.previousSibling : items[items.length - 1]
+        const nextItem = currentItem ? currentItem.nextSibling : items[0]
+
+        if (key === "ArrowUp") {
+            prevItem?.focus()
+        } else if (key === "ArrowDown") {
+            nextItem?.focus()
+        }
+    }
 }
+
+const selectedClass = "item-selected"
 
 export default ListView

@@ -5,12 +5,22 @@
 :root {
   --width: 220px;
   --border-radius: 4px;
+  --color-primary: #2979ff;
+  --color-primary-dark: #2962ff;
+  --color-bluegray-50: #eceff1;
+  --color-bluegray-100: #cfd8dc;
+  --color-red-600: #e53935;
+  --color-red-800: #c62828;
 }
 
 * {
   margin: 0;
   padding: 0;
-  outline-color: #2962ff;
+  outline-color: var(--color-primary-dark);
+}
+
+:focus:not(.focus-visible) {
+  outline: none;
 }
 
 body {
@@ -55,7 +65,6 @@ input[type=text] {
 button {
   border: none;
   background: none;
-  outline: none;
   cursor: pointer;
 }
 
@@ -75,14 +84,19 @@ button {
 }
 
 .button.primary {
-  background: #2979ff;
-  border-color: #2979ff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
   color: #ffffff;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
-.button.primary:active, .button.primary:focus-visible {
-  background: #2962ff;
+.button.primary:active {
+  background: var(--color-primary-dark);
+}
+.button.primary.focus-visible {
+  background: var(--color-primary-dark);
+  outline: none;
+  transform: scale(1.05);
 }
 
 .buttons {

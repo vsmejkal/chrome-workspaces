@@ -42,14 +42,14 @@ async function render() {
 		deleteItem: async ({ workspaceId }) => {
 			const workspace = await Workspace.get(workspaceId)
 
-			if (confirm(`Really remove ${workspace.name}?`)) {
+			if (confirm(`Remove "${workspace.name}"?`)) {
 				await Workspace.remove(workspaceId)
 				listView.show()
 			}
 		}
 	})
 
-	await listView.render()
+	await listView.show()
 }
 
 async function createInitialWorkspaces() {
