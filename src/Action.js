@@ -1,9 +1,9 @@
 const Action = {
-    async openWorkspace(workspaceId, closeCurrent = true) {
+    async openWorkspace(workspaceId, newWindow = false) {
         await chrome.runtime.sendMessage({
             type: "OPEN_WORKSPACE",
             workspaceId,
-            closeCurrent
+            closeCurrent: !newWindow
         });
     }
 }

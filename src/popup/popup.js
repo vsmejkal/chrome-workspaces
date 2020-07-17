@@ -5,6 +5,7 @@ import WorkspaceTab from "../data/WorkspaceTab.js"
 import OpenTabs from "../data/OpenTabs.js"
 import ListView from "./view/ListView.js"
 import DetailView from "./view/DetailView.js";
+import Action from "../Action.js";
 
 init().then(render)
 
@@ -20,7 +21,8 @@ async function init() {
 async function render() {
 	const listView = new ListView({
 		addItem: () => newView.show(),
-		editItem: (id) => editView.show({ workspaceId: id })
+		editItem: (id) => editView.show({ workspaceId: id }),
+		openItem: (id, newWindow) => Action.openWorkspace(id, newWindow).then(() => window.close())
 	})
 
 	const newView = new DetailView({
@@ -53,7 +55,7 @@ async function render() {
 }
 
 async function createInitialWorkspaces() {
-	const windowId = (await chrome.windows.getLastFocused()).id
+	const windowId = (await chrome.windows.getCurrent()).id
 	const windowTabs = await chrome.tabs.query({ windowId })
 	const workspaceTabs = await Promise.all(windowTabs.map(WorkspaceTab.create))
 

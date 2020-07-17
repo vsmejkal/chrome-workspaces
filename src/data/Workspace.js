@@ -58,7 +58,7 @@ const Workspace = {
       focused: true
     }
 
-    const currentWindow= await chrome.windows.getLastFocused()
+    const currentWindow = await chrome.windows.getLastFocused()
 
     if (closeCurrent) {
       createData.left = currentWindow.left

@@ -1,32 +1,32 @@
 import OpenWorkspaces from "../../data/OpenWorkspaces.js"
-import Action from "../../Action.js"
 import View from "./View.js"
 import WorkspaceList from "../../data/WorkspaceList.js"
 
 class ListView extends View {
-    constructor({ addItem, editItem }) {
+    constructor({ addItem, editItem, openItem }) {
         super("#view-list")
 
         this._addItem = addItem
         this._editItem = editItem
+        this._openItem = openItem
+
+        this._listElement = this.getElement("#workspace-list")
+        this._addButton = this.getElement("#new-workspace-button")
     }
 
     async render() {
         const workspaces = await WorkspaceList.getWorkspaces()
-        const currentWindowId = (await chrome.windows.getLastFocused()).id
+        const currentWindowId = (await chrome.windows.getCurrent()).id
         const currentWorkspaceId = (await OpenWorkspaces.find({ windowId: currentWindowId }))?.workspaceId
 
-        const listElement = this.getElement("#workspace-list")
-        listElement.innerHTML = ""
+        this._listElement.innerHTML = ""
+        this._addButton.onclick = () => this._addItem()
 
         for (const workspace of workspaces) {
             const selected = workspace.id === currentWorkspaceId
             const item = this._createItem({ ...workspace, selected })
-            listElement.appendChild(item)
+            this._listElement.appendChild(item)
         }
-
-        const addButton = this.getElement("#new-workspace-button")
-        addButton.onclick = () => this._addItem()
     }
 
     _createItem({ id, name, icon, selected }) {
@@ -49,8 +49,10 @@ class ListView extends View {
         const item = document.createElement("button")
         item.classList.add("item")
         item.classList.toggle(selectedClass, selected)
-        item.onclick = () => Action.openWorkspace(id)
-        item.onauxclick = (e) => Action.openWorkspace(id, e.button !== 1)
+        item.onclick = ({button, ctrlKey, metaKey}) => {
+            const newWindow = (button === 0 && ctrlKey) || (button === 0 && metaKey) || (button === 1)
+            this._openItem(id, newWindow)
+        }
         item.appendChild(itemIcon)
         item.appendChild(itemName)
         item.appendChild(itemButton)
@@ -59,17 +61,18 @@ class ListView extends View {
     }
 
     keyPressed({ key }) {
-        const items = this.getElements(".item")
-        const focusedItem = this.getElement(".item:focus")
+        const items = [...this._listElement.children, this._addButton]
+        const focusedItem = items.includes(document.activeElement) ? document.activeElement : null
         const selectedItem = this.getElement(`.${selectedClass}`)
         const currentItem = focusedItem ?? selectedItem
-        const prevItem = currentItem ? currentItem.previousSibling : items[items.length - 1]
-        const nextItem = currentItem ? currentItem.nextSibling : items[0]
+        const currentIndex = items.indexOf(currentItem)
+        const prevIndex = currentItem ? currentIndex - 1 : items.length - 1
+        const nextIndex = currentItem ? currentIndex + 1 : 0
 
         if (key === "ArrowUp") {
-            prevItem?.focus()
+            items[prevIndex]?.focus()
         } else if (key === "ArrowDown") {
-            nextItem?.focus()
+            items[nextIndex]?.focus()
         }
     }
 }
