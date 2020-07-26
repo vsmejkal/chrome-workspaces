@@ -1,8 +1,6 @@
-import Workspace from "../data/Workspace.js"
-import WorkspaceList from "../data/WorkspaceList.js"
-import OpenWorkspaces from "../data/OpenWorkspaces.js"
-import WorkspaceTab from "../data/WorkspaceTab.js"
-import OpenTabs from "../data/OpenTabs.js"
+import Workspace from "../storage/Workspace.js"
+import WorkspaceList from "../storage/WorkspaceList.js"
+import WorkspaceTab from "../storage/WorkspaceTab.js"
 import ListView from "./view/ListView.js"
 import DetailView from "./view/DetailView.js";
 import Action from "../Action.js";
@@ -11,9 +9,9 @@ init().then(render)
 
 
 async function init() {
-	let items = await WorkspaceList.getIds()
+	let list = await WorkspaceList.get()
 
-	if (items.length === 0) {
+	if (list.length === 0) {
 		await createInitialWorkspaces();
 	}
 }
@@ -56,30 +54,22 @@ async function render() {
 
 async function createInitialWorkspaces() {
 	const windowId = (await chrome.windows.getCurrent()).id
-	const windowTabs = await chrome.tabs.query({ windowId })
-	const workspaceTabs = await Promise.all(windowTabs.map(WorkspaceTab.create))
+	const tabs = await chrome.tabs.query({ windowId })
 
-	const workspace1 = await Workspace.create({
+	await Workspace.create({
 		name: "Workspace 1",
 		icon: "home",
-		tabs: workspaceTabs
+		tabs: tabs.map(WorkspaceTab.create),
+		windowId
 	})
 
-	const workspace2 = await Workspace.createEmpty({
+	await Workspace.create({
 		name: "Workspace 2",
 		icon: "star"
 	})
-
-	const windowTabIds = windowTabs.map(tab => tab.id)
-	const workspaceTabIds = workspaceTabs.map(tab => tab.id)
-	
-	await OpenWorkspaces.add(windowId, workspace1.id)
-	await OpenTabs.addAll(windowTabIds, workspaceTabIds)
-
-	return [workspace1, workspace2]
 }
 
-// Debug
+// For debugging
 document.onkeypress = async (e) => {
 	const extensionInfo = await chrome.management.getSelf()
 	const isDevelopment = extensionInfo.installType === "development"

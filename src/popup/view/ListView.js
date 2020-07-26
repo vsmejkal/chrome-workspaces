@@ -1,6 +1,5 @@
-import OpenWorkspaces from "../../data/OpenWorkspaces.js"
 import View from "./View.js"
-import WorkspaceList from "../../data/WorkspaceList.js"
+import WorkspaceList from "../../storage/WorkspaceList.js"
 
 class ListView extends View {
     constructor({ addItem, editItem, openItem }) {
@@ -17,7 +16,7 @@ class ListView extends View {
     async render() {
         const workspaces = await WorkspaceList.getWorkspaces()
         const currentWindowId = (await chrome.windows.getCurrent()).id
-        const currentWorkspaceId = (await OpenWorkspaces.find({ windowId: currentWindowId }))?.workspaceId
+        const currentWorkspaceId = await WorkspaceList.findWorkspaceByWindow(currentWindowId)
 
         this._listElement.innerHTML = ""
         this._addButton.onclick = () => this._addItem()
