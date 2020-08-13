@@ -1,6 +1,6 @@
-import Workspace from "../storage/Workspace.js"
-import WorkspaceList from "../storage/WorkspaceList.js"
-import WorkspaceTab from "../storage/WorkspaceTab.js"
+import Workspace from "../model/Workspace.js"
+import WorkspaceList from "../model/WorkspaceList.js"
+import WorkspaceTab from "../model/WorkspaceTab.js"
 import ListView from "./view/ListView.js"
 import DetailView from "./view/DetailView.js";
 import Action from "../Action.js";
@@ -12,7 +12,7 @@ async function init() {
 	let list = await WorkspaceList.get()
 
 	if (list.length === 0) {
-		await createInitialWorkspaces();
+		await createInitialWorkspaces()
 	}
 }
 
@@ -25,7 +25,7 @@ async function render() {
 
 	const newView = new DetailView({
 		saveItem: async ({ name, icon }) => {
-			await Workspace.createEmpty({ name, icon })
+			await Workspace.create({ name, icon })
 			listView.show()
 		}
 	})

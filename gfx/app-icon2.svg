@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="65.771446mm"
+   height="65.770714mm"
+   viewBox="0 0 65.771445 65.770714"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="app-icon2.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   inkscape:export-filename="/home/vojta/Projekty/chrome-workspaces/app/icons/extension/icon256.png"
+   inkscape:export-xdpi="98.86467"
+   inkscape:export-ydpi="98.86467">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="50.306905"
+     inkscape:cy="-82.940219"
+     inkscape:document-units="mm"
+     inkscape:current-layer="g4769"
+     showgrid="false"
+     inkscape:window-width="1915"
+     inkscape:window-height="901"
+     inkscape:window-x="564"
+     inkscape:window-y="69"
+     inkscape:window-maximized="0"
+     fit-margin-left="2.864"
+     fit-margin-right="2.864"
+     fit-margin-top="1"
+     fit-margin-bottom="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Vrstva 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-70.520847,-57.295465)">
+    <rect
+       inkscape:export-ydpi="19.849854"
+       inkscape:export-xdpi="19.849854"
+       ry="0"
+       y="77.887199"
+       x="-88.635422"
+       height="61.421124"
+       width="61.421124"
+       id="rect4765"
+       style="opacity:1;fill:none;fill-opacity:1;stroke:none;stroke-width:7.89473724;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal" />
+    <g
+       inkscape:export-ydpi="19.849854"
+       inkscape:export-xdpi="19.849854"
+       transform="matrix(0.26704186,0,0,0.29320899,23.691697,-16.437432)"
+       id="g4769">
+      <rect
+         inkscape:export-ydpi="6.7682304"
+         inkscape:export-xdpi="6.7682304"
+         transform="matrix(0.85299027,-0.52192681,0.85299027,0.52192681,0,0)"
+         ry="11.962589"
+         y="446.97824"
+         x="-224.93816"
+         height="127.91792"
+         width="127.91792"
+         id="rect4873"
+         style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:15.50521088;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0;paint-order:fill markers stroke"
+         inkscape:export-filename="/home/vojta/Projekty/chrome-workspaces/app/icons/extension/icon16.png" />
+      <rect
+         style="fill:#2979ff;fill-opacity:1;stroke:#2979ff;stroke-width:15.50433254;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="rect978-5"
+         width="127.91792"
+         height="127.91792"
+         x="-199.00433"
+         y="421.04437"
+         ry="12.121113"
+         transform="matrix(0.85299027,-0.52192681,0.85299027,0.52192681,0,0)"
+         inkscape:export-xdpi="6.7682304"
+         inkscape:export-ydpi="6.7682304"
+         inkscape:export-filename="/home/vojta/Projekty/chrome-workspaces/app/icons/extension/icon16.png" />
+      <path
+         style="opacity:1;fill:none;fill-opacity:0.04637679;stroke:#535d6c;stroke-width:12.86542606;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+         d="m 397.41955,368.58478 -88.70479,54.2766 c -5.65301,3.45895 -14.75494,3.45895 -20.40795,0 l -88.70479,-54.2766"
+         id="path846"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cssc" />
+      <path
+         sodipodi:nodetypes="cssc"
+         inkscape:connector-curvature="0"
+         id="path848"
+         d="m 397.41955,408.36992 -88.70479,54.2766 c -5.65301,3.45895 -14.75494,3.45895 -20.40795,0 l -88.70479,-54.2766"
+         style="opacity:1;fill:none;fill-opacity:0.04637679;stroke:#535d6c;stroke-width:12.86542606;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers" />
+    </g>
+    <g
+       id="g921"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.76905,24.403833)" />
+    <g
+       id="g923"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.76905,24.403833)" />
+    <g
+       id="g925"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.76905,24.403833)" />
+    <g
+       id="g927"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.76905,24.403833)" />
+    <g
+       id="g929"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.76905,24.403833)" />
+    <g
+       id="g931"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.76905,24.403833)" />
+    <g
+       id="g933"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.76905,24.403833)" />
+    <g
+       id="g935"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.76905,24.403833)" />
+    <g
+       id="g937"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.76905,24.403833)" />
+    <g
+       id="g939"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.76905,24.403833)" />
+    <g
+       id="g941"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.76905,24.403833)" />
+    <g
+       id="g943"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.76905,24.403833)" />
+    <g
+       id="g945"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.76905,24.403833)" />
+    <g
+       id="g947"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.76905,24.403833)" />
+    <g
+       id="g949"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.76905,24.403833)" />
+  </g>
+</svg>

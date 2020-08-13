@@ -6,7 +6,7 @@ import { scheduleSuspend } from "../Suspender.js";
 
 const Workspace = {
 	async create({ name, icon, tabs, windowId }) {
-		if (!tabs) {
+		if (!tabs || tabs.length === 0) {
 			tabs = [WorkspaceTab.createEmpty()]
 		}
 
@@ -37,42 +37,51 @@ const Workspace = {
 		await Storage.remove(workspaceId)
 	},
 
-	// TODO: refactor
 	async open(workspaceId, closeCurrent = true) {
 		const workspace = await Workspace.get(workspaceId)
 		const windowId = await WorkspaceList.findWindowByWorkspace(workspaceId)
 
 		if (windowId) {
+			return await focusWindow(windowId)
+		}
+
+		const currentWindow = await chrome.windows.getLastFocused()
+		const {left, top, width, height} = currentWindow
+		const properties = closeCurrent ? {left, top, width, height} : {}
+
+		const newWindow = await createWindow(workspace, properties)
+		await initWindow(workspace, newWindow)
+
+		if (closeCurrent) {
+			await closeWindow(currentWindow.id)
+		}
+
+		async function createWindow(workspace, properties) {
+			return await chrome.windows.create({
+				url: workspace.tabs.map(tab => tab.url),
+				focused: true,
+				...properties
+			})
+		}
+
+		async function initWindow(workspace, window) {
+			await Workspace.assignWindow(workspace.id, window.id)
+
+			workspace.tabs.forEach(({ url, active = false, pinned = false}, i) => {
+				const tabId = window.tabs[i].id
+				if (url.startsWith("http")) {
+					scheduleSuspend(tabId)
+				}
+				chrome.tabs.update(tabId, { active, pinned })
+			})
+		}
+
+		async function focusWindow(windowId) {
 			await chrome.windows.update(windowId, { focused: true })
-			return
 		}
 
-		const createData = {
-			url: workspace.tabs.map(tab => tab.url),
-			focused: true
-		}
-
-		const oldWindow = await chrome.windows.getLastFocused()
-
-		if (closeCurrent) {
-			createData.left = oldWindow.left
-			createData.top = oldWindow.top
-			createData.width = oldWindow.width
-			createData.height = oldWindow.height
-		}
-
-		const newWindow = await chrome.windows.create(createData)
-		const newTabs = await chrome.tabs.query({ windowId: newWindow.id })
-		assert(workspace.tabs.length === newTabs.length)
-
-		newTabs
-			.filter((tab, i) => workspace.tabs[i].url.startsWith("http"))
-			.forEach(tab => scheduleSuspend(tab.id))
-
-		await Workspace.assignWindow(workspaceId, newWindow.id)
-
-		if (closeCurrent) {
-			await chrome.windows.remove(oldWindow.id)
+		async function closeWindow(windowId) {
+			await chrome.windows.remove(windowId)
 		}
 	},
 

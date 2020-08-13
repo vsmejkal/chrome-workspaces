@@ -1,5 +1,5 @@
 import View from "./View.js"
-import Workspace from "../../storage/Workspace.js"
+import Workspace from "../../model/Workspace.js"
 
 class DetailView extends View {
     constructor({ saveItem, deleteItem }) {

@@ -1,22 +1,29 @@
 {
   "name": "Workspaces",
-  "version": "0.2.0",
+  "version": "0.3",
   "manifest_version": 2,
-  "description": "Organize your tabs into workspaces",
+  "description": "Organize your tabs into workspaces.",
   "homepage_url": "https://github.com/vsmejkal/chrome-workspaces",
   "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "app/icons/extension/icon16.png",
+    "32": "app/icons/extension/icon32.png",
+    "48": "app/icons/extension/icon48.png",
+    "128": "app/icons/extension/icon128.png",
+    "256": "app/icons/extension/icon256.png"
   },
   "background": {
-    "page": "src/background/background.html",
+    "page": "app/background/background.html",
     "persistent": true
   },
   "browser_action": {
+    "default_icon": {
+      "16": "app/icons/extension/icon16.png",
+      "24": "app/icons/extension/icon24.png",
+      "32": "app/icons/extension/icon32.png",
+      "48": "app/icons/extension/icon48.png"
+    },
     "default_title": "Workspaces",
-    "default_icon": "icons/icon19.png",
-    "default_popup": "src/popup/popup.html"
+    "default_popup": "app/popup/popup.html"
   },
   "permissions": [
     "contextMenus",

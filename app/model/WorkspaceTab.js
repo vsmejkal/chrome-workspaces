@@ -1,13 +1,13 @@
 const WorkspaceTab = {
-	create(tabInfo) {
+	create(tab) {
 		const workspaceTab = {
-			title: tabInfo.title?.slice(0, 40),
-			url: tabInfo.url ?? tabInfo.pendingUrl
+			title: tab.title?.slice(0, 40),
+			url: tab.url ?? tab.pendingUrl
 		}
-		if (tabInfo.pinned) {
+		if (tab.pinned) {
 			workspaceTab.pinned = true
 		}
-		if (tabInfo.active) {
+		if (tab.active) {
 			workspaceTab.active = true
 		}
 

@@ -1,5 +1,5 @@
 import View from "./View.js"
-import WorkspaceList from "../../storage/WorkspaceList.js"
+import WorkspaceList from "../../model/WorkspaceList.js"
 
 class ListView extends View {
     constructor({ addItem, editItem, openItem }) {
@@ -39,19 +39,23 @@ class ListView extends View {
         itemName.innerText = name
 
         const itemButton = document.createElement("i")
-        itemButton.classList.add("bi", "bi-three-dots", "item-more-button")
+        itemButton.title = "Edit"
+        itemButton.classList.add("bi", "bi-pencil", "item-more-button")
         itemButton.onclick = (e) => {
             e.stopPropagation();
             this._editItem(id);
         }
 
-        const item = document.createElement("button")
-        item.classList.add("item")
-        item.classList.toggle(selectedClass, selected)
-        item.onclick = ({button, ctrlKey, metaKey}) => {
+        const handleClick = ({button, ctrlKey, metaKey}) => {
             const newWindow = (button === 0 && ctrlKey) || (button === 0 && metaKey) || (button === 1)
             this._openItem(id, newWindow)
         }
+
+        const item = document.createElement("button")
+        item.classList.add("item")
+        item.classList.toggle(selectedClass, selected)
+        item.onclick = handleClick
+        item.onauxclick = handleClick
         item.appendChild(itemIcon)
         item.appendChild(itemName)
         item.appendChild(itemButton)
