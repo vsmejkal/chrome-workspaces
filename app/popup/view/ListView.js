@@ -40,7 +40,7 @@ class ListView extends View {
 
         const itemButton = document.createElement("i")
         itemButton.title = "Edit"
-        itemButton.classList.add("bi", "bi-pencil", "item-more-button")
+        itemButton.classList.add("bi", "bi-pencil", "item-edit-button")
         itemButton.onclick = (e) => {
             e.stopPropagation();
             this._editItem(id);

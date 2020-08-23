@@ -35,7 +35,7 @@
     background: var(--color-primary-dark);
 }
 .item-selected .item-icon,
-.item-selected .item-more-button {
+.item-selected .item-edit-button {
     filter: invert(1);
 }
 
@@ -47,21 +47,21 @@
     flex-grow: 1;
 }
 
-.item-more-button {
+.item-edit-button {
     opacity: 0;
     visibility: hidden;
     border-radius: 5px;
 }
-.item-more-button:hover {
+.item-edit-button:hover {
     background-color: rgba(0, 0, 0, 0.2);
 }
-.item-more-button:active {
+.item-edit-button:active {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-.item:hover .item-more-button {
+.item:hover .item-edit-button {
     visibility: visible;
-    opacity: 0.5;
+    opacity: 0.4;
     transition: visibility 0s 0.5s, opacity 0.2s 0.5s;
 }
 
