@@ -2,7 +2,7 @@ import { assert, randomString } from "../Utils.js"
 import WorkspaceList from "./WorkspaceList.js"
 import WorkspaceTab from "./WorkspaceTab.js"
 import Storage from "./Storage.js"
-import { scheduleSuspend } from "../TabSuspender.js"
+import { scheduleSuspend } from "../TabSuspend.js"
 
 const Workspace = {
 	async create({ name, icon, tabs, windowId }) {

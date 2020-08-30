@@ -2,6 +2,7 @@ import Workspace from "../model/Workspace.js"
 import Options from "../model/Options.js"
 import Action from "../Action.js"
 import WorkspaceList from "../model/WorkspaceList.js"
+import WindowSync from "../WindowSync.js"
 
 chrome.runtime.onMessage.addListener(handleMessage)
 chrome.runtime.onInstalled.addListener(handleInstall)
@@ -12,10 +13,8 @@ chrome.tabs.onAttached.addListener(handleTabAttach)
 chrome.tabs.onDetached.addListener(handleTabDetach)
 chrome.windows.onCreated.addListener(handleWindowOpen)
 chrome.windows.onRemoved.addListener(handleWindowClose)
-window.setInterval(updateWorkspaces, 5000)
 
 const WindowType = chrome.windows.WindowType
-const dirtyWindows = new Set()
 let openingWorkspace = false
 
 async function handleMessage(request, sender, sendResponse) {
@@ -33,30 +32,30 @@ async function handleMessage(request, sender, sendResponse) {
 
 async function handleTabActivate({windowId}) {
 	if (!openingWorkspace) {
-		dirtyWindows.add(windowId)
+		WindowSync.schedule(windowId)
 	}
 }
 
 async function handleTabUpdate(tabId, changeInfo, tab) {
-	if (!openingWorkspace) {
-		dirtyWindows.add(tab.windowId)
+	if (!openingWorkspace && changeInfo.url) {
+		WindowSync.schedule(tab.windowId)
 	}
 }
 
 async function handleTabRemove(tabId, {windowId, isWindowClosing}) {
 	if (isWindowClosing) {
-		dirtyWindows.delete(windowId)
+		WindowSync.unschedule(windowId)
 	} else {
-		dirtyWindows.add(windowId)
+		WindowSync.schedule(windowId)
 	}
 }
 
 async function handleTabAttach(tabId, {newWindowId}) {
-	dirtyWindows.add(newWindowId)
+	WindowSync.schedule(newWindowId)
 }
 
 async function handleTabDetach(tabId, {oldWindowId}) {
-	dirtyWindows.add(oldWindowId)
+	WindowSync.schedule(oldWindowId)
 }
 
 async function handleWindowOpen(window) {
@@ -85,17 +84,6 @@ async function handleInstall() {
 	// TODO: Welcome screen & support
 }
 
-async function updateWorkspaces() {
-	for (const windowId of dirtyWindows) {
-		await Workspace.updateFromWindow(windowId)
-	}
-
-	if (dirtyWindows.size > 0) {
-		console.debug('TABS SYNCED', new Date())
-	}
-
-	dirtyWindows.clear()
-}
 
 async function workspaceMatchesWindow(workspaceId, windowId) {
 	const windowTabs = await chrome.tabs.query({ windowId })
