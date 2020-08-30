@@ -16,7 +16,7 @@ class ListView extends View {
     async render() {
         const workspaces = await WorkspaceList.getWorkspaces()
         const currentWindowId = (await chrome.windows.getCurrent()).id
-        const currentWorkspaceId = await WorkspaceList.findWorkspaceByWindow(currentWindowId)
+        const currentWorkspaceId = await WorkspaceList.findWorkspaceForWindow(currentWindowId)
 
         this._listElement.innerHTML = ""
         this._addButton.onclick = () => this._addItem()

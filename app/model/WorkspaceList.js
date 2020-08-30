@@ -5,43 +5,57 @@ const WorkspaceList = {
 	/**
 	 * @returns {Promise<Array<{workspaceId: string, windowId: number}>>}
 	 */
-	async get() {
+	async getItems() {
 		return await Storage.get(Storage.WORKSPACE_LIST) ?? []
 	},
 
-	async set(list) {
+	async setItems(list) {
 		await Storage.set(Storage.WORKSPACE_LIST, list)
 	},
 
 	async getWorkspaces() {
-		const list = await WorkspaceList.get()
+		const list = await WorkspaceList.getItems()
 		const workspaceIds = list.map(item => item.workspaceId)
 
 		return await Storage.getAll(workspaceIds)
 	},
 
 	async add(workspaceId, windowId) {
-		const list = await WorkspaceList.get()
+		const list = await WorkspaceList.getItems()
 
-		await WorkspaceList.set([...list, {workspaceId, windowId}])
+		await WorkspaceList.setItems(list.concat({ workspaceId, windowId }))
+	},
+
+	async update(workspaceId, windowId) {
+		const list = await WorkspaceList.getItems()
+
+		for (const item of list) {
+			if (item.workspaceId === workspaceId) {
+				item.windowId = windowId
+			}
+		}
+
+		await WorkspaceList.setItems(list)
 	},
 
 	async remove(workspaceId) {
-		const list = await WorkspaceList.get()
+		const list = await WorkspaceList.getItems()
 
-		await WorkspaceList.set(list.filter(item => item.workspaceId !== workspaceId))
+		await WorkspaceList.setItems(list
+			.filter(item => item.workspaceId !== workspaceId)
+		)
 	},
 
-	async findWorkspaceByWindow(windowId) {
+	async findWorkspaceForWindow(windowId) {
 		assert(windowId)
-		const list = await WorkspaceList.get()
+		const list = await WorkspaceList.getItems()
 
 		return list.find(item => item.windowId === windowId)?.workspaceId
 	},
 
-	async findWindowByWorkspace(workspaceId) {
+	async findWindowForWorkspace(workspaceId) {
 		assert(workspaceId)
-		const list = await WorkspaceList.get()
+		const list = await WorkspaceList.getItems()
 
 		return list.find(item => item.workspaceId === workspaceId)?.windowId
 	}

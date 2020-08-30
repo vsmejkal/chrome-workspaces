@@ -9,7 +9,7 @@ init().then(render)
 
 
 async function init() {
-	let list = await WorkspaceList.get()
+	let list = await WorkspaceList.getItems()
 
 	if (list.length === 0) {
 		await createInitialWorkspaces()

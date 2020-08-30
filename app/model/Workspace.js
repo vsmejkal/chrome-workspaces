@@ -2,7 +2,7 @@ import { assert, randomString } from "../Utils.js"
 import WorkspaceList from "./WorkspaceList.js"
 import WorkspaceTab from "./WorkspaceTab.js"
 import Storage from "./Storage.js"
-import { scheduleSuspend } from "../Suspender.js";
+import { scheduleSuspend } from "../TabSuspender.js"
 
 const Workspace = {
 	async create({ name, icon, tabs, windowId }) {
@@ -39,10 +39,10 @@ const Workspace = {
 
 	async open(workspaceId, closeCurrent = true) {
 		const workspace = await Workspace.get(workspaceId)
-		const windowId = await WorkspaceList.findWindowByWorkspace(workspaceId)
+		const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
 
-		if (windowId) {
-			return await focusWindow(windowId)
+		if (windowId && await focusWindow(windowId)) {
+			return
 		}
 
 		const currentWindow = await chrome.windows.getLastFocused()
@@ -65,7 +65,7 @@ const Workspace = {
 		}
 
 		async function initWindow(workspace, window) {
-			await Workspace.assignWindow(workspace.id, window.id)
+			await WorkspaceList.update(workspace.id, window.id)
 
 			workspace.tabs.forEach(({ url, active = false, pinned = false}, i) => {
 				const tabId = window.tabs[i].id
@@ -77,28 +77,28 @@ const Workspace = {
 		}
 
 		async function focusWindow(windowId) {
-			await chrome.windows.update(windowId, { focused: true })
+			try {
+				await chrome.windows.update(windowId, { focused: true })
+				return true
+			} catch (e) {
+				console.error(e)
+				return false
+			}
 		}
 
 		async function closeWindow(windowId) {
-			await chrome.windows.remove(windowId)
+			try {
+				await chrome.windows.remove(windowId)
+				return true
+			} catch (e) {
+				console.error(e)
+				return false
+			}
 		}
 	},
 
-	async assignWindow(workspaceId, windowId) {
-		const list = await WorkspaceList.get()
-
-		list.forEach(item => {
-			if (item.workspaceId === workspaceId) {
-				item.windowId = windowId
-			}
-		})
-
-		await WorkspaceList.set(list)
-	},
-
 	async updateFromWindow(windowId) {
-		const workspaceId = await WorkspaceList.findWorkspaceByWindow(windowId)
+		const workspaceId = await WorkspaceList.findWorkspaceForWindow(windowId)
 		if (!workspaceId) return
 
 		const workspace = await Workspace.get(workspaceId)
