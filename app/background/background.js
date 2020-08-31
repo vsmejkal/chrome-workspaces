@@ -92,5 +92,8 @@ async function workspaceMatchesWindow(workspaceId, windowId) {
 	const workspaceTabs = (await Workspace.get(workspaceId))?.tabs ?? []
 	const matchedUrls = workspaceTabs.filter(tab => windowUrls.has(tab.url))
 
-	return matchedUrls.length > 0 && windowTabs.length - matchedUrls.length <= 1
+	const totalTabs = windowTabs.length
+	const totalMatches = matchedUrls.length
+
+	return totalMatches > 0 && (totalTabs - totalMatches <= 1 || totalMatches / totalTabs > 0.75)
 }
