@@ -65,6 +65,12 @@ async function handleWindowOpen(window) {
 
 	const windowId = window.id
 	const lastWorkspaceId = await Options.get(Options.LAST_WORKSPACE_ID)
+	const allWindows = await chrome.windows.getAll({windowTypes: [WindowType.NORMAL]})
+
+	// Chrome opened -> clear old workspace-window mapping
+	if (allWindows.length === 1) {
+		await WorkspaceList.clearWindowIds()
+	}
 
 	if (lastWorkspaceId && await workspaceMatchesWindow(lastWorkspaceId, windowId)) {
 		await WorkspaceList.update(lastWorkspaceId, windowId)

@@ -3,7 +3,7 @@ import { assert } from "../Utils.js";
 
 const WorkspaceList = {
 	/**
-	 * @returns {Promise<Array<{workspaceId: string, windowId: number}>>}
+	 * @returns {Promise<Array<{workspaceId: string, windowId: ?number}>>}
 	 */
 	async getItems() {
 		return await Storage.get(Storage.WORKSPACE_LIST) ?? []
@@ -58,6 +58,15 @@ const WorkspaceList = {
 		const list = await WorkspaceList.getItems()
 
 		return list.find(item => item.workspaceId === workspaceId)?.windowId
+	},
+
+	async clearWindowIds() {
+		const list = await WorkspaceList.getItems()
+		for (const item of list) {
+			item.windowId = null
+		}
+
+		await WorkspaceList.setItems(list)
 	}
 }
 

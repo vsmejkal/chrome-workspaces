@@ -26,7 +26,6 @@
     "default_popup": "app/popup/popup.html"
   },
   "permissions": [
-    "contextMenus",
     "storage",
     "tabs"
   ]
