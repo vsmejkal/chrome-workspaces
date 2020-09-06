@@ -46,16 +46,10 @@ class ListView extends View {
             this._editItem(id);
         }
 
-        const handleClick = ({button, ctrlKey, metaKey}) => {
-            const newWindow = (button === 0 && ctrlKey) || (button === 0 && metaKey) || (button === 1)
-            this._openItem(id, newWindow)
-        }
-
         const item = document.createElement("button")
         item.classList.add("item")
         item.classList.toggle(selectedClass, selected)
-        item.onclick = handleClick
-        item.onauxclick = handleClick
+        item.onclick = () => this._openItem(id)
         item.appendChild(itemIcon)
         item.appendChild(itemName)
         item.appendChild(itemButton)

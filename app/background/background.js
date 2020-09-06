@@ -23,7 +23,7 @@ async function handleMessage(request, sender, sendResponse) {
 
 	if (request.type === Action.Type.OPEN_WORKSPACE) {
 		openingWorkspace = true
-		await Workspace.open(request.workspaceId, request.closeCurrent)
+		await Workspace.open(request.workspaceId)
 		openingWorkspace = false
 	}
 

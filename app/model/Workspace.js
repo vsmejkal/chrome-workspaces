@@ -37,7 +37,7 @@ const Workspace = {
 		await Storage.remove(workspaceId)
 	},
 
-	async open(workspaceId, closeCurrent = true) {
+	async open(workspaceId) {
 		const workspace = await Workspace.get(workspaceId)
 		const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
 
@@ -45,22 +45,13 @@ const Workspace = {
 			return
 		}
 
-		const currentWindow = await chrome.windows.getLastFocused()
-		const {left, top, width, height} = currentWindow
-		const properties = closeCurrent ? {left, top, width, height} : {}
-
-		const newWindow = await createWindow(workspace, properties)
+		const newWindow = await createWindow(workspace)
 		await initWindow(workspace, newWindow)
 
-		if (closeCurrent) {
-			await closeWindow(currentWindow.id)
-		}
-
-		async function createWindow(workspace, properties) {
+		async function createWindow(workspace) {
 			return await chrome.windows.create({
 				url: workspace.tabs.map(tab => tab.url),
-				focused: true,
-				...properties
+				focused: true
 			})
 		}
 
@@ -79,16 +70,6 @@ const Workspace = {
 		async function focusWindow(windowId) {
 			try {
 				await chrome.windows.update(windowId, { focused: true })
-				return true
-			} catch (e) {
-				console.error(e)
-				return false
-			}
-		}
-
-		async function closeWindow(windowId) {
-			try {
-				await chrome.windows.remove(windowId)
 				return true
 			} catch (e) {
 				console.error(e)

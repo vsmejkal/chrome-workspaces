@@ -20,7 +20,7 @@ async function render() {
 	const listView = new ListView({
 		addItem: () => newView.show(),
 		editItem: (id) => editView.show({ workspaceId: id }),
-		openItem: (id, newWindow) => Action.openWorkspace(id, newWindow).then(() => window.close())
+		openItem: (id) => Action.openWorkspace(id).then(() => window.close())
 	})
 
 	const newView = new DetailView({
