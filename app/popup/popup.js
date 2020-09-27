@@ -24,17 +24,17 @@ async function render() {
 	})
 
 	const newView = new DetailView({
-		saveItem: async ({ name, icon }) => {
-			await Workspace.create({ name, icon })
+		saveItem: async ({ name, color }) => {
+			await Workspace.create({ name, color })
 			listView.show()
 		}
 	})
 
 	const editView = new DetailView({
-		saveItem: async ({ workspaceId, name, icon }) => {
+		saveItem: async ({ workspaceId, name, color }) => {
 			const workspace = await Workspace.get(workspaceId)
 			workspace.name = name
-			workspace.icon = icon
+			workspace.color = color
 			await Workspace.save(workspace)
 
 			listView.show()
@@ -58,14 +58,14 @@ async function createInitialWorkspaces() {
 
 	await Workspace.create({
 		name: "Workspace 1",
-		icon: "home",
 		tabs: tabs.map(WorkspaceTab.create),
+		color: "blue",
 		windowId
 	})
 
 	await Workspace.create({
 		name: "Workspace 2",
-		icon: "star"
+		color: "gray"
 	})
 }
 

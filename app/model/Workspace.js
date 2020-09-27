@@ -5,14 +5,14 @@ import Storage from "./Storage.js"
 import { scheduleSuspend } from "../TabSuspend.js"
 
 const Workspace = {
-	async create({ name, icon, tabs, windowId }) {
+	async create({ name, color, tabs, windowId }) {
 		if (!tabs || tabs.length === 0) {
 			tabs = [WorkspaceTab.createEmpty()]
 		}
 
 		const workspace = {
 			id: `${Storage.WORKSPACE_PREFIX}${randomString(8)}`,
-			name, icon, tabs
+			name, color, tabs
 		}
 
 		await Workspace.save(workspace)

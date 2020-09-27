@@ -1,54 +1,55 @@
-#workspace-icon-picker {
+#workspace-color-picker {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    column-gap: 8px;
-    row-gap: 6px;
+    row-gap: 12px;
+    padding-top: 4px;
 }
-#workspace-icon-picker .icon {
+#workspace-color-picker .color {
     display: inline-block;
-    width: 32px;
-    height: 32px;
+    width: 20px;
+    height: 20px;
     margin: auto;
     border: none;
     border-radius: var(--border-radius);
-    background-position: center;
-    background-size: 32px 32px;
-    background-repeat: no-repeat;
-    background-color: var(--color-bluegray-50);
     cursor: pointer;
 }
-#workspace-icon-picker .icon i {
-    opacity: 0.9;
+#workspace-color-picker .color:focus {
+    animation: bump 250ms ease-in-out;
 }
-#workspace-icon-picker .icon:active:not(.icon-selected) {
-    background-color: var(--color-bluegray-100);
-}
-#workspace-icon-picker .icon-selected {
-    background-color: var(--color-primary);
-}
-#workspace-icon-picker .icon-selected:active {
-    background-color: var(--color-primary-dark);
-}
-#workspace-icon-picker .icon-selected i {
-    opacity: 1;
-    filter: invert(1);
+#workspace-color-picker .color-selected {
+    background-image: url(../../icons/ui/check.svg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
 }
 
 #workspace-remove {
     margin-right: auto;
-    color: var(--color-red-800);
+    color: var(--color-ui-danger-dark);
 }
 #workspace-remove:hover,
 #workspace-remove:active {
-    background-color: var(--color-red-600);
-    border-color: var(--color-red-800);
+    background-color: var(--color-ui-danger);
+    border-color: var(--color-ui-danger-dark);
     color: #ffffff;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     outline: none;
 }
 #workspace-remove:active {
-    background-color: var(--color-red-800);
+    background-color: var(--color-ui-danger-dark);
     color: #ffffff;
+}
+
+@keyframes bump {
+    0% {
+        transform: scale(1.0);
+    }
+    50% {
+        transform: scale(1.25);
+    }
+    100% {
+        transform: scale(1.0);
+    }
 }

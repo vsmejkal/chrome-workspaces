@@ -1,5 +1,6 @@
 import View from "./View.js"
 import WorkspaceList from "../../model/WorkspaceList.js"
+import Color from "../../Color.js"
 
 class ListView extends View {
     constructor({ addItem, editItem, openItem }) {
@@ -28,11 +29,9 @@ class ListView extends View {
         }
     }
 
-    _createItem({ id, name, icon, selected }) {
-        const itemIcon = document.createElement("i")
-        if (icon) {
-            itemIcon.classList.add("item-icon", "bi", `bi-${icon}`)
-        }
+    _createItem({ id, name, color = "gray", selected }) {
+        const itemColor = document.createElement("div")
+        itemColor.classList.add("item-color")
 
         const itemName = document.createElement("div")
         itemName.classList.add("item-name")
@@ -40,7 +39,7 @@ class ListView extends View {
 
         const itemButton = document.createElement("i")
         itemButton.title = "Edit"
-        itemButton.classList.add("bi", "bi-pencil", "item-edit-button")
+        itemButton.classList.add("bi", "bi-three-dots", "item-edit-button")
         itemButton.onclick = (e) => {
             e.stopPropagation();
             this._editItem(id);
@@ -50,7 +49,9 @@ class ListView extends View {
         item.classList.add("item")
         item.classList.toggle(selectedClass, selected)
         item.onclick = () => this._openItem(id)
-        item.appendChild(itemIcon)
+        item.style.setProperty('--item-color', Color[color]?.color)
+        item.style.setProperty('--item-color-dark', Color[color]?.dark)
+        item.appendChild(itemColor)
         item.appendChild(itemName)
         item.appendChild(itemButton)
 

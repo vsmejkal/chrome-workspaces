@@ -7,17 +7,5 @@
     background-size: 80% 80%;
 }
 
-.bi-pencil { background-image: url("ui/pencil.svg"); }
+.bi-three-dots { background-image: url("ui/three-dots.svg"); }
 .bi-plus { background-image: url("ui/plus.svg"); }
-
-/* Workspace icons */
-.bi-home { background-image: url("workspace/house.svg"); }
-.bi-star { background-image: url("workspace/star.svg"); }
-.bi-work { background-image: url("workspace/briefcase.svg"); }
-.bi-buy { background-image: url("workspace/cart4.svg"); }
-.bi-gift { background-image: url("workspace/gift.svg"); }
-.bi-smile { background-image: url("workspace/emoji-smile.svg"); }
-.bi-read { background-image: url("workspace/book.svg"); }
-.bi-media { background-image: url("workspace/caret-right-square.svg"); }
-.bi-game { background-image: url("workspace/controller.svg"); }
-.bi-travel { background-image: url("workspace/cursor.svg"); }

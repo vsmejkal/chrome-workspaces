@@ -4,54 +4,68 @@
 
 .item, #new-workspace-button {
     width: 100%;
-    min-height: 24px;
+    min-height: 32px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin: 4px 0;
-    padding: 6px 8px;
+    padding: 0 8px;
     font-weight: 500;
     text-align: start;
     cursor: pointer;
     border-radius: var(--border-radius);
 }
+.item {
+    --item-color: var(--color-ui-primary);
+    --item-color-dark: var(--color-ui-primary-dark);
+
+    position: relative;
+}
 .item:hover {
-    background: var(--color-bluegray-50);
+    background: var(--color-ui-neutral-50);
 }
 .item:active {
-    background: var(--color-bluegray-100);
+    background: var(--color-ui-neutral-100);
 }
 
-.item-selected {
-    background: var(--color-primary);
+.item-selected, .item-selected:hover {
+    font-weight: bold;
+    background: var(--item-color-dark);
     color: #ffffff;
-    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, .06);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, .2);
-}
-.item-selected:hover {
-    background: var(--color-primary);
-}
-.item-selected.focus-visible {
-    background: var(--color-primary-dark);
-}
-.item-selected .item-icon,
-.item-selected .item-edit-button {
-    filter: invert(1);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .15);
 }
 
-.item-icon {
+.item-color {
+    flex-shrink: 0;
     margin-right: 8px;
+    width: 16px;
+    height: 16px;
+    border-radius: var(--border-radius);
+    background-color: var(--item-color);
+}
+.item-selected .item-color {
+    background-color: transparent !important;
+    background-image: url(../../icons/ui/check.svg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 140%;
+    opacity: 0.75;
 }
 
 .item-name {
     flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .item-edit-button {
+    flex-shrink: 0;
+    width: 0;
     opacity: 0;
-    visibility: hidden;
     border-radius: 5px;
     background-size: 75% 75%;
+    overflow: hidden;
 }
 .item-edit-button:hover {
     background-color: rgba(0, 0, 0, 0.2);
@@ -59,16 +73,18 @@
 .item-edit-button:active {
     background-color: rgba(0, 0, 0, 0.4);
 }
-
+.item-selected .item-edit-button {
+    filter: invert(1);
+}
 .item:hover .item-edit-button {
-    visibility: visible;
-    opacity: 0.4;
-    transition: visibility 0s 0.5s, opacity 0.2s 0.5s;
+    width: 24px;
+    opacity: 0.5;
+    transition: width 0s 0.5s, opacity 0.2s 0.5s;
 }
 
 #new-workspace-button {
     width: auto;
-    margin: 8px 4px;
+    margin: 1px;
     padding: 2px 8px 2px 4px;
     color: rgba(0, 0, 0, 0.4);
 }

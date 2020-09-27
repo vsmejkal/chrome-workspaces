@@ -16,7 +16,9 @@ class View {
 
     get root() {
         const root = document.querySelector(this.#selector)
+
         assert(root, `View ${this.#selector} not found`)
+
         return root
     }
 
