@@ -3,7 +3,7 @@
 @import url(./view/DetailView.css);
 
 :root {
-    --width: 200px;
+    --width: 220px;
     --border-radius: 4px;
     --color-ui-primary: #2979ff;
     --color-ui-primary-dark: #2962ff;
@@ -17,6 +17,7 @@
     margin: 0;
     padding: 0;
     outline-color: var(--color-ui-primary-dark);
+    font-family: "Roboto", "Open Sans", Arial, "Lucida Grande", sans-serif;
 }
 
 :focus:not(.focus-visible) {
@@ -29,12 +30,12 @@ body {
     padding: 0;
     color: #1A202C;
     font-size: 14px;
-    font-family: "Open Sans", Arial, "Lucida Grande", sans-serif;
 }
 
 h1 {
     font-size: 16px;
-    margin: 10px 0;
+    margin: 12px 0;
+    font-weight: normal;
 }
 
 .view {

@@ -1,10 +1,10 @@
 #workspace-list {
-    margin-top: 20px;
+    margin-top: 16px;
 }
 
 .item, #new-workspace-button {
     width: 100%;
-    min-height: 32px;
+    min-height: 36px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -37,9 +37,9 @@
 
 .item-color {
     flex-shrink: 0;
-    margin-right: 8px;
-    width: 16px;
-    height: 16px;
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
     border-radius: var(--border-radius);
     background-color: var(--item-color);
 }
@@ -48,8 +48,7 @@
     background-image: url(../../icons/ui/check.svg);
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 140%;
-    opacity: 0.75;
+    background-size: 130%;
 }
 
 .item-name {
