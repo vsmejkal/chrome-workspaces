@@ -9,6 +9,7 @@
     --color-ui-primary-dark: #2962ff;
     --color-ui-neutral-50: #eceff1;
     --color-ui-neutral-100: #cfd8dc;
+    --color-ui-neutral-600: #546e7a;
     --color-ui-danger: #e53935;
     --color-ui-danger-dark: #c62828;
 }
@@ -33,9 +34,9 @@ body {
 }
 
 h1 {
-    font-size: 16px;
+    font-size: 18px;
     margin: 12px 0;
-    font-weight: normal;
+    color: var(--color-ui-neutral-600);
 }
 
 .view {
