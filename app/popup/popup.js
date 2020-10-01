@@ -4,6 +4,7 @@ import WorkspaceTab from "../model/WorkspaceTab.js"
 import ListView from "./view/ListView.js"
 import DetailView from "./view/DetailView.js";
 import Action from "../Action.js";
+import Color from "../Color.js";
 
 init().then(render)
 
@@ -59,13 +60,13 @@ async function createInitialWorkspaces() {
 	await Workspace.create({
 		name: "Workspace 1",
 		tabs: tabs.map(WorkspaceTab.create),
-		color: "blue",
+		color: Color.Name.BLUE,
 		windowId
 	})
 
 	await Workspace.create({
 		name: "Workspace 2",
-		color: "gray"
+		color: Color.Name.GREEN
 	})
 }
 
@@ -74,7 +75,7 @@ document.onkeypress = async (e) => {
 	const extensionInfo = await chrome.management.getSelf()
 	const isDevelopment = extensionInfo.installType === "development"
 
-	if (isDevelopment && e.key === "R" && confirm("Clear all data?")) {
+	if (isDevelopment && e.ctrlKey && e.altKey && e.key === "R" && confirm("Clear all data?")) {
 		chrome.storage.local.clear()
 		chrome.storage.sync.clear()
 		chrome.runtime.reload()
