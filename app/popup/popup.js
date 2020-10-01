@@ -60,13 +60,13 @@ async function createInitialWorkspaces() {
 	await Workspace.create({
 		name: "Workspace 1",
 		tabs: tabs.map(WorkspaceTab.create),
-		color: Color.Name.BLUE,
+		color: Color.Palette.BLUE,
 		windowId
 	})
 
 	await Workspace.create({
 		name: "Workspace 2",
-		color: Color.Name.GREEN
+		color: Color.Palette.GREEN
 	})
 }
 
@@ -75,7 +75,7 @@ document.onkeypress = async (e) => {
 	const extensionInfo = await chrome.management.getSelf()
 	const isDevelopment = extensionInfo.installType === "development"
 
-	if (isDevelopment && e.ctrlKey && e.altKey && e.key === "R" && confirm("Clear all data?")) {
+	if (isDevelopment && document.activeElement === document.body && e.key === "R" && confirm("Clear all data?")) {
 		chrome.storage.local.clear()
 		chrome.storage.sync.clear()
 		chrome.runtime.reload()

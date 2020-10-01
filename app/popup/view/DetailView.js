@@ -78,7 +78,7 @@ class DetailView extends View {
     _renderColors() {
         this._colorPicker.innerHTML = ""
 
-        Object.keys(Color).forEach(colorName => {
+        Object.values(Color.Palette).forEach(colorName => {
             const button = document.createElement('button')
             button.classList.add('color')
             button.dataset.colorName = colorName

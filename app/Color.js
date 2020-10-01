@@ -12,7 +12,7 @@ const Palette = {
 }
 
 export default {
-	Name: Palette,
+	Palette,
 
 	[Palette.RED]: {
 		color: '#ee4d4d',
