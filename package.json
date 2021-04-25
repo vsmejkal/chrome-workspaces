@@ -1,0 +1,14 @@
+{
+  "name": "chrome-workspaces",
+  "version": "0.4.0",
+  "description": "Chrome extension to organize tabs into workspaces.",
+  "repository": "git@github.com:vsmejkal/chrome-workspaces.git",
+  "author": "Vojtech Smejkal",
+  "license": "MIT",
+  "devDependencies": {
+    "rollup": "^2.45.2"
+  },
+  "scripts": {
+    "dev": "rollup -c -w"
+  }
+}

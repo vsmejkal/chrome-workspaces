@@ -1,3 +1,4 @@
+import "./importLibraries.js"
 import Workspace from "../model/Workspace.js"
 import Options from "../model/Options.js"
 import Action from "../Action.js"
@@ -13,6 +14,7 @@ chrome.tabs.onAttached.addListener(handleTabAttach)
 chrome.tabs.onDetached.addListener(handleTabDetach)
 chrome.windows.onCreated.addListener(handleWindowOpen)
 chrome.windows.onRemoved.addListener(handleWindowClose)
+
 
 const WindowType = chrome.windows.WindowType
 let openingWorkspace = false

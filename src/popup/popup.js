@@ -8,7 +8,6 @@ import Color from "../Color.js";
 
 init().then(render)
 
-
 async function init() {
 	let list = await WorkspaceList.getItems()
 
