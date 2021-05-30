@@ -4,7 +4,6 @@ import WorkspaceTab from "../model/WorkspaceTab.js"
 import ListView from "./view/ListView.js"
 import DetailView from "./view/DetailView.js";
 import Action from "../Action.js";
-import Color from "../Color.js";
 
 init().then(render)
 
@@ -57,15 +56,15 @@ async function createInitialWorkspaces() {
 	const tabs = await chrome.tabs.query({ windowId })
 
 	await Workspace.create({
-		name: "Workspace 1",
+		name: "Blue Workspace",
 		tabs: tabs.map(WorkspaceTab.create),
-		color: Color.Palette.BLUE,
+		color: "blue",
 		windowId
 	})
 
 	await Workspace.create({
-		name: "Workspace 2",
-		color: Color.Palette.GREEN
+		name: "Green Workspace",
+		color: "green"
 	})
 }
 

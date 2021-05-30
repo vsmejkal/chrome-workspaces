@@ -3,7 +3,7 @@
 @import url(./view/DetailView.css);
 
 :root {
-    --width: 220px;
+    --width: 230px;
     --border-radius: 4px;
     --color-ui-primary: #2979ff;
     --color-ui-primary-dark: #2962ff;

@@ -1,17 +1,14 @@
 #workspace-color-picker {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    row-gap: 12px;
-    padding-top: 4px;
+    display: flex;
+    padding: 4px 0;
+    justify-content: space-between;
 }
 #workspace-color-picker .color {
     display: inline-block;
     width: 22px;
     height: 22px;
-    margin: auto;
+    border-radius: 50% !important;
     border: none;
-    border-radius: var(--border-radius);
     cursor: pointer;
 }
 #workspace-color-picker .color:focus {

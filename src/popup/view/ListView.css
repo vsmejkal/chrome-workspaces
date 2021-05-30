@@ -38,9 +38,9 @@
 .item-color {
     flex-shrink: 0;
     margin-right: 10px;
-    width: 18px;
-    height: 18px;
-    border-radius: var(--border-radius);
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
     background-color: var(--item-color);
 }
 .item-selected .item-color {
@@ -55,6 +55,7 @@
     flex-grow: 1;
     white-space: nowrap;
     overflow: hidden;
+    font-size: 105%;
     text-overflow: ellipsis;
 }
 

@@ -29,7 +29,7 @@ class DetailView extends View {
         }
 
         this._renderColors()
-        this._selectColor(workspace?.color)
+        this._selectColor(workspace?.color ?? "grey")
 
         this._removeButton.style.display = workspace ? "block" : "none"
         this._removeButton.onclick = () => this._deleteItem({ workspaceId })
@@ -78,15 +78,15 @@ class DetailView extends View {
     _renderColors() {
         this._colorPicker.innerHTML = ""
 
-        Object.values(Color.Palette).forEach(colorName => {
+        for (const colorName of Object.keys(Color)) {
             const button = document.createElement('button')
             button.classList.add('color')
             button.dataset.colorName = colorName
-            button.style.backgroundColor = Color[colorName].color
+            button.style.backgroundColor = Color[colorName]
             button.onclick = () => this._selectColor(colorName)
 
             this._colorPicker.appendChild(button)
-        })
+        }
     }
 
     _selectColor(colorName) {

@@ -4,6 +4,7 @@ import Options from "../model/Options.js"
 import Action from "../Action.js"
 import WorkspaceList from "../model/WorkspaceList.js"
 import WindowSync from "../WindowSync.js"
+import { executeMigrations } from "../migration/migration.js";
 
 chrome.runtime.onMessage.addListener(handleMessage)
 chrome.runtime.onInstalled.addListener(handleInstall)
@@ -88,8 +89,14 @@ async function handleWindowClose(windowId) {
 	await Options.set(Options.LAST_WORKSPACE_ID, workspaceId)
 }
 
-async function handleInstall() {
-	// TODO: Welcome screen & support
+async function handleInstall({ reason, previousVersion }) {
+	if (reason === "update") {
+		await executeMigrations(previousVersion)
+	}
+
+	if (reason === "install") {
+		// TODO: Welcome screen & support
+	}
 }
 
 
