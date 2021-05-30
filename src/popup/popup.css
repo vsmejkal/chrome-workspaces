@@ -35,12 +35,12 @@ body {
 
 h1 {
     font-size: 18px;
-    margin: 12px 0;
+    margin: 12px 4px;
     color: var(--color-ui-neutral-600);
 }
 
 .view {
-    padding: 10px;
+    padding: 8px;
     background: #ffffff;
     display: none;
 }

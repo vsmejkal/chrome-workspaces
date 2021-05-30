@@ -50,7 +50,7 @@ class ListView extends View {
         item.classList.toggle(selectedClass, selected)
         item.onclick = () => this._openItem(id)
         item.style.setProperty('--item-color', Color[color])
-        item.style.setProperty('--item-color-dark', Color[color])
+        item.style.setProperty('--item-bg-color', Color[color] + "33")
         item.appendChild(itemColor)
         item.appendChild(itemName)
         item.appendChild(itemButton)

@@ -9,7 +9,7 @@
     align-items: center;
     justify-content: space-between;
     margin: 4px 0;
-    padding: 0 8px;
+    padding: 2px 8px;
     font-weight: 500;
     text-align: start;
     cursor: pointer;
@@ -17,7 +17,6 @@
 }
 .item {
     --item-color: var(--color-ui-primary);
-    --item-color-dark: var(--color-ui-primary-dark);
 
     position: relative;
 }
@@ -29,10 +28,7 @@
 }
 
 .item-selected, .item-selected:hover {
-    font-weight: bold;
-    background: var(--item-color-dark);
-    color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, .15);
+    background: var(--item-bg-color);
 }
 
 .item-color {
@@ -42,13 +38,6 @@
     height: 20px;
     border-radius: 10px;
     background-color: var(--item-color);
-}
-.item-selected .item-color {
-    background-color: transparent !important;
-    background-image: url(../../icons/ui/check.svg);
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 130%;
 }
 
 .item-name {
@@ -72,9 +61,6 @@
 }
 .item-edit-button:active {
     background-color: rgba(0, 0, 0, 0.4);
-}
-.item-selected .item-edit-button {
-    filter: invert(1);
 }
 .item:hover .item-edit-button {
     width: 24px;
