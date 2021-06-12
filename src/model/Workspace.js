@@ -46,7 +46,7 @@ const Workspace = {
 		}
 
 		const newWindow = await createWindow(workspace)
-		await initWindow(workspace, newWindow)
+		await initTabs(workspace, newWindow)
 
 		async function createWindow(workspace) {
 			return await chrome.windows.create({
@@ -55,16 +55,21 @@ const Workspace = {
 			})
 		}
 
-		async function initWindow(workspace, window) {
+		async function initTabs(workspace, window) {
+			const tabIds = window.tabs.map((tab) => tab.id)
+
 			await WorkspaceList.update(workspace.id, window.id)
 
-			workspace.tabs.forEach(({ url, active = false, pinned = false}, i) => {
-				const tabId = window.tabs[i].id
+			workspace.tabs.forEach(({ url, active = false, pinned = false}, index) => {
+				const tabId = tabIds[index]
 				if (url.startsWith("http")) {
 					scheduleSuspend(tabId)
 				}
 				chrome.tabs.update(tabId, { active, pinned })
 			})
+
+			const groupId = await chrome.tabs.group({ tabIds })
+			await chrome.tabGroups.update(groupId, { title: workspace.name, color: workspace.color})
 		}
 
 		async function focusWindow(windowId) {

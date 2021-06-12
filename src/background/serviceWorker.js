@@ -9,6 +9,7 @@ import { executeMigrations } from "../migration/migration.js";
 chrome.runtime.onMessage.addListener(handleMessage)
 chrome.runtime.onInstalled.addListener(handleInstall)
 chrome.tabs.onActivated.addListener(handleTabActivate)
+chrome.tabs.onCreated.addListener(handleTabCreate)
 chrome.tabs.onUpdated.addListener(handleTabUpdate)
 chrome.tabs.onRemoved.addListener(handleTabRemove)
 chrome.tabs.onAttached.addListener(handleTabAttach)
@@ -33,9 +34,15 @@ async function handleMessage(request, sender, sendResponse) {
 	return true
 }
 
-async function handleTabActivate({windowId}) {
+async function handleTabActivate({ windowId }) {
 	if (!openingWorkspace) {
 		WindowSync.schedule(windowId)
+	}
+}
+
+async function handleTabCreate(tab) {
+	if (!openingWorkspace) {
+		await addTabToGroup(tab.id, tab.windowId);
 	}
 }
 
@@ -54,6 +61,8 @@ async function handleTabRemove(tabId, {windowId, isWindowClosing}) {
 }
 
 async function handleTabAttach(tabId, {newWindowId}) {
+	await addTabToGroup(tabId, newWindowId)
+	
 	WindowSync.schedule(newWindowId)
 }
 
@@ -99,6 +108,16 @@ async function handleInstall({ reason, previousVersion }) {
 	}
 }
 
+async function addTabToGroup(tabId, windowId) {
+	const workspaceId = await WorkspaceList.findWorkspaceForWindow(windowId)
+	if (!workspaceId) return
+
+	const groupsInWindow = await chrome.tabGroups.query({windowId})
+	const firstGroup = groupsInWindow?.[0]
+	if (!firstGroup) return
+
+	await chrome.tabs.group({ groupId: firstGroup.id, tabIds: tabId })
+}
 
 async function workspaceMatchesWindow(workspaceId, windowId) {
 	const windowTabs = await chrome.tabs.query({ windowId })
