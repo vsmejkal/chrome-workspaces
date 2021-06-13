@@ -21,12 +21,12 @@
     background-size: cover;
 }
 
-#workspace-remove {
+#view-detail .remove-button {
     margin-right: auto;
     color: var(--color-ui-danger-dark);
 }
-#workspace-remove:hover,
-#workspace-remove:active {
+#view-detail .remove-button:hover,
+#view-detail .remove-button:active {
     background-color: var(--color-ui-danger);
     border-color: var(--color-ui-danger-dark);
     color: #ffffff;
@@ -34,7 +34,7 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     outline: none;
 }
-#workspace-remove:active {
+#view-detail .remove-button:active {
     background-color: var(--color-ui-danger-dark);
     color: #ffffff;
 }

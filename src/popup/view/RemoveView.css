@@ -1,0 +1,17 @@
+#view-remove p {
+    margin: 0 4px;
+    line-height: 1.5;
+}
+
+#view-remove .cancel-button {
+    margin-right: auto;
+}
+
+#view-remove .remove-button {
+    background-color: var(--color-ui-danger);
+    border-color: var(--color-ui-danger-dark);
+    color: #ffffff;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    outline: none;
+}

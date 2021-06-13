@@ -3,12 +3,12 @@ import WorkspaceList from "../../workspace/WorkspaceList.js"
 import Color from "../../Color.js"
 
 class ListView extends View {
-    constructor({ addItem, editItem, openItem }) {
+    constructor({ onAddItem, onEditItem, onOpenItem }) {
         super("#view-list")
 
-        this._addItem = addItem
-        this._editItem = editItem
-        this._openItem = openItem
+        this._onAddItem = onAddItem
+        this._onEditItem = onEditItem
+        this._onOpenItem = onOpenItem
 
         this._listElement = this.getElement("#workspace-list")
         this._addButton = this.getElement("#new-workspace-button")
@@ -20,7 +20,7 @@ class ListView extends View {
         const currentWorkspaceId = await WorkspaceList.findWorkspaceForWindow(currentWindowId)
 
         this._listElement.innerHTML = ""
-        this._addButton.onclick = () => this._addItem()
+        this._addButton.onclick = () => this._onAddItem()
 
         for (const workspace of workspaces) {
             const selected = workspace.id === currentWorkspaceId
@@ -42,13 +42,13 @@ class ListView extends View {
         itemButton.classList.add("bi", "bi-three-dots", "item-edit-button")
         itemButton.onclick = (e) => {
             e.stopPropagation();
-            this._editItem(id);
+            this._onEditItem(id);
         }
 
         const item = document.createElement("button")
         item.classList.add("item")
         item.classList.toggle(selectedClass, selected)
-        item.onclick = () => this._openItem(id)
+        item.onclick = () => this._onOpenItem(id)
         item.style.setProperty('--item-color', Color[color])
         item.style.setProperty('--item-bg-color', Color[color] + "24")
         item.appendChild(itemColor)

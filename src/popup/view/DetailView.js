@@ -3,17 +3,17 @@ import Workspace from "../../workspace/Workspace.js"
 import Color from "../../Color.js"
 
 class DetailView extends View {
-    constructor({ saveItem, deleteItem }) {
+    constructor({ onSave, onRemove }) {
         super("#view-detail")
 
-        this._saveItem = saveItem
-        this._deleteItem = deleteItem
+        this._onSave = onSave
+        this._onRemove = onRemove
 
         this._heading = this.getElement("h1")
         this._nameField = this.getElement("#workspace-name")
         this._colorPicker = this.getElement("#workspace-color-picker")
-        this._removeButton = this.getElement("#workspace-remove")
-        this._saveButton = this.getElement("#workspace-save")
+        this._removeButton = this.getElement(".remove-button")
+        this._saveButton = this.getElement(".save-button")
     }
 
     async render({ workspaceId }) {
@@ -32,10 +32,10 @@ class DetailView extends View {
         this._selectColor(workspace?.color ?? "grey")
 
         this._removeButton.style.display = workspace ? "block" : "none"
-        this._removeButton.onclick = () => this._deleteItem({ workspaceId })
+        this._removeButton.onclick = () => this._onRemove({ workspaceId })
 
         this._saveButton.innerText = workspace ? "Done" : "Add"
-        this._saveButton.onclick = () => this._validate() && this._saveItem({
+        this._saveButton.onclick = () => this._validate() && this._onSave({
             workspaceId: workspaceId,
             name: this._nameField.value,
             color: this._getSelectedColor()

@@ -1,9 +1,9 @@
 import Workspace from "../workspace/Workspace.js"
 import WorkspaceList from "../workspace/WorkspaceList.js"
-import WorkspaceTab from "../workspace/WorkspaceTab.js"
 import ListView from "./view/ListView.js"
 import DetailView from "./view/DetailView.js";
 import Action from "../Action.js";
+import RemoveView from "./view/RemoveView.js";
 
 init().then(render)
 
@@ -17,20 +17,20 @@ async function init() {
 
 async function render() {
 	const listView = new ListView({
-		addItem: () => newView.show(),
-		editItem: (id) => editView.show({ workspaceId: id }),
-		openItem: (id) => Action.openWorkspace(id).then(() => window.close())
+		onAddItem: () => newView.show(),
+		onEditItem: (id) => editView.show({ workspaceId: id }),
+		onOpenItem: (id) => Action.openWorkspace(id).then(() => window.close())
 	})
 
 	const newView = new DetailView({
-		saveItem: async ({ name, color }) => {
+		onSave: async ({ name, color }) => {
 			await Workspace.create({ name, color })
 			listView.show()
 		}
 	})
 
 	const editView = new DetailView({
-		saveItem: async ({ workspaceId, name, color }) => {
+		onSave: async ({ workspaceId, name, color }) => {
 			const workspace = await Workspace.get(workspaceId)
 			workspace.name = name
 			workspace.color = color
@@ -38,13 +38,18 @@ async function render() {
 
 			listView.show()
 		},
-		deleteItem: async ({ workspaceId }) => {
-			const workspace = await Workspace.get(workspaceId)
+		onRemove: async ({ workspaceId }) => {
+			removeView.show({ workspaceId })
+		}
+	})
 
-			if (confirm(`Remove "${workspace.name}"?`)) {
-				await Workspace.remove(workspaceId)
-				listView.show()
-			}
+	const removeView = new RemoveView({
+		onCancel: async ({ workspaceId }) => {
+			editView.show({ workspaceId })
+		},
+		onRemove: async ({ workspaceId }) => {
+			await Workspace.remove(workspaceId)
+			listView.show()
 		}
 	})
 
