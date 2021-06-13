@@ -1,8 +1,8 @@
 import "./importLibraries.js"
-import Workspace from "../model/Workspace.js"
-import Options from "../model/Options.js"
+import Workspace from "../workspace/Workspace.js"
+import Config from "../storage/Config.js"
 import Action from "../Action.js"
-import WorkspaceList from "../model/WorkspaceList.js"
+import WorkspaceList from "../workspace/WorkspaceList.js"
 import WindowSync from "../WindowSync.js"
 import { executeMigrations } from "../migration/migration.js";
 
@@ -14,39 +14,45 @@ chrome.tabs.onUpdated.addListener(handleTabUpdate)
 chrome.tabs.onRemoved.addListener(handleTabRemove)
 chrome.tabs.onAttached.addListener(handleTabAttach)
 chrome.tabs.onDetached.addListener(handleTabDetach)
+chrome.tabGroups.onUpdated.addListener(handleTabGroupUpdate)
 chrome.windows.onCreated.addListener(handleWindowOpen)
 chrome.windows.onRemoved.addListener(handleWindowClose)
 
 
 const WindowType = chrome.windows.WindowType
-let openingWorkspace = false
 
 async function handleMessage(request, sender, sendResponse) {
 	// Always send response
 	sendResponse({status: "ok"})
 
 	if (request.type === Action.Type.OPEN_WORKSPACE) {
-		openingWorkspace = true
+		await Config.set(Config.Key.OPENING_WORKSPACE, true)
 		await Workspace.open(request.workspaceId)
-		openingWorkspace = false
+		await Config.set(Config.Key.OPENING_WORKSPACE, false)
 	}
 
 	return true
 }
 
 async function handleTabActivate({ windowId }) {
+	const openingWorkspace = await Config.get(Config.Key.OPENING_WORKSPACE)
+
 	if (!openingWorkspace) {
 		WindowSync.schedule(windowId)
 	}
 }
 
 async function handleTabCreate(tab) {
+	const openingWorkspace = await Config.get(Config.Key.OPENING_WORKSPACE)
+
 	if (!openingWorkspace) {
 		await addTabToGroup(tab.id, tab.windowId);
 	}
 }
 
 async function handleTabUpdate(tabId, changeInfo, tab) {
+	const openingWorkspace = await Config.get(Config.Key.OPENING_WORKSPACE)
+
 	if (!openingWorkspace && changeInfo.url) {
 		WindowSync.schedule(tab.windowId)
 	}
@@ -70,13 +76,29 @@ async function handleTabDetach(tabId, {oldWindowId}) {
 	WindowSync.schedule(oldWindowId)
 }
 
+async function handleTabGroupUpdate(tabGroup) {
+	const openingWorkspace = await Config.get(Config.Key.OPENING_WORKSPACE)
+	if (openingWorkspace) return
+	console.log("handleTabGroupUpdate", tabGroup.id, tabGroup.title, tabGroup.color)
+
+	const workspaceId = await WorkspaceList.findWorkspaceForWindow(tabGroup.windowId)
+	if (!workspaceId) return
+
+	const workspace = await Workspace.get(workspaceId)
+	workspace.name = tabGroup.title
+	workspace.color = tabGroup.color
+	await Workspace.save(workspace)
+}
+
 async function handleWindowOpen(window) {
+	const openingWorkspace = await Config.get(Config.Key.OPENING_WORKSPACE)
+
 	if (openingWorkspace || window.type !== WindowType.NORMAL) {
 		return
 	}
 
 	const windowId = window.id
-	const lastWorkspaceId = await Options.get(Options.LAST_WORKSPACE_ID)
+	const lastWorkspaceId = await Config.get(Config.Key.LAST_WORKSPACE_ID)
 	const allWindows = await chrome.windows.getAll({windowTypes: [WindowType.NORMAL]})
 
 	// Chrome opened -> clear old workspace-window mapping
@@ -95,7 +117,7 @@ async function handleWindowClose(windowId) {
 		await WorkspaceList.update(workspaceId, null)
 	}
 
-	await Options.set(Options.LAST_WORKSPACE_ID, workspaceId)
+	await Config.set(Config.Key.LAST_WORKSPACE_ID, workspaceId)
 }
 
 async function handleInstall({ reason, previousVersion }) {
@@ -112,7 +134,7 @@ async function addTabToGroup(tabId, windowId) {
 	const workspaceId = await WorkspaceList.findWorkspaceForWindow(windowId)
 	if (!workspaceId) return
 
-	const groupsInWindow = await chrome.tabGroups.query({windowId})
+	const groupsInWindow = await chrome.tabGroups.query({ windowId })
 	const firstGroup = groupsInWindow?.[0]
 	if (!firstGroup) return
 

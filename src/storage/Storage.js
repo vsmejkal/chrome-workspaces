@@ -1,9 +1,13 @@
 import { assert } from "../Utils.js";
 
-const Storage = {
-	OPTIONS: "options",
+const Key = {
+	CONFIG: "config",
 	WORKSPACE_LIST: "workspaceList",
 	WORKSPACE_PREFIX: "workspace_",
+}
+
+const Storage = {
+	Key,
 
 	async get(key) {
 		if (!key) return null

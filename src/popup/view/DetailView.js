@@ -1,5 +1,5 @@
 import View from "./View.js"
-import Workspace from "../../model/Workspace.js"
+import Workspace from "../../workspace/Workspace.js"
 import Color from "../../Color.js"
 
 class DetailView extends View {

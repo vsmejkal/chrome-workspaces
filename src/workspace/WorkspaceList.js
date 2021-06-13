@@ -1,4 +1,4 @@
-import Storage from "./Storage.js"
+import Storage from "../storage/Storage.js"
 import { assert } from "../Utils.js";
 
 const WorkspaceList = {
@@ -6,11 +6,11 @@ const WorkspaceList = {
 	 * @returns {Promise<Array<{workspaceId: string, windowId: ?number}>>}
 	 */
 	async getItems() {
-		return await Storage.get(Storage.WORKSPACE_LIST) ?? []
+		return await Storage.get(Storage.Key.WORKSPACE_LIST) ?? []
 	},
 
 	async setItems(list) {
-		await Storage.set(Storage.WORKSPACE_LIST, list)
+		await Storage.set(Storage.Key.WORKSPACE_LIST, list)
 	},
 
 	async getWorkspaces() {

@@ -1,7 +1,7 @@
 import { assert, randomString } from "../Utils.js"
 import WorkspaceList from "./WorkspaceList.js"
 import WorkspaceTab from "./WorkspaceTab.js"
-import Storage from "./Storage.js"
+import Storage from "../storage/Storage.js"
 import { scheduleSuspend } from "../TabSuspend.js"
 
 const Workspace = {
@@ -11,7 +11,7 @@ const Workspace = {
 		}
 
 		const workspace = {
-			id: `${Storage.WORKSPACE_PREFIX}${randomString(8)}`,
+			id: `${Storage.Key.WORKSPACE_PREFIX}${randomString(8)}`,
 			name, color, tabs
 		}
 
@@ -30,11 +30,32 @@ const Workspace = {
 		assert(workspace.tabs.every(tab => typeof tab === "object"))
 
 		await Storage.set(workspace.id, workspace)
+
+		const windowId = await WorkspaceList.findWindowForWorkspace(workspace.id)
+		if (!windowId) return
+
+		const groupsInWindow = await chrome.tabGroups.query({ windowId })
+		const group = groupsInWindow?.[0]
+		if (!group) return
+
+		if (group.title !== workspace.name || group.color !== workspace.color) {
+			await chrome.tabGroups.update(group.id, {
+				title: workspace.name,
+				color: workspace.color,
+			})
+		}
 	},
 
 	async remove(workspaceId) {
+		const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
+
 		await WorkspaceList.remove(workspaceId)
 		await Storage.remove(workspaceId)
+
+		if (windowId) {
+			const windowTabs = await chrome.tabs.query({ windowId })
+			await chrome.tabs.ungroup(windowTabs.map((tab) => tab.id))
+		}
 	},
 
 	async open(workspaceId) {

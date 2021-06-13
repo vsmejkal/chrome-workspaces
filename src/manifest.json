@@ -12,7 +12,7 @@
     "256": "icons/extension/icon256.png"
   },
   "background": {
-    "service_worker": "serviceWorker.js"
+    "service_worker": "serviceWorker.compiled.js"
   },
   "action": {
     "default_icon": {

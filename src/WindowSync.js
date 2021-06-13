@@ -1,4 +1,4 @@
-import Workspace from "./model/Workspace.js";
+import Workspace from "./workspace/Workspace.js";
 
 const windowsToSync = new Set()
 const delay = 1000
