@@ -3,7 +3,7 @@ import Workspace from "../workspace/Workspace.js"
 import Config from "../storage/Config.js"
 import Action from "../Action.js"
 import WorkspaceList from "../workspace/WorkspaceList.js"
-import WindowSync from "../WindowSync.js"
+import SyncService from "../service/SyncService.js"
 import { executeMigrations } from "../migration/migration.js";
 
 chrome.runtime.onMessage.addListener(handleMessage)
@@ -38,7 +38,7 @@ async function handleTabActivate({ windowId }) {
 	const openingWorkspace = await Config.get(Config.Key.OPENING_WORKSPACE)
 
 	if (!openingWorkspace) {
-		WindowSync.schedule(windowId)
+		SyncService.scheduleSync(windowId)
 	}
 }
 
@@ -54,26 +54,26 @@ async function handleTabUpdate(tabId, changeInfo, tab) {
 	const openingWorkspace = await Config.get(Config.Key.OPENING_WORKSPACE)
 
 	if (!openingWorkspace && changeInfo.url) {
-		WindowSync.schedule(tab.windowId)
+		SyncService.scheduleSync(tab.windowId)
 	}
 }
 
 async function handleTabRemove(tabId, {windowId, isWindowClosing}) {
 	if (isWindowClosing) {
-		WindowSync.unschedule(windowId)
+		SyncService.cancelSync(windowId)
 	} else {
-		WindowSync.schedule(windowId)
+		SyncService.doSync(windowId)
 	}
 }
 
 async function handleTabAttach(tabId, {newWindowId}) {
 	await addTabToGroup(tabId, newWindowId)
-	
-	WindowSync.schedule(newWindowId)
+
+	SyncService.scheduleSync(newWindowId)
 }
 
 async function handleTabDetach(tabId, {oldWindowId}) {
-	WindowSync.schedule(oldWindowId)
+	SyncService.scheduleSync(oldWindowId)
 }
 
 async function handleTabGroupUpdate(tabGroup) {

@@ -1,16 +1,21 @@
-import Workspace from "./workspace/Workspace.js";
+import Workspace from "../workspace/Workspace.js";
 
 const windowsToSync = new Set()
-const delay = 1000
+const delay = 500
 let timer = null
 
-function schedule(windowId) {
+function scheduleSync(windowId) {
 	windowsToSync.add(windowId)
 	timer = timer ?? setTimeout(performSync, delay)
 }
 
-function unschedule(windowId) {
+function cancelSync(windowId) {
 	windowsToSync.delete(windowId)
+}
+
+function doSync(windowId) {
+	windowsToSync.delete(windowId)
+	Workspace.updateFromWindow(windowId).then()
 }
 
 async function performSync() {
@@ -26,4 +31,4 @@ async function performSync() {
 	timer = null
 }
 
-export default { schedule, unschedule }
+export default { scheduleSync, cancelSync, doSync }
