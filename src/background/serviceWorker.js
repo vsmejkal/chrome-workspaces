@@ -4,7 +4,7 @@ import Config from "../storage/Config.js"
 import Action from "../Action.js"
 import WorkspaceList from "../workspace/WorkspaceList.js"
 import SyncService from "../service/SyncService.js"
-import { executeMigrations } from "../migration/migration.js";
+import MigrationService from "../service/MigrationService.js";
 
 chrome.runtime.onMessage.addListener(handleMessage)
 chrome.runtime.onInstalled.addListener(handleInstall)
@@ -122,7 +122,9 @@ async function handleWindowClose(windowId) {
 
 async function handleInstall({ reason, previousVersion }) {
 	if (reason === "update") {
-		await executeMigrations(previousVersion)
+		await MigrationService.migrate({
+			previousVersion: previousVersion
+		})
 	}
 
 	if (reason === "install") {
