@@ -7,7 +7,9 @@ class DebugView extends View {
 
 	async render() {
 		this.getElement(".run-tests-button").onclick = () => {
-
+			chrome.tabs.create({
+				url: chrome.runtime.getURL("test/testRunner.html")
+			})
 		}
 
 		this.getElement(".clear-data-button").onclick = () => {
