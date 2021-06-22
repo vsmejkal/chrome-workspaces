@@ -1,7 +1,7 @@
 import Workspace from "../workspace/Workspace.js";
 
 const windowsToSync = new Set()
-const delay = 500
+const delay = 200
 let timer = null
 
 function scheduleSync(windowId) {
