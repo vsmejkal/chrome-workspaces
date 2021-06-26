@@ -2,6 +2,7 @@
 @import url(./view/ListView.css);
 @import url(./view/DetailView.css);
 @import url(./view/RemoveView.css);
+@import url(./view/DebugView.css);
 
 :root {
     --width: 230px;

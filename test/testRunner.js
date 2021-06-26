@@ -1,15 +1,14 @@
-// document.addEventListener("DOMContentLoaded"
 bootstrap()
 
 async function bootstrap() {
 	const { installType } = await chrome.management.getSelf()
 
 	if (installType !== "development") {
-		alert("Tests can be run only in development mode!");
-		return;
+		alert("Tests can be run only in development mode!")
+		return
 	}
 
-	await runMigrationTests();
+	await runMigrationTests()
 }
 
 async function setUp() {
