@@ -1,4 +1,4 @@
-export const colorMapping = {
+const colorMapping = {
 	["red"]: "red",
 	["orange"]: "yellow",
 	["yellow"]: "yellow",
@@ -11,7 +11,7 @@ export const colorMapping = {
 	["gray"]: "grey",
 }
 
-export const defaultColor = "grey"
+const defaultColor = "grey"
 
 export default {
 	fromVersion: "0.4",
