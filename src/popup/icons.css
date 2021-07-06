@@ -7,5 +7,5 @@
     background-size: 80% 80%;
 }
 
-.bi-three-dots { background-image: url("ui/three-dots.svg"); }
-.bi-plus { background-image: url("ui/plus.svg"); }
+.bi-three-dots { background-image: url("../icons/ui/three-dots.svg"); }
+.bi-plus { background-image: url("../icons/ui/plus.svg"); }

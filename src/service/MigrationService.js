@@ -1,7 +1,7 @@
-import Migration_00_Color from "../migration/00_color.js"
+import WorkspaceColorMigration from "../migration/00_WorkspaceColorMigration.js"
 
 const migrationList = [
-	Migration_00_Color,
+	WorkspaceColorMigration,
 ]
 
 async function migrate({ previousVersion }) {

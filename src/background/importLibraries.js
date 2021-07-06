@@ -1,1 +1,1 @@
-importScripts("lib/chrome-extension-async.js")
+importScripts("src/lib/chrome-extension-async.js")

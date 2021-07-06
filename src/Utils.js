@@ -1,6 +1,12 @@
 export function assert(condition, message) {
   if (!condition) {
-    throw message ?? ("AssertError: actual value is " + condition)
+    throw message ?? `AssertError: actual value is ${condition}`
+  }
+}
+
+export function assertEqual(actual, expected) {
+  if (actual !== expected) {
+    throw `AssertError: expected value: ${expected}, actual value: ${actual}`
   }
 }
 

@@ -1,7 +1,8 @@
-@import url(../icons/icons.css);
+@import url(icons.css);
 @import url(./view/ListView.css);
 @import url(./view/DetailView.css);
 @import url(./view/RemoveView.css);
+@import url(./view/DebugView.css);
 
 :root {
     --width: 230px;

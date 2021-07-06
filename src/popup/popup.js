@@ -4,6 +4,7 @@ import ListView from "./view/ListView.js"
 import DetailView from "./view/DetailView.js";
 import Action from "../Action.js";
 import RemoveView from "./view/RemoveView.js";
+import DebugView from "./view/DebugView.js";
 
 init().then(render)
 
@@ -53,6 +54,8 @@ async function render() {
 		}
 	})
 
+	registerDebugView();
+
 	await listView.show()
 }
 
@@ -68,14 +71,13 @@ async function createInitialWorkspaces() {
 	})
 }
 
-// For debugging
-document.onkeypress = async (e) => {
-	const extensionInfo = await chrome.management.getSelf()
-	const isDevelopment = extensionInfo.installType === "development"
+async function registerDebugView() {
+	const { installType } = await chrome.management.getSelf()
+	if (installType !== "development") return;
 
-	if (isDevelopment && document.activeElement === document.body && e.key === "R" && confirm("Clear all data?")) {
-		chrome.storage.local.clear()
-		chrome.storage.sync.clear()
-		chrome.runtime.reload()
+	document.onkeypress = async (event) => {
+		if (event.key === ".") {
+			new DebugView().show()
+		}
 	}
 }

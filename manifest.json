@@ -1,0 +1,32 @@
+{
+  "name": "Workspaces",
+  "version": "0.4",
+  "manifest_version": 3,
+  "description": "Organize your tabs into workspaces.",
+  "homepage_url": "https://github.com/vsmejkal/chrome-workspaces",
+  "icons": {
+    "16": "src/icons/extension/icon16.png",
+    "32": "src/icons/extension/icon32.png",
+    "48": "src/icons/extension/icon48.png",
+    "128": "src/icons/extension/icon128.png",
+    "256": "src/icons/extension/icon256.png"
+  },
+  "background": {
+    "service_worker": "serviceWorkerLoader.js"
+  },
+  "action": {
+    "default_icon": {
+      "16": "src/icons/extension/icon16.png",
+      "24": "src/icons/extension/icon24.png",
+      "32": "src/icons/extension/icon32.png",
+      "48": "src/icons/extension/icon48.png"
+    },
+    "default_title": "Workspaces",
+    "default_popup": "src/popup/popup.html"
+  },
+  "permissions": [
+    "storage",
+    "tabs",
+    "tabGroups"
+  ]
+}
