@@ -19,16 +19,15 @@
     --item-color: var(--color-ui-primary);
 
     position: relative;
+    opacity: 0.9;
 }
 .item:hover {
-    background: var(--color-ui-neutral-50);
-}
-.item:active {
-    background: var(--color-ui-neutral-100);
+    background: var(--item-bg-color);
 }
 
 .item-selected, .item-selected:hover {
     background: var(--item-bg-color);
+    opacity: 1;
 }
 
 .item-color {
@@ -38,6 +37,7 @@
     height: 20px;
     border-radius: 10px;
     background-color: var(--item-color);
+    opacity: 0.95;
 }
 
 .item-name {
