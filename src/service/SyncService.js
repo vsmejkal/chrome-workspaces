@@ -1,34 +1,37 @@
 import Workspace from "../workspace/Workspace.js";
+import WorkspaceList from "../workspace/WorkspaceList.js";
 
 const windowsToSync = new Set()
-const delay = 200
-let timer = null
+const syncPeriod = 200
+let syncTimer = null
 
 function scheduleSync(windowId) {
 	windowsToSync.add(windowId)
-	timer = timer ?? setTimeout(performSync, delay)
+
+	if (!syncTimer) {
+		syncTimer = setTimeout(syncScheduled, syncPeriod)
+	}
 }
 
 function cancelSync(windowId) {
 	windowsToSync.delete(windowId)
 }
 
-function doSync(windowId) {
+async function syncWindow(windowId) {
 	windowsToSync.delete(windowId)
-	Workspace.updateFromWindow(windowId).then()
+
+	const workspaceId = await WorkspaceList.findWorkspaceForWindow(windowId)
+	if (!workspaceId) return
+
+	await Workspace.update(workspaceId)
 }
 
-async function performSync() {
-	for (const windowId of windowsToSync) {
-		await Workspace.updateFromWindow(windowId)
-	}
-
-	if (windowsToSync.size > 0) {
-		console.debug('TABS SYNCED', new Date())
-	}
-
+async function syncScheduled() {
+	const windowList = Array.from(windowsToSync)
+	syncTimer = null
 	windowsToSync.clear()
-	timer = null
+
+	await Promise.all(windowList.map(syncWindow))
 }
 
-export default { scheduleSync, cancelSync, doSync }
+export default { scheduleSync, cancelSync, syncWindow }

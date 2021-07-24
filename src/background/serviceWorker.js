@@ -62,7 +62,7 @@ async function handleTabRemove(tabId, {windowId, isWindowClosing}) {
 	if (isWindowClosing) {
 		SyncService.cancelSync(windowId)
 	} else {
-		SyncService.doSync(windowId)
+		await SyncService.syncWindow(windowId)
 	}
 }
 
@@ -79,7 +79,6 @@ async function handleTabDetach(tabId, {oldWindowId}) {
 async function handleTabGroupUpdate(tabGroup) {
 	const openingWorkspace = await Config.get(Config.Key.OPENING_WORKSPACE)
 	if (openingWorkspace) return
-	console.log("handleTabGroupUpdate", tabGroup.id, tabGroup.title, tabGroup.color)
 
 	const workspaceId = await WorkspaceList.findWorkspaceForWindow(tabGroup.windowId)
 	if (!workspaceId) return
@@ -97,17 +96,28 @@ async function handleWindowOpen(window) {
 		return
 	}
 
-	const windowId = window.id
-	const lastWorkspaceId = await Config.get(Config.Key.LAST_WORKSPACE_ID)
-	const allWindows = await chrome.windows.getAll({windowTypes: [WindowType.NORMAL]})
+	const allWindows = await chrome.windows.getAll({
+		windowTypes: [WindowType.NORMAL]
+	})
 
-	// Chrome opened -> clear old workspace-window mapping
 	if (allWindows.length === 1) {
-		await WorkspaceList.clearWindowIds()
+		await handleFirstWindowOpen(window)
 	}
+}
 
-	if (lastWorkspaceId && await workspaceMatchesWindow(lastWorkspaceId, windowId)) {
-		await WorkspaceList.update(lastWorkspaceId, windowId)
+async function handleFirstWindowOpen(window) {
+	await WorkspaceList.clearWindowMapping()
+
+	const lastWorkspaceId = await Config.get(Config.Key.LAST_WORKSPACE_ID)
+	if (!lastWorkspaceId) return
+
+	const lastWorkspace = await Workspace.get(lastWorkspaceId)
+	if (!lastWorkspace) return
+
+	const tabGroups = await chrome.tabGroups.query({ windowId: window.id })
+
+	if (tabGroups.length === 1 && tabGroups[0].color === lastWorkspace.color && tabGroups[0].title === lastWorkspace.name) {
+		await WorkspaceList.update(lastWorkspaceId, window.id)
 	}
 }
 
@@ -141,17 +151,4 @@ async function addTabToGroup(tabId, windowId) {
 	if (!firstGroup) return
 
 	await chrome.tabs.group({ groupId: firstGroup.id, tabIds: tabId })
-}
-
-async function workspaceMatchesWindow(workspaceId, windowId) {
-	const windowTabs = await chrome.tabs.query({ windowId })
-	const windowUrls = new Set(windowTabs.map(tab => tab.url))
-
-	const workspaceTabs = (await Workspace.get(workspaceId))?.tabs ?? []
-	const matchedUrls = workspaceTabs.filter(tab => windowUrls.has(tab.url))
-
-	const totalTabs = windowTabs.length
-	const totalMatches = matchedUrls.length
-
-	return totalMatches > 0 && (totalTabs - totalMatches <= 1 || totalMatches / totalTabs > 0.75)
 }
