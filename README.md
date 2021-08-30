@@ -1,5 +1,10 @@
 # Workspaces
-Workspace switcher extension for Chrome
+
+![Workspaces banner](https://github.com/vsmejkal/chrome-workspaces/blob/master/media/banner-small.png?raw=true)
+
+Workspaces is a Chrome extension for simple tab management.
+
+Each workspace is represented by browser window where tabs are automatically saved and restored.
 
 [![Workspaces in Chrome Web Store](https://github.com/vsmejkal/chrome-workspaces/blob/master/media/chrome-webstore-badge.png?raw=true)](https://chrome.google.com/webstore/detail/workspaces/hpljjefgmnkloakbfckghmlapghabgfa)
 
