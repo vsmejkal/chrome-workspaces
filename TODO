@@ -1,0 +1,24 @@
+# v0.5 Create workspace from window
+
+The existing button to add a new empty workspace is replaced by button
+that transforms the current window into a new workspace. Also we have a new
+infographics on list page instead of initial empty workspaces.
+
+[ ] **• Create workspace from the current window
+[ ] **• Infographics for empty workspace list
+[ ] *•• Do not create initial empty workspaces
+[ ] *•• Add attached tab to workspace
+[ ] **• Disable custom tab groups inside workspace
+[ ] *•• Bug: A change is not saved, if the window is closed quickly
+
+# v0.6
+
+[ ] **• Move tab to a workspace
+
+# Backlog
+
+[ ] **• Dark theme
+[ ] *** Translations
+[ ] *** Synchronization
+[ ] *•• Get rid of chrome-extension-async lib
+[ ] *** E2E tests
