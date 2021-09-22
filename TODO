@@ -16,9 +16,13 @@ infographics on list page instead of initial empty workspaces.
 
 [ ] **• Move tab to a workspace
 
+# v0.7
+
+[ ] *** Drag to order workspaces (Issue #8)
+[ ] **• Dark theme
+
 # Backlog
 
-[ ] **• Dark theme
 [ ] *** Translations
 [ ] *** Synchronization
 [ ] *•• Get rid of chrome-extension-async lib
