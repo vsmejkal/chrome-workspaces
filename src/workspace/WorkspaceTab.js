@@ -28,6 +28,17 @@ const WorkspaceTab = {
 	},
 
 	/**
+	 * Create workspace tabs from given browser window. 
+	 * @param windowId Window ID
+	 * @returns {WorkspaceTab[]}
+	 */
+	async createAllFromWindow(windowId) {
+		const tabs = await chrome.tabs.query({ windowId })
+
+		return tabs.map(WorkspaceTab.create)
+	},
+
+	/**
 	 * Create empty workspace tab.
 	 * @returns {WorkspaceTab}
 	 */

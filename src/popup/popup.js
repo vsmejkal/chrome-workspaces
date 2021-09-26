@@ -19,14 +19,31 @@ async function init() {
 async function render() {
 	const listView = new ListView({
 		onAddItem: () => newView.show(),
-		onEditItem: (id) => editView.show({ workspaceId: id }),
-		onOpenItem: (id) => Action.openWorkspace(id).then(() => window.close())
+		onEditItem: (workspaceId) => editView.show({ workspaceId }),
+		onOpenItem: async (workspaceId) => {
+			const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
+			const windowExists = Boolean(windowId && await chrome.windows.get(windowId))
+
+			if (windowExists) {
+				await Workspace.focus(workspaceId)
+			} else {
+				await Action.openWorkspace(workspaceId)
+			}
+
+			closePopup()
+		} 
 	})
 
 	const newView = new DetailView({
 		onSave: async ({ name, color }) => {
-			await Workspace.create({ name, color })
-			listView.show()
+			const currentWindow = await chrome.windows.getLastFocused()
+			const currentWorkspaceId = await WorkspaceList.findWorkspaceForWindow(currentWindow.id)
+			const windowId = !currentWorkspaceId ? currentWindow.id : undefined
+			const newWorkspace = await Workspace.create({ name, color, windowId })
+			
+			await Action.openWorkspace(newWorkspace.id)
+
+			closePopup()
 		}
 	})
 
@@ -54,7 +71,7 @@ async function render() {
 		}
 	})
 
-	registerDebugView();
+	registerDebugView()
 
 	await listView.show()
 }
@@ -80,4 +97,8 @@ async function registerDebugView() {
 			new DebugView().show()
 		}
 	}
+}
+
+function closePopup() {
+	window.close()
 }

@@ -1,6 +1,6 @@
 {
   "name": "Workspaces",
-  "version": "0.4",
+  "version": "0.5",
   "manifest_version": 3,
   "description": "Organize your tabs into workspaces.",
   "homepage_url": "https://github.com/vsmejkal/chrome-workspaces",

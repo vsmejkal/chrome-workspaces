@@ -2,6 +2,7 @@ import { assert, randomString } from "../Utils.js"
 import WorkspaceList from "./WorkspaceList.js"
 import WorkspaceTab from "./WorkspaceTab.js"
 import Storage from "../storage/Storage.js"
+import Config from "../storage/Config.js"
 import { scheduleSuspend } from "../TabSuspend.js"
 
 /**
@@ -21,22 +22,57 @@ const Workspace = {
 	 * Create and save a new workspace.
 	 * @param {string} name Title of the workspace
 	 * @param {WorkspaceColor} color Color of the workspace
-	 * @param {WorkspaceTab[]|null} tabs List of the workspace tabs
-	 * @param windowId Window ID of the workspace
+	 * @param {WorkspaceTab[]} [tabs] List of the workspace tabs
+	 * @param {number} [windowId] Window ID of the workspace
 	 * @returns {Promise<Workspace>}
 	 */
 	async create({ name, color, tabs, windowId }) {
+		if (windowId) {
+			tabs = await WorkspaceTab.createAllFromWindow(windowId)
+		}
 		if (!tabs || tabs.length === 0) {
 			tabs = [WorkspaceTab.createEmpty()]
 		}
 
-		const id = `${Storage.Key.WORKSPACE_PREFIX}${randomString(8)}`
-		const workspace = { id, name, color, tabs }
+		const workspaceId = `${Storage.Key.WORKSPACE_PREFIX}${randomString(8)}`
+		const workspace = { id: workspaceId, name, color, tabs }
 
 		await Workspace.save(workspace)
-		await WorkspaceList.add(workspace.id, windowId)
+		await WorkspaceList.add(workspaceId, windowId)
 
 		return workspace
+	},
+
+	/**
+	 * Create tab group with workspace tabs
+	 * @param {string} workspaceId 
+	 */
+	async activate(workspaceId) {
+		const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
+		if (!windowId) return
+
+		const workspace = await Workspace.get(workspaceId)
+		const tabs = await chrome.tabs.query({ windowId })
+		const tabIds = tabs.map((tab) => tab.id)
+		const groupId = await chrome.tabs.group({ tabIds })
+		
+		if (workspace && groupId) {
+			await chrome.tabGroups.update(groupId, { title: workspace.name, color: workspace.color })
+		}
+	},
+
+	/**
+	 * Ungroup workspace tabs
+	 * @param {string} workspaceId
+	 */
+	async deactivate(workspaceId) {
+		const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
+		if (!windowId) return
+
+		const tabs = await chrome.tabs.query({ windowId })
+		const tabIds = tabs.map((tab) => tab.id)
+
+		await chrome.tabs.ungroup(tabIds)
 	},
 
 	/**
@@ -51,7 +87,6 @@ const Workspace = {
 	/**
 	 * Save changes to an existing workspace.
 	 * @param {Workspace} workspace
-	 * @returns {Promise<void>}
 	 */
 	async save(workspace) {
 		assert(Array.isArray(workspace.tabs))
@@ -77,75 +112,68 @@ const Workspace = {
 	/**
 	 * Remove workspace by ID.
 	 * @param {string} workspaceId
-	 * @returns {Promise<void>}
 	 */
 	async remove(workspaceId) {
-		const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
-
+		await Workspace.deactivate(workspaceId)
 		await WorkspaceList.remove(workspaceId)
 		await Storage.remove(workspaceId)
+	},
+
+	/**
+	 * Focus workspace window
+	 * @param {string} workspaceId 
+	 */
+	async focus(workspaceId) {
+		const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
 
 		if (windowId) {
-			const windowTabs = await chrome.tabs.query({ windowId })
-			await chrome.tabs.ungroup(windowTabs.map((tab) => tab.id))
+			await chrome.windows.update(windowId, { focused: true })
 		}
 	},
 
 	/**
 	 * Open a workspace.
 	 * @param {string} workspaceId
-	 * @returns {Promise<void>}
 	 */
 	async open(workspaceId) {
-		const workspace = await Workspace.get(workspaceId)
-		const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
+		try {
+			await Config.set(Config.Key.OPENING_WORKSPACE, true)
+			await Workspace._doOpen(workspaceId)
+		} finally {
+			await Config.set(Config.Key.OPENING_WORKSPACE, false)
+		}
+	 },
 
-		if (windowId && await focusWindow(windowId)) {
+	async _doOpen(workspaceId) {
+		const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
+		const windowExists = Boolean(windowId && await chrome.windows.get(windowId))
+
+		if (windowExists) {
+			await Workspace.activate(workspaceId)
 			return
 		}
 
-		const newWindow = await createWindow(workspace)
-		await initTabs(workspace, newWindow)
+		const workspace = await Workspace.get(workspaceId)
+		const window = await chrome.windows.create({
+			url: workspace.tabs.map(tab => tab.url),
+			focused: true
+		})
 
-		async function createWindow(workspace) {
-			return await chrome.windows.create({
-				url: workspace.tabs.map(tab => tab.url),
-				focused: true
-			})
-		}
-
-		async function initTabs(workspace, window) {
-			const tabIds = window.tabs.map((tab) => tab.id)
-
-			await WorkspaceList.update(workspace.id, window.id)
-
-			workspace.tabs.forEach(({ url, active = false, pinned = false}, index) => {
-				const tabId = tabIds[index]
-				if (url.startsWith("http")) {
-					scheduleSuspend(tabId)
-				}
-				chrome.tabs.update(tabId, { active, pinned })
-			})
-
-			const groupId = await chrome.tabs.group({ tabIds })
-			await chrome.tabGroups.update(groupId, { title: workspace.name, color: workspace.color})
-		}
-
-		async function focusWindow(windowId) {
-			try {
-				await chrome.windows.update(windowId, { focused: true })
-				return true
-			} catch (e) {
-				console.error(e)
-				return false
+		workspace.tabs.forEach(({ url, active = false, pinned = false}, index) => {
+			const tabId = window.tabs[index].id
+			if (url.startsWith("http")) {
+				scheduleSuspend(tabId)
 			}
-		}
+			chrome.tabs.update(tabId, { active, pinned })
+		})
+
+		await WorkspaceList.update(workspace.id, window.id)
+		await Workspace.activate(workspaceId)
 	},
 
 	/**
 	 * Sync window changes to workspace.
 	 * @param {string} workspaceId
-	 * @returns {Promise<void>}
 	 */
 	async update(workspaceId) {
 		const workspace = await Workspace.get(workspaceId)
@@ -154,8 +182,7 @@ const Workspace = {
 		const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
 		if (!windowId) return
 
-		const tabs = await chrome.tabs.query({ windowId })
-		workspace.tabs = tabs.map(WorkspaceTab.create)
+		workspace.tabs = await WorkspaceTab.createAllFromWindow(windowId)
 
 		await Workspace.save(workspace)
 	}

@@ -1,12 +1,23 @@
+class AssertError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = "AssertError"
+  }
+}
+
 export function assert(condition, message) {
+  if (!message) {
+    message = `Expected truthy value, actual value: ${condition}`
+  }
+
   if (!condition) {
-    throw message ?? `AssertError: actual value is ${condition}`
+    throw new AssertError(message)
   }
 }
 
 export function assertEqual(actual, expected) {
   if (actual !== expected) {
-    throw `AssertError: expected value: ${expected}, actual value: ${actual}`
+    throw new AssertError(`Expected value: ${expected}, actual value: ${actual}`)
   }
 }
 

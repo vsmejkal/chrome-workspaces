@@ -41,8 +41,8 @@ const WorkspaceList = {
 	async remove(workspaceId) {
 		const list = await WorkspaceList.getItems()
 
-		await WorkspaceList.setItems(list
-			.filter(item => item.workspaceId !== workspaceId)
+		await WorkspaceList.setItems(
+			list.filter(item => item.workspaceId !== workspaceId)
 		)
 	},
 

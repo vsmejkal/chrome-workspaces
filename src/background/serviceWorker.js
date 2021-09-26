@@ -26,9 +26,7 @@ async function handleMessage(request, sender, sendResponse) {
 	sendResponse({status: "ok"})
 
 	if (request.type === Action.Type.OPEN_WORKSPACE) {
-		await Config.set(Config.Key.OPENING_WORKSPACE, true)
 		await Workspace.open(request.workspaceId)
-		await Config.set(Config.Key.OPENING_WORKSPACE, false)
 	}
 
 	return true
