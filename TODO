@@ -7,7 +7,7 @@ infographics on list page instead of initial empty workspaces.
 [x] **• Create workspace from the current window (Issue #3)
 [ ] *•• Improve Add new workspace button
 [ ] **• Infographics for empty workspace list
-[ ] *•• Do not create initial empty workspaces
+[x] *•• Do not create initial empty workspaces
 [ ] *•• Add attached tab to workspace
 [ ] **• Disable custom tab groups inside workspace
 [ ] *•• Bug: A change is not saved, if the window is closed quickly (Issue #2)

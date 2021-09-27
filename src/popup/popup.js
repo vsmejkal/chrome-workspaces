@@ -6,15 +6,8 @@ import Action from "../Action.js";
 import RemoveView from "./view/RemoveView.js";
 import DebugView from "./view/DebugView.js";
 
-init().then(render)
-
-async function init() {
-	let list = await WorkspaceList.getItems()
-
-	if (list.length === 0) {
-		await createInitialWorkspaces()
-	}
-}
+// Bootstrap and render the workspace list
+document.addEventListener("DOMContentLoaded", render);
 
 async function render() {
 	const listView = new ListView({
@@ -76,23 +69,11 @@ async function render() {
 	await listView.show()
 }
 
-async function createInitialWorkspaces() {
-	await Workspace.create({
-		name: "Blue Workspace",
-		color: "blue"
-	})
-
-	await Workspace.create({
-		name: "Green Workspace",
-		color: "green"
-	})
-}
-
 async function registerDebugView() {
 	const { installType } = await chrome.management.getSelf()
 	if (installType !== "development") return;
 
-	document.onkeypress = async (event) => {
+	document.onkeydown = async (event) => {
 		if (event.key === ".") {
 			new DebugView().show()
 		}
