@@ -12,3 +12,4 @@ Each workspace is represented by browser window where tabs are automatically sav
   - [Bootstrap Icons](https://github.com/twbs/icons)
   - [Chrome Extension Async](https://github.com/KeithHenry/chromeExtensionAsync)
   - [Polyfill for :focus-visible](https://github.com/WICG/focus-visible)
+  - [TODO file](https://blog.frantic.im/all/todo-file-for-personal-projects/)

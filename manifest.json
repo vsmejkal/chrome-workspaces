@@ -28,5 +28,12 @@
     "storage",
     "tabs",
     "tabGroups"
-  ]
+  ],
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+W"
+      }
+    }
+  }
 }
