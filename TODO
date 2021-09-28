@@ -15,7 +15,9 @@ infographics on list page instead of initial empty workspaces.
 
 # v0.6
 
-[ ] **• Move tab to a workspace
+[ ] **• Send tab to a workspace
+[ ] **• Set up Patreon / Github Sponsors
+[ ] **• Welcome page
 
 # v0.7
 
@@ -24,8 +26,11 @@ infographics on list page instead of initial empty workspaces.
 
 # Backlog
 
-[ ] *** Translations
 [ ] *** Synchronization
+[ ] *** Translations
 [ ] *•• Get rid of chrome-extension-async lib
 [ ] *** E2E tests
 [ ] *•• Mark open workspaces in the list
+[ ] *•• Show dialog to remove workspace when the last tab is closed
+[ ] **• Better design
+[ ] **• Intro video
