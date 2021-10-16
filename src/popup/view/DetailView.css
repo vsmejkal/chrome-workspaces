@@ -1,9 +1,9 @@
-#workspace-color-picker {
+#view-detail .color-picker {
     display: flex;
     padding: 4px 0;
     justify-content: space-between;
 }
-#workspace-color-picker .color {
+#view-detail .color-picker .color {
     display: inline-block;
     width: 22px;
     height: 22px;
@@ -12,10 +12,10 @@
     cursor: pointer;
     opacity: 0.9;
 }
-#workspace-color-picker .color:focus {
+#view-detail .color-picker .color:focus {
     animation: bump 250ms ease-in-out;
 }
-#workspace-color-picker .color-selected {
+#view-detail .color-picker .color-selected {
     background-image: url(../../icons/ui/check.svg);
     background-repeat: no-repeat;
     background-position: center center;

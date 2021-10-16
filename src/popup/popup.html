@@ -5,26 +5,37 @@
 		<link href="popup.css" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 		<script src="../lib/chrome-extension-async.js"></script>
-		<script src="../lib/focus-visible.js"></script>
+		<script src="../lib/focus-visible.js" defer></script>
 		<script src="popup.js" type="module"></script>
 		<title>Workspaces</title>
 	</head>
 
 	<body>
+		<div id="view-empty-list" class="view">
+			<img src="../icons/extension/icon128.png" alt="" class="empty-list-image" />
+			<h1>Workspaces</h1>
+			<p class="description">Create your first workspace to&nbsp;autosave the open tabs.</p>
+			<button class="button button-primary new-button"><i class="bi bi-plus"></i>Create Workspace</button>
+		</div>
+
 		<div id="view-list" class="view">
 			<h1>Workspaces</h1>
-			<div id="workspace-list">...</div>
-			<button id="new-workspace-button"><i class="bi bi-plus"></i>Add New</button>
+			<div class="workspace-list">...</div>
+			<button class="new-button"><i class="bi bi-plus"></i>Add New</button>
 		</div>
 
 		<div id="view-detail" class="view">
 			<h1>Edit Workspace</h1>
 
-			<label for="workspace-name">Name</label>
-			<input type="text" id="workspace-name" />
+			<label>
+				<span>Name</span>
+				<input type="text" class="workspace-name" />
+			</label>
 
-			<label>Color</label>
-			<div id="workspace-color-picker"></div>
+			<label>
+				<span>Color</span>
+				<div class="color-picker"></div>
+			</label>
 
 			<div class="buttons">
 				<button class="button remove-button">Remove</button>

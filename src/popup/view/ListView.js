@@ -10,8 +10,8 @@ class ListView extends View {
         this._onEditItem = onEditItem
         this._onOpenItem = onOpenItem
 
-        this._listElement = this.getElement("#workspace-list")
-        this._addButton = this.getElement("#new-workspace-button")
+        this._listElement = this.getElement(".workspace-list")
+        this._addButton = this.getElement(".new-button")
     }
 
     async render() {
@@ -24,12 +24,12 @@ class ListView extends View {
 
         for (const workspace of workspaces) {
             const selected = workspace.id === currentWorkspaceId
-            const item = this._createItem({ ...workspace, selected })
+            const item = this._renderItem({ ...workspace, selected })
             this._listElement.appendChild(item)
         }
     }
 
-    _createItem({ id, name, color = "gray", selected }) {
+    _renderItem({ id, name, color = "gray", selected }) {
         const itemColor = document.createElement("div")
         itemColor.classList.add("item-color")
 

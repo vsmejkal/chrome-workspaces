@@ -5,28 +5,55 @@ import DetailView from "./view/DetailView.js";
 import Action from "../Action.js";
 import RemoveView from "./view/RemoveView.js";
 import DebugView from "./view/DebugView.js";
+import EmptyListView from "./view/EmptyListView.js";
 
 // Bootstrap and render the workspace list
 document.addEventListener("DOMContentLoaded", render);
 
 async function render() {
-	const listView = new ListView({
-		onAddItem: () => newView.show(),
-		onEditItem: (workspaceId) => editView.show({ workspaceId }),
-		onOpenItem: async (workspaceId) => {
-			const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
-			const windowExists = Boolean(windowId && await chrome.windows.get(windowId))
+	showListView()
+	registerDebugView()
+}
 
-			if (windowExists) {
-				await Workspace.focus(workspaceId)
-			} else {
-				await Action.openWorkspace(workspaceId)
-			}
+async function showListView() {
+	await showWorkspaceListView()
 
-			closePopup()
-		} 
-	})
+	const workspaceList = await WorkspaceList.getItems()
+	if (workspaceList.length === 0) {
+		await showEmptyListView()
+	}
 
+	async function showWorkspaceListView() {
+		const listView = new ListView({
+			onAddItem: () => showAddWorkspaceView(),
+			onEditItem: (workspaceId) => showEditWorkspaceView(workspaceId),
+			onOpenItem: async (workspaceId) => {
+				const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
+				const windowExists = Boolean(windowId && await chrome.windows.get(windowId))
+	
+				if (windowExists) {
+					await Workspace.focus(workspaceId)
+				} else {
+					await Action.openWorkspace(workspaceId)
+				}
+	
+				closePopup()
+			} 
+		})
+	
+		await listView.show()
+	}
+	
+	async function showEmptyListView() {
+		const emptyListView = new EmptyListView({
+			onAddItem: () => showAddWorkspaceView(),
+		})
+	
+		await emptyListView.show()
+	}
+}
+
+async function showAddWorkspaceView() {
 	const newView = new DetailView({
 		onSave: async ({ name, color }) => {
 			const currentWindow = await chrome.windows.getLastFocused()
@@ -36,37 +63,46 @@ async function render() {
 			
 			await Action.openWorkspace(newWorkspace.id)
 
-			closePopup()
+			if (currentWorkspaceId) {
+				closePopup()
+			} else {
+				showListView()
+			}
 		}
 	})
 
+	await newView.show()
+}
+
+async function showEditWorkspaceView(workspaceId) {
 	const editView = new DetailView({
 		onSave: async ({ workspaceId, name, color }) => {
 			const workspace = await Workspace.get(workspaceId)
 			workspace.name = name
 			workspace.color = color
 			await Workspace.save(workspace)
-
-			listView.show()
+			showListView()
 		},
 		onRemove: async ({ workspaceId }) => {
-			removeView.show({ workspaceId })
+			showRemoveWorkspaceView(workspaceId)
 		}
 	})
 
+	await editView.show({ workspaceId })
+}
+
+async function showRemoveWorkspaceView(workspaceId) {
 	const removeView = new RemoveView({
 		onCancel: async ({ workspaceId }) => {
-			editView.show({ workspaceId })
+			showEditWorkspaceView(workspaceId)
 		},
 		onRemove: async ({ workspaceId }) => {
 			await Workspace.remove(workspaceId)
-			listView.show()
+			showListView()
 		}
 	})
-
-	registerDebugView()
-
-	await listView.show()
+	
+	await removeView.show({ workspaceId })
 }
 
 async function registerDebugView() {

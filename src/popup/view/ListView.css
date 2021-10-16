@@ -1,8 +1,8 @@
-#workspace-list {
+#view-list .workspace-list {
     margin-top: 16px;
 }
 
-.item, #new-workspace-button {
+#view-list .item, #view-list .new-button {
     width: 100%;
     min-height: 36px;
     display: flex;
@@ -15,22 +15,22 @@
     cursor: pointer;
     border-radius: var(--border-radius);
 }
-.item {
+#view-list .item {
     --item-color: var(--color-ui-primary);
 
     position: relative;
     opacity: 0.9;
 }
-.item:hover {
+#view-list .item:hover {
     background: var(--item-bg-color);
 }
 
-.item-selected, .item-selected:hover {
+#view-list .item-selected, #view-list .item-selected:hover {
     background: var(--item-bg-color);
     opacity: 1;
 }
 
-.item-color {
+#view-list .item-color {
     flex-shrink: 0;
     margin-right: 10px;
     width: 20px;
@@ -40,7 +40,7 @@
     opacity: 0.95;
 }
 
-.item-name {
+#view-list .item-name {
     flex-grow: 1;
     white-space: nowrap;
     overflow: hidden;
@@ -48,7 +48,7 @@
     text-overflow: ellipsis;
 }
 
-.item-edit-button {
+#view-list .item-edit-button {
     flex-shrink: 0;
     width: 0;
     opacity: 0;
@@ -56,33 +56,33 @@
     background-size: 75% 75%;
     overflow: hidden;
 }
-.item-edit-button:hover {
+#view-list .item-edit-button:hover {
     background-color: rgba(0, 0, 0, 0.2);
 }
-.item-edit-button:active {
+#view-list .item-edit-button:active {
     background-color: rgba(0, 0, 0, 0.4);
 }
-.item:hover .item-edit-button {
+#view-list .item:hover .item-edit-button {
     width: 24px;
     opacity: 0.5;
     transition: width 0s 0.5s, opacity 0.2s 0.5s;
 }
 
-#new-workspace-button {
+#view-list .new-button {
     width: auto;
     margin: 1px;
     padding: 2px 8px 2px 4px;
     color: rgba(0, 0, 0, 0.4);
 }
-#new-workspace-button:hover,
-#new-workspace-button:focus {
+#view-list .new-button:hover,
+#view-list .new-button:focus {
     color: rgba(0, 0, 0, 0.6);
 }
-#new-workspace-button i {
+#view-list .new-button i {
     opacity: 0.4;
     margin-right: 4px;
 }
-#new-workspace-button:hover i,
-#new-workspace-button:focus i {
+#view-list .new-button:hover i,
+#view-list .new-button:focus i {
     opacity: 0.6;
 }

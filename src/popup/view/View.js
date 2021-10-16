@@ -30,7 +30,7 @@ class View {
         return Array.from(this.root.querySelectorAll(selector))
     }
 
-    show(props = {}) {
+    async show(props = {}) {
         const oldView = document.querySelector(`.${activeClass}`)
         oldView?.classList?.remove(activeClass)
 
@@ -39,7 +39,7 @@ class View {
 
         View.#activeView = this
 
-        this.render(props)
+        await this.render(props)
     }
 
     async render(props) {}

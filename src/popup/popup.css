@@ -1,4 +1,5 @@
-@import url(icons.css);
+@import url(./icons.css);
+@import url(./view/EmptyListView.css);
 @import url(./view/ListView.css);
 @import url(./view/DetailView.css);
 @import url(./view/RemoveView.css);
@@ -51,11 +52,11 @@ h1 {
     display: block;
 }
 
-label {
+label > span:first-child {
     display: block;
     color: #616161;
     font-size: .9em;
-    margin: 15px 0 5px 0;
+    margin: 14px 0 4px 0;
 }
 
 input[type=text] {
@@ -74,7 +75,9 @@ button {
 }
 
 .button {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     min-width: 60px;
     padding: 5px 10px;
     border: 1px solid #e0e0e0;
@@ -105,6 +108,17 @@ button {
     background: var(--color-ui-primary-dark);
     outline: none;
     transform: scale(1.05);
+}
+
+.button > .bi {
+    width: 16px;
+    height: 16px;
+    background-size: 120%;
+    margin-right: 4px;
+    margin-left: -4px;
+}
+.button-primary > .bi {
+    filter: invert(1);
 }
 
 .buttons {

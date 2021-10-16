@@ -10,8 +10,8 @@ class DetailView extends View {
         this._onRemove = onRemove
 
         this._heading = this.getElement("h1")
-        this._nameField = this.getElement("#workspace-name")
-        this._colorPicker = this.getElement("#workspace-color-picker")
+        this._nameField = this.getElement(".workspace-name")
+        this._colorPicker = this.getElement(".color-picker")
         this._removeButton = this.getElement(".remove-button")
         this._saveButton = this.getElement(".save-button")
     }
