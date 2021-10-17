@@ -5,13 +5,15 @@ that transforms the current window into a new workspace. Also we have a new
 infographics on list page instead of initial empty workspaces.
 
 [x] **• Create workspace from the current window (Issue #3)
-[ ] *•• Improve Add new workspace button
+[x] *•• Improve Add new workspace button
 [x] **• Infographics for empty workspace list
 [x] *•• Do not create initial empty workspaces
 [ ] *•• Add attached tab to workspace
 [ ] **• Disable custom tab groups inside workspace
 [ ] *•• Bug: A change is not saved, if the window is closed quickly (Issue #2)
 [x] *•• Support keyboard shortcuts (Issue #7)
+[ ] *•• Improve keyboard control
+[ ] *•• Better explaining text in Remove view
 
 # v0.6
 
@@ -35,3 +37,4 @@ infographics on list page instead of initial empty workspaces.
 [ ] **• Better design
 [ ] **• Intro video
 [ ] **• Use shadow DOM with scoped CSS for views
+[ ] **• Show info page instead of blank tab in empty workspace

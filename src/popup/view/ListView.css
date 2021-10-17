@@ -2,7 +2,7 @@
     margin-top: 16px;
 }
 
-#view-list .item, #view-list .new-button {
+#view-list .item {
     width: 100%;
     min-height: 36px;
     display: flex;
@@ -68,21 +68,6 @@
     transition: width 0s 0.5s, opacity 0.2s 0.5s;
 }
 
-#view-list .new-button {
-    width: auto;
-    margin: 1px;
-    padding: 2px 8px 2px 4px;
-    color: rgba(0, 0, 0, 0.4);
-}
-#view-list .new-button:hover,
-#view-list .new-button:focus {
-    color: rgba(0, 0, 0, 0.6);
-}
-#view-list .new-button i {
-    opacity: 0.4;
-    margin-right: 4px;
-}
-#view-list .new-button:hover i,
-#view-list .new-button:focus i {
-    opacity: 0.6;
+#view-list .buttons {
+    margin-top: 10px;
 }

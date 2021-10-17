@@ -1,6 +1,5 @@
 #view-remove p {
-    margin: 0 4px;
-    line-height: 1.5;
+    margin: 0 4px 4px 0;
 }
 
 #view-remove .cancel-button {
