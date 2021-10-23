@@ -8,9 +8,9 @@ infographics on list page instead of initial empty workspaces.
 [x] *•• Improve Add new workspace button
 [x] **• Infographics for empty workspace list
 [x] *•• Do not create initial empty workspaces
-[ ] *•• Add attached tab to workspace
+[x] *•• Add attached tab to group
 [ ] **• Disable custom tab groups inside workspace
-[ ] *•• Bug: A change is not saved, if the window is closed quickly (Issue #2)
+[ ] *•• A change is not saved, if the window is closed quickly (Issue #2)
 [x] *•• Support keyboard shortcuts (Issue #7)
 [ ] *•• Improve keyboard control
 [ ] *•• Better explaining text in Remove view
@@ -19,7 +19,7 @@ infographics on list page instead of initial empty workspaces.
 
 [ ] **• Send tab to a workspace
 [ ] **• Set up Patreon / Github Sponsors
-[ ] **• Welcome page
+[ ] *** Onboarding page
 
 # v0.7
 

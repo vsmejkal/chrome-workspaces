@@ -3,7 +3,7 @@ import WorkspaceList from "./WorkspaceList.js"
 import WorkspaceTab from "./WorkspaceTab.js"
 import Storage from "../storage/Storage.js"
 import Config from "../storage/Config.js"
-import { scheduleSuspend } from "../TabSuspend.js"
+import TabSuspendService from "../service/TabSuspendService.js"
 
 /**
  * @typedef {'grey'|'blue'|'red'|'yellow'|'green'|'pink'|'purple'|'cyan'} WorkspaceColor
@@ -54,7 +54,13 @@ const Workspace = {
 		const workspace = await Workspace.get(workspaceId)
 		const tabs = await chrome.tabs.query({ windowId })
 		const tabIds = tabs.map((tab) => tab.id)
-		const groupId = await chrome.tabs.group({ tabIds })
+		let groupId = await Workspace.getGroupId(workspaceId)
+
+		if (groupId) {
+			await chrome.tabs.group({ tabIds, groupId })
+		} else {
+			groupId = await chrome.tabs.group({ tabIds })
+		}
 		
 		if (workspace && groupId) {
 			await chrome.tabGroups.update(groupId, { title: workspace.name, color: workspace.color })
@@ -97,8 +103,7 @@ const Workspace = {
 		const windowId = await WorkspaceList.findWindowForWorkspace(workspace.id)
 		if (!windowId) return
 
-		const groupsInWindow = await chrome.tabGroups.query({ windowId })
-		const group = groupsInWindow?.[0]
+		const [group] = await chrome.tabGroups.query({ windowId })
 		if (!group) return
 
 		if (group.title !== workspace.name || group.color !== workspace.color) {
@@ -162,7 +167,7 @@ const Workspace = {
 		workspace.tabs.forEach(({ url, active = false, pinned = false}, index) => {
 			const tabId = window.tabs[index].id
 			if (url.startsWith("http")) {
-				scheduleSuspend(tabId)
+				TabSuspendService.scheduleSuspend(tabId)
 			}
 			chrome.tabs.update(tabId, { active, pinned })
 		})
@@ -173,18 +178,40 @@ const Workspace = {
 
 	/**
 	 * Sync window changes to workspace.
-	 * @param {string} workspaceId
+	 * @param {unknown} windowId
 	 */
-	async update(workspaceId) {
+	async sync(windowId) {
+		const workspaceId = await WorkspaceList.findWorkspaceForWindow(windowId)
+		if (!workspaceId) return
+
 		const workspace = await Workspace.get(workspaceId)
 		if (!workspace) return
 
+		const tabs = await chrome.tabs.query({ windowId })
+		workspace.tabs = tabs.map(WorkspaceTab.create)
+
+		await Workspace.save(workspace)
+	},
+
+	/**
+	 * Get a Tab Group ID associated with the workspace
+	 * @param {string} workspaceId
+	 * @returns {Promise<number>} 
+	 */
+	async getGroupId(workspaceId) {
 		const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
 		if (!windowId) return
 
-		workspace.tabs = await WorkspaceTab.createAllFromWindow(windowId)
+		const workspace = await Workspace.get(workspaceId)
+		if (!workspace) return
 
-		await Workspace.save(workspace)
+		const [group] = await chrome.tabGroups.query({
+			windowId: windowId,
+			title: workspace.name,
+			color: workspace.color,
+		})
+
+		return group?.id
 	}
 }
 

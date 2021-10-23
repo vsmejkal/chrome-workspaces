@@ -3,7 +3,7 @@ import Workspace from "../workspace/Workspace.js"
 import Config from "../storage/Config.js"
 import Action from "../Action.js"
 import WorkspaceList from "../workspace/WorkspaceList.js"
-import SyncService from "../service/SyncService.js"
+import WorkspaceUpdateService from "../service/WorkspaceUpdateService.js"
 import MigrationService from "../service/MigrationService.js";
 
 chrome.runtime.onMessage.addListener(handleMessage)
@@ -36,7 +36,7 @@ async function handleTabActivate({ windowId }) {
 	const openingWorkspace = await Config.get(Config.Key.OPENING_WORKSPACE)
 
 	if (!openingWorkspace) {
-		SyncService.scheduleSync(windowId)
+		WorkspaceUpdateService.scheduleUpdate(windowId)
 	}
 }
 
@@ -52,26 +52,34 @@ async function handleTabUpdate(tabId, changeInfo, tab) {
 	const openingWorkspace = await Config.get(Config.Key.OPENING_WORKSPACE)
 
 	if (!openingWorkspace && changeInfo.url) {
-		SyncService.scheduleSync(tab.windowId)
+		WorkspaceUpdateService.scheduleUpdate(tab.windowId)
 	}
 }
 
-async function handleTabRemove(tabId, {windowId, isWindowClosing}) {
+async function handleTabRemove(tabId, { windowId, isWindowClosing }) {
 	if (isWindowClosing) {
-		SyncService.cancelSync(windowId)
+		WorkspaceUpdateService.cancelUpdate(windowId)
 	} else {
-		await SyncService.syncWindow(windowId)
+		await WorkspaceUpdateService.update(windowId)
 	}
 }
 
-async function handleTabAttach(tabId, {newWindowId}) {
-	await addTabToGroup(tabId, newWindowId)
-
-	SyncService.scheduleSync(newWindowId)
+async function handleTabAttach(tabId, attachInfo) {
+	for (let attempt = 0; attempt < 10; attempt++) {
+		try {
+			await addTabToGroup(tabId, attachInfo.newWindowId)
+			break
+		} catch {
+			// Tab cannot be edited while user is dragging it
+			await new Promise((resolve) => setTimeout(resolve, 500))
+		}
+	}
+	
+	WorkspaceUpdateService.scheduleUpdate(attachInfo.newWindowId)
 }
 
-async function handleTabDetach(tabId, {oldWindowId}) {
-	SyncService.scheduleSync(oldWindowId)
+async function handleTabDetach(tabId, { oldWindowId }) {
+	WorkspaceUpdateService.scheduleUpdate(oldWindowId)
 }
 
 async function handleTabGroupUpdate(tabGroup) {
@@ -82,9 +90,13 @@ async function handleTabGroupUpdate(tabGroup) {
 	if (!workspaceId) return
 
 	const workspace = await Workspace.get(workspaceId)
-	workspace.name = tabGroup.title
-	workspace.color = tabGroup.color
-	await Workspace.save(workspace)
+	if (!workspace) return;
+
+	if (workspace.name !== tabGroup.title || workspace.color !== tabGroup.color) {
+		workspace.name = tabGroup.title
+		workspace.color = tabGroup.color
+		await Workspace.save(workspace)
+	}
 }
 
 async function handleWindowOpen(window) {
@@ -136,7 +148,7 @@ async function handleInstall({ reason, previousVersion }) {
 	}
 
 	if (reason === "install") {
-		// TODO: Welcome screen & support
+		// TODO: Onboarding page & support
 	}
 }
 
@@ -144,9 +156,8 @@ async function addTabToGroup(tabId, windowId) {
 	const workspaceId = await WorkspaceList.findWorkspaceForWindow(windowId)
 	if (!workspaceId) return
 
-	const groupsInWindow = await chrome.tabGroups.query({ windowId })
-	const firstGroup = groupsInWindow?.[0]
-	if (!firstGroup) return
+	const groupId = await Workspace.getGroupId(workspaceId)
+	if (!groupId) return
 
-	await chrome.tabs.group({ groupId: firstGroup.id, tabIds: tabId })
+	await chrome.tabs.group({ groupId, tabIds: tabId })
 }

@@ -1,20 +1,18 @@
 const tabsToSuspend = new Set()
 
-export function scheduleSuspend(tabId) {
+function scheduleSuspend(tabId) {
 	tabsToSuspend.add(tabId)
 }
 
-function suspend(tabId) {
+function suspendTab(tabId) {
 	setTimeout(() => chrome.tabs.discard(tabId), 200)
 }
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 	if (tabsToSuspend.has(tabId) && changeInfo.title && !tab.active) {
-		suspend(tabId)
+		suspendTab(tabId)
 		tabsToSuspend.delete(tabId)
 	}
 })
 
-
-
-
+export default { scheduleSuspend }
