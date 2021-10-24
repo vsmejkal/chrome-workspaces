@@ -1,6 +1,6 @@
 import View from "./View.js"
 import WorkspaceList from "../../workspace/WorkspaceList.js"
-import Color from "../../Color.js"
+import WorkspaceColor from "../../workspace/WorkspaceColor.js"
 
 class ListView extends View {
     constructor({ onAddItem, onEditItem, onOpenItem }) {
@@ -49,8 +49,8 @@ class ListView extends View {
         item.classList.add("item")
         item.classList.toggle(selectedClass, selected)
         item.onclick = () => this._onOpenItem(id)
-        item.style.setProperty('--item-color', Color[color])
-        item.style.setProperty('--item-bg-color', Color[color] + "24")
+        item.style.setProperty('--item-color', WorkspaceColor[color])
+        item.style.setProperty('--item-bg-color', WorkspaceColor[color] + "24")
         item.appendChild(itemColor)
         item.appendChild(itemName)
         item.appendChild(itemButton)

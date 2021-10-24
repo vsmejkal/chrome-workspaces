@@ -14,6 +14,7 @@ chrome.tabs.onUpdated.addListener(handleTabUpdate)
 chrome.tabs.onRemoved.addListener(handleTabRemove)
 chrome.tabs.onAttached.addListener(handleTabAttach)
 chrome.tabs.onDetached.addListener(handleTabDetach)
+chrome.tabGroups.onCreated.addListener(handleTabGroupCreate)
 chrome.tabGroups.onUpdated.addListener(handleTabGroupUpdate)
 chrome.windows.onCreated.addListener(handleWindowOpen)
 chrome.windows.onRemoved.addListener(handleWindowClose)
@@ -82,19 +83,36 @@ async function handleTabDetach(tabId, { oldWindowId }) {
 	WorkspaceUpdateService.scheduleUpdate(oldWindowId)
 }
 
-async function handleTabGroupUpdate(tabGroup) {
+async function handleTabGroupCreate(group) {
 	const openingWorkspace = await Config.get(Config.Key.OPENING_WORKSPACE)
 	if (openingWorkspace) return
 
-	const workspaceId = await WorkspaceList.findWorkspaceForWindow(tabGroup.windowId)
+	const workspaceId = await WorkspaceList.findWorkspaceForWindow(group.windowId)
+	if (!workspaceId) return
+
+	const groups = await chrome.tabGroups.query({ windowId: group.windowId })
+	if (groups.length > 1) {
+		// Destroy custom tab groups inside workspace
+		await Workspace.activate(workspaceId)
+	}
+}
+
+async function handleTabGroupUpdate(group) {
+	const openingWorkspace = await Config.get(Config.Key.OPENING_WORKSPACE)
+	if (openingWorkspace) return
+
+	const workspaceId = await WorkspaceList.findWorkspaceForWindow(group.windowId)
 	if (!workspaceId) return
 
 	const workspace = await Workspace.get(workspaceId)
 	if (!workspace) return;
 
-	if (workspace.name !== tabGroup.title || workspace.color !== tabGroup.color) {
-		workspace.name = tabGroup.title
-		workspace.color = tabGroup.color
+	const groups = await chrome.tabGroups.query({ windowId: group.windowId })
+	if (groups.length > 1) return;
+
+	if (workspace.name !== group.title || workspace.color !== group.color) {
+		workspace.name = group.title
+		workspace.color = group.color
 		await Workspace.save(workspace)
 	}
 }

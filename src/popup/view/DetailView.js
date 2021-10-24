@@ -1,6 +1,6 @@
 import View from "./View.js"
 import Workspace from "../../workspace/Workspace.js"
-import Color from "../../Color.js"
+import WorkspaceColor from "../../workspace/WorkspaceColor.js"
 
 class DetailView extends View {
     constructor({ onSave, onRemove }) {
@@ -78,11 +78,11 @@ class DetailView extends View {
     _renderColors() {
         this._colorPicker.innerHTML = ""
 
-        for (const colorName of Object.keys(Color)) {
+        for (const colorName of Object.keys(WorkspaceColor)) {
             const button = document.createElement('button')
             button.classList.add('color')
             button.dataset.colorName = colorName
-            button.style.backgroundColor = Color[colorName]
+            button.style.backgroundColor = WorkspaceColor[colorName]
             button.onclick = () => this._selectColor(colorName)
 
             this._colorPicker.appendChild(button)

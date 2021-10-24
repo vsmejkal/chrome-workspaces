@@ -1,4 +1,4 @@
-export const Color = {
+export const WorkspaceColor = {
 	["grey"]: "#424242",
 	["blue"]: "#1565c0",
 	["red"]: "#c62828",
@@ -9,4 +9,4 @@ export const Color = {
 	["cyan"]: "#00838f",
 }
 
-export default Color
+export default WorkspaceColor

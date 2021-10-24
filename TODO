@@ -9,7 +9,7 @@ infographics on list page instead of initial empty workspaces.
 [x] **• Infographics for empty workspace list
 [x] *•• Do not create initial empty workspaces
 [x] *•• Add attached tab to group
-[ ] **• Disable custom tab groups inside workspace
+[x] **• Disable custom tab groups inside workspace
 [ ] *•• A change is not saved, if the window is closed quickly (Issue #2)
 [x] *•• Support keyboard shortcuts (Issue #7)
 [ ] *•• Improve keyboard control
