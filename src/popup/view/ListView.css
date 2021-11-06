@@ -17,6 +17,7 @@
 }
 #view-list .item {
     --item-color: var(--color-ui-primary);
+    --item-bg-color: transparent;
 
     position: relative;
     opacity: 0.9;
@@ -35,7 +36,7 @@
     margin-right: 10px;
     width: 20px;
     height: 20px;
-    border-radius: 10px;
+    border-radius: 4px;
     background-color: var(--item-color);
     opacity: 0.95;
 }
