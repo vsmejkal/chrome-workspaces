@@ -10,10 +10,12 @@ infographics on list page instead of initial empty workspaces.
 [x] *•• Do not create initial empty workspaces
 [x] *•• Add attached tab to group
 [x] **• Disable custom tab groups inside workspace
-[ ] *•• A change is not saved, if the window is closed quickly (Issue #2)
 [x] *•• Support keyboard shortcuts (Issue #7)
 [ ] *•• Improve keyboard control
 [ ] *•• Better explaining text in Remove view
+[ ] *•• 🐞 A change is not saved if the window is closed quickly (Issue #2)
+[x] *•• 🐞 Workspace is not active if restored from another window
+[ ] *•• 🐞 Pinned tabs are not preserved
 
 # v0.6
 

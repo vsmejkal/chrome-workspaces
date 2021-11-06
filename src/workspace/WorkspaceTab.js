@@ -30,7 +30,7 @@ const WorkspaceTab = {
 	/**
 	 * Create workspace tabs from given browser window. 
 	 * @param windowId Window ID
-	 * @returns {WorkspaceTab[]}
+	 * @returns {Promise<WorkspaceTab[]>}
 	 */
 	async createAllFromWindow(windowId) {
 		const tabs = await chrome.tabs.query({ windowId })

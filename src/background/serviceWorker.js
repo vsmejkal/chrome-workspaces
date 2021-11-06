@@ -6,6 +6,8 @@ import WorkspaceList from "../workspace/WorkspaceList.js"
 import WorkspaceUpdateService from "../service/WorkspaceUpdateService.js"
 import MigrationService from "../service/MigrationService.js";
 
+const { WindowType, WINDOW_ID_NONE } = chrome.windows
+
 chrome.runtime.onMessage.addListener(handleMessage)
 chrome.runtime.onInstalled.addListener(handleInstall)
 chrome.tabs.onActivated.addListener(handleTabActivate)
@@ -18,9 +20,8 @@ chrome.tabGroups.onCreated.addListener(handleTabGroupCreate)
 chrome.tabGroups.onUpdated.addListener(handleTabGroupUpdate)
 chrome.windows.onCreated.addListener(handleWindowOpen)
 chrome.windows.onRemoved.addListener(handleWindowClose)
+chrome.windows.onFocusChanged.addListener(handleWindowFocus, { windowTypes: [WindowType.NORMAL] })
 
-
-const WindowType = chrome.windows.WindowType
 
 async function handleMessage(request, sender, sendResponse) {
 	// Always send response
@@ -129,12 +130,8 @@ async function handleWindowOpen(window) {
 	})
 
 	if (allWindows.length === 1) {
-		await handleFirstWindowOpen(window)
+		await WorkspaceList.clearWindowMapping()
 	}
-}
-
-async function handleFirstWindowOpen(window) {
-	await WorkspaceList.clearWindowMapping()
 
 	const lastWorkspaceId = await Config.get(Config.Key.LAST_WORKSPACE_ID)
 	if (!lastWorkspaceId) return
@@ -154,8 +151,15 @@ async function handleWindowClose(windowId) {
 	if (workspaceId) {
 		await WorkspaceList.update(workspaceId, null)
 	}
+}
 
-	await Config.set(Config.Key.LAST_WORKSPACE_ID, workspaceId)
+async function handleWindowFocus(windowId) {
+	if (windowId === WINDOW_ID_NONE) return
+
+	const workspaceId = await WorkspaceList.findWorkspaceForWindow(windowId)
+	if (workspaceId) {
+		await Config.set(Config.Key.LAST_WORKSPACE_ID, workspaceId)
+	}
 }
 
 async function handleInstall({ reason, previousVersion }) {

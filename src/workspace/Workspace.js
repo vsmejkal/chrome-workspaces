@@ -1,4 +1,4 @@
-import { assert, randomString } from "../Utils.js"
+import { assert, randomString, windowExists } from "../Utils.js"
 import WorkspaceList from "./WorkspaceList.js"
 import WorkspaceTab from "./WorkspaceTab.js"
 import Storage from "../storage/Storage.js"
@@ -48,7 +48,7 @@ const Workspace = {
 	 * @param {string} workspaceId 
 	 */
 	async activate(workspaceId) {
-		const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
+		const windowId = await Workspace.getWindowId(workspaceId)
 		if (!windowId) return
 
 		const workspace = await Workspace.get(workspaceId)
@@ -72,13 +72,15 @@ const Workspace = {
 	 * @param {string} workspaceId
 	 */
 	async deactivate(workspaceId) {
-		const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
+		const windowId = await Workspace.getWindowId(workspaceId)
 		if (!windowId) return
 
 		const tabs = await chrome.tabs.query({ windowId })
 		const tabIds = tabs.map((tab) => tab.id)
 
-		await chrome.tabs.ungroup(tabIds)
+		if (tabIds.length > 0) {
+			await chrome.tabs.ungroup(tabIds)
+		}
 	},
 
 	/**
@@ -100,7 +102,7 @@ const Workspace = {
 
 		await Storage.set(workspace.id, workspace)
 
-		const windowId = await WorkspaceList.findWindowForWorkspace(workspace.id)
+		const windowId = await Workspace.getWindowId(workspace.id)
 		if (!windowId) return
 
 		const [group] = await chrome.tabGroups.query({ windowId })
@@ -129,7 +131,7 @@ const Workspace = {
 	 * @param {string} workspaceId 
 	 */
 	async focus(workspaceId) {
-		const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
+		const windowId = await Workspace.getWindowId(workspaceId)
 
 		if (windowId) {
 			await chrome.windows.update(windowId, { focused: true })
@@ -141,23 +143,23 @@ const Workspace = {
 	 * @param {string} workspaceId
 	 */
 	async open(workspaceId) {
+		const windowId = await Workspace.getWindowId(workspaceId)
+
 		try {
 			await Config.set(Config.Key.OPENING_WORKSPACE, true)
-			await Workspace._doOpen(workspaceId)
+			
+			if (await windowExists(windowId)) {
+				await Workspace.activate(workspaceId)
+				await Workspace.focus(workspaceId)
+			} else {
+				await Workspace._doOpen(workspaceId)
+			}
 		} finally {
 			await Config.set(Config.Key.OPENING_WORKSPACE, false)
 		}
 	 },
 
 	async _doOpen(workspaceId) {
-		const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
-		const windowExists = Boolean(windowId && await chrome.windows.get(windowId))
-
-		if (windowExists) {
-			await Workspace.activate(workspaceId)
-			return
-		}
-
 		const workspace = await Workspace.get(workspaceId)
 		const window = await chrome.windows.create({
 			url: workspace.tabs.map(tab => tab.url),
@@ -194,12 +196,19 @@ const Workspace = {
 	},
 
 	/**
+	 * Get a browser window ID associated with the workspace
+	 * @param {string} workspaceId
+	 */
+	async getWindowId(workspaceId) {
+		return await WorkspaceList.findWindowForWorkspace(workspaceId)
+	},
+
+	/**
 	 * Get a Tab Group ID associated with the workspace
 	 * @param {string} workspaceId
-	 * @returns {Promise<number>} 
 	 */
 	async getGroupId(workspaceId) {
-		const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
+		const windowId = await Workspace.getWindowId(workspaceId)
 		if (!windowId) return
 
 		const workspace = await Workspace.get(workspaceId)

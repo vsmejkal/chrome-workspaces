@@ -28,15 +28,7 @@ async function showListView() {
 			onAddItem: () => showAddWorkspaceView(),
 			onEditItem: (workspaceId) => showEditWorkspaceView(workspaceId),
 			onOpenItem: async (workspaceId) => {
-				const windowId = await WorkspaceList.findWindowForWorkspace(workspaceId)
-				const windowExists = Boolean(windowId && await chrome.windows.get(windowId))
-	
-				if (windowExists) {
-					await Workspace.focus(workspaceId)
-				} else {
-					await Action.openWorkspace(workspaceId)
-				}
-	
+				await Action.openWorkspace(workspaceId)
 				closePopup()
 			} 
 		})
@@ -62,12 +54,7 @@ async function showAddWorkspaceView() {
 			const newWorkspace = await Workspace.create({ name, color, windowId })
 			
 			await Action.openWorkspace(newWorkspace.id)
-
-			if (currentWorkspaceId) {
-				closePopup()
-			} else {
-				showListView()
-			}
+			closePopup()
 		}
 	})
 
