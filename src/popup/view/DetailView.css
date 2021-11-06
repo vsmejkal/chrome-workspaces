@@ -3,6 +3,10 @@
     padding: 4px 0;
     justify-content: space-between;
 }
+#view-detail .color-picker input[type=radio] {
+    position: absolute;
+	opacity: 0;
+}
 #view-detail .color-picker .color {
     display: inline-block;
     width: 22px;
@@ -12,10 +16,10 @@
     cursor: pointer;
     opacity: 0.9;
 }
-#view-detail .color-picker .color:focus {
+#view-detail .color-picker input[type=radio]:focus + .color {
     animation: bump 250ms ease-in-out;
 }
-#view-detail .color-picker .color-selected {
+#view-detail .color-picker input[type=radio]:checked + .color {
     background-image: url(../../icons/ui/check.svg);
     background-repeat: no-repeat;
     background-position: center center;

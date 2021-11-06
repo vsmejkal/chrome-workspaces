@@ -22,11 +22,6 @@ class DetailView extends View {
         this._heading.innerText = workspace ? "Edit Workspace" : "New Workspace"
 
         this._nameField.value = workspace?.name ?? ""
-        this._nameField.onkeydown = (e) => {
-            if (e.key === "Enter") {
-                this._saveButton.click()
-            }
-        }
 
         this._renderColors()
         this._selectColor(workspace?.color ?? "grey")
@@ -45,24 +40,8 @@ class DetailView extends View {
     }
 
     keyPressed({ key }) {
-        const offsetMap = {
-            "ArrowLeft": -1,
-            "ArrowRight": 1,
-            "ArrowUp": -5,
-            "ArrowDown": 5
-        }
-
-        const colorButtons = this.getElements(".color")
-        const offset = offsetMap[key]
-        const index = colorButtons.indexOf(document.activeElement)
-
-        if (!offset || index === -1) {
-            return
-        }
-
-        const nextIndex = index + offset
-        if (nextIndex >= 0 && nextIndex < colorButtons.length) {
-            colorButtons[nextIndex].focus()
+        if (key === "Enter") {
+            this._saveButton.click()
         }
     }
 
@@ -79,24 +58,29 @@ class DetailView extends View {
         this._colorPicker.innerHTML = ""
 
         for (const colorName of Object.keys(WorkspaceColor)) {
-            const button = document.createElement('button')
-            button.classList.add('color')
-            button.dataset.colorName = colorName
-            button.style.backgroundColor = WorkspaceColor[colorName]
-            button.onclick = () => this._selectColor(colorName)
+            const radio = document.createElement("input")
+            radio.type = "radio"
+            radio.name = "color"
+            radio.value = colorName
 
-            this._colorPicker.appendChild(button)
+            const button = document.createElement("div")
+            button.classList.add('color')
+            button.style.backgroundColor = WorkspaceColor[colorName]
+
+            const label = document.createElement("label")
+            label.appendChild(radio)
+            label.appendChild(button)
+            
+            this._colorPicker.appendChild(label)
         }
     }
 
     _selectColor(colorName) {
-        this.getElements(".color").forEach(color => {
-            color.classList.toggle("color-selected", color.dataset.colorName === colorName)
-        })
+        this.getElement(`input[type=radio][value=${colorName}]`).checked = true
     }
 
     _getSelectedColor() {
-        return this.getElement(".color-selected")?.dataset?.colorName
+        return this.getElement("input[type=radio]:checked")?.value
     }
 }
 

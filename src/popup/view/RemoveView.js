@@ -24,8 +24,7 @@ class RemoveView extends View {
 
 		const removeButton = this.getElement(".remove-button")
 		removeButton.onclick = () => this._onRemove({ workspaceId })
-
-		cancelButton.focus()
+		removeButton.focus()
 	}
 }
 

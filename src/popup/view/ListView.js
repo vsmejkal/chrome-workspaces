@@ -60,12 +60,9 @@ class ListView extends View {
 
     keyPressed({ key }) {
         const items = [...this._listElement.children, this._addButton]
-        const focusedItem = items.includes(document.activeElement) ? document.activeElement : null
-        const selectedItem = this.getElement(`.${selectedClass}`)
-        const currentItem = focusedItem ?? selectedItem
-        const currentIndex = items.indexOf(currentItem)
-        const prevIndex = currentItem ? currentIndex - 1 : items.length - 1
-        const nextIndex = currentItem ? currentIndex + 1 : 0
+        const currentIndex = items.indexOf(document.activeElement)
+        const prevIndex = currentIndex >= 0 ? currentIndex - 1 : items.length - 1
+        const nextIndex = currentIndex >= 0 ? currentIndex + 1 : 0
 
         if (key === "ArrowUp") {
             items[prevIndex]?.focus()
