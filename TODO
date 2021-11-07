@@ -15,7 +15,8 @@ infographics on list page instead of initial empty workspaces.
 [ ] *•• Better explaining text in Remove view
 [ ] *•• 🐞 A change is not saved if the window is closed quickly (Issue #2)
 [x] *•• 🐞 Workspace is not active if restored from another window
-[ ] *•• 🐞 Pinned tabs are not preserved
+[x] *•• 🐞 Pinned tabs are not preserved
+[ ] **• Test plan
 
 # v0.6
 

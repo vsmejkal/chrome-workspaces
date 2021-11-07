@@ -52,14 +52,13 @@ const Workspace = {
 		if (!windowId) return
 
 		const workspace = await Workspace.get(workspaceId)
-		const tabs = await chrome.tabs.query({ windowId })
-		const tabIds = tabs.map((tab) => tab.id)
 		let groupId = await Workspace.getGroupId(workspaceId)
 
-		if (groupId) {
-			await chrome.tabs.group({ tabIds, groupId })
-		} else {
-			groupId = await chrome.tabs.group({ tabIds })
+		const tabs = await chrome.tabs.query({ windowId })
+		const tabIdsToGroup = tabs.filter(tab => !tab.pinned && tab.groupId !== groupId).map((tab) => tab.id)
+
+		if (tabIdsToGroup.length > 0) {
+			groupId = await chrome.tabs.group({ tabIds: tabIdsToGroup, groupId })
 		}
 		
 		if (workspace && groupId) {
@@ -121,9 +120,12 @@ const Workspace = {
 	 * @param {string} workspaceId
 	 */
 	async remove(workspaceId) {
-		await Workspace.deactivate(workspaceId)
-		await WorkspaceList.remove(workspaceId)
-		await Storage.remove(workspaceId)
+		try {
+			await Workspace.deactivate(workspaceId)
+		} finally {
+			await WorkspaceList.remove(workspaceId)
+			await Storage.remove(workspaceId)
+		}
 	},
 
 	/**

@@ -12,8 +12,9 @@ chrome.runtime.onMessage.addListener(handleMessage)
 chrome.runtime.onInstalled.addListener(handleInstall)
 chrome.tabs.onActivated.addListener(handleTabActivate)
 chrome.tabs.onCreated.addListener(handleTabCreate)
-chrome.tabs.onUpdated.addListener(handleTabUpdate)
+chrome.tabs.onMoved.addListener(handleTabMove)
 chrome.tabs.onRemoved.addListener(handleTabRemove)
+chrome.tabs.onUpdated.addListener(handleTabUpdate)
 chrome.tabs.onAttached.addListener(handleTabAttach)
 chrome.tabs.onDetached.addListener(handleTabDetach)
 chrome.tabGroups.onCreated.addListener(handleTabGroupCreate)
@@ -25,7 +26,7 @@ chrome.windows.onFocusChanged.addListener(handleWindowFocus, { windowTypes: [Win
 
 async function handleMessage(request, sender, sendResponse) {
 	// Always send response
-	sendResponse({status: "ok"})
+	sendResponse({ status: "ok" })
 
 	if (request.type === Action.Type.OPEN_WORKSPACE) {
 		await Workspace.open(request.workspaceId)
@@ -44,18 +45,16 @@ async function handleTabActivate({ windowId }) {
 
 async function handleTabCreate(tab) {
 	const openingWorkspace = await Config.get(Config.Key.OPENING_WORKSPACE)
+	if (openingWorkspace) return
 
-	if (!openingWorkspace) {
-		await addTabToGroup(tab.id, tab.windowId);
-	}
+	await addTabToGroup(tab.id, tab.windowId);
 }
 
-async function handleTabUpdate(tabId, changeInfo, tab) {
+async function handleTabMove(tabId, { windowId }) {
 	const openingWorkspace = await Config.get(Config.Key.OPENING_WORKSPACE)
+	if (openingWorkspace) return
 
-	if (!openingWorkspace && changeInfo.url) {
-		WorkspaceUpdateService.scheduleUpdate(tab.windowId)
-	}
+	await WorkspaceUpdateService.update(windowId)
 }
 
 async function handleTabRemove(tabId, { windowId, isWindowClosing }) {
@@ -63,6 +62,19 @@ async function handleTabRemove(tabId, { windowId, isWindowClosing }) {
 		WorkspaceUpdateService.cancelUpdate(windowId)
 	} else {
 		await WorkspaceUpdateService.update(windowId)
+	}
+}
+
+async function handleTabUpdate(tabId, changeInfo, tab) {
+	const openingWorkspace = await Config.get(Config.Key.OPENING_WORKSPACE)
+	if (openingWorkspace) return
+
+	if ("url" in changeInfo || "pinned" in changeInfo) {
+		WorkspaceUpdateService.scheduleUpdate(tab.windowId)
+	}
+
+	if (changeInfo.pinned === false) {
+		await addTabToGroup(tabId, tab.windowId)
 	}
 }
 
@@ -76,7 +88,7 @@ async function handleTabAttach(tabId, attachInfo) {
 			await new Promise((resolve) => setTimeout(resolve, 500))
 		}
 	}
-	
+
 	WorkspaceUpdateService.scheduleUpdate(attachInfo.newWindowId)
 }
 
@@ -91,10 +103,16 @@ async function handleTabGroupCreate(group) {
 	const workspaceId = await WorkspaceList.findWorkspaceForWindow(group.windowId)
 	if (!workspaceId) return
 
-	const groups = await chrome.tabGroups.query({ windowId: group.windowId })
-	if (groups.length > 1) {
-		// Destroy custom tab groups inside workspace
-		await Workspace.activate(workspaceId)
+	const workspaceGroupId = await Workspace.getGroupId(workspaceId)
+	if (!workspaceGroupId) return
+
+	if (workspaceGroupId !== group.id) {
+		// We do not allow other tab groups inside workspace
+		const tabs = await chrome.tabs.query({ groupId: group.id })
+		await chrome.tabs.group({
+			groupId: workspaceGroupId,
+			tabIds: tabs.map((tab) => tab.id)
+		})
 	}
 }
 
@@ -105,11 +123,17 @@ async function handleTabGroupUpdate(group) {
 	const workspaceId = await WorkspaceList.findWorkspaceForWindow(group.windowId)
 	if (!workspaceId) return
 
+	const workspaceGroupId = await Workspace.getGroupId(workspaceId)
+	if (workspaceGroupId !== group.id) return;
+
 	const workspace = await Workspace.get(workspaceId)
 	if (!workspace) return;
 
-	const groups = await chrome.tabGroups.query({ windowId: group.windowId })
-	if (groups.length > 1) return;
+	if (!group.title) {
+		// Group title is empty -> reset with the workspace name
+		await Workspace.activate(workspaceId)
+		return
+	}
 
 	if (workspace.name !== group.title || workspace.color !== group.color) {
 		workspace.name = group.title
@@ -179,7 +203,10 @@ async function addTabToGroup(tabId, windowId) {
 	if (!workspaceId) return
 
 	const groupId = await Workspace.getGroupId(workspaceId)
-	if (!groupId) return
 
-	await chrome.tabs.group({ groupId, tabIds: tabId })
+	if (groupId) {
+		await chrome.tabs.group({ groupId, tabIds: tabId })
+	} else {
+		await Workspace.activate(workspaceId)
+	}
 }
