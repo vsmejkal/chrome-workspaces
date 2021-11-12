@@ -7,17 +7,22 @@ class RemoveView extends View {
 
 		this._onCancel = onCancel
 		this._onRemove = onRemove
+		this._description = this.getElement(".description")
 	}
 
 	async render({ workspaceId }) {
 		const workspace = await Workspace.get(workspaceId)
+		const windowId = await Workspace.getWindowId(workspaceId)
 
 		const workspaceNameElement = this.getElement(".workspace-name")
 		workspaceNameElement.innerText = workspace.name
 
-		const tabCountElement = this.getElement(".workspace-tab-count")
-		const tabCount = workspace.tabs.length
-		tabCountElement.innerHTML = `${tabCount}&nbsp;${tabCount === 1 ? "tab" : "tabs"}`
+		if (windowId) {
+			this._description.innerText = "The browser window remains open."
+		} else {
+			const tabCount = workspace.tabs.length
+			this._description.innerText = `${tabCount} saved ${tabCount === 1 ? "tab" : "tabs"} will be lost.`
+		}
 
 		const cancelButton = this.getElement(".cancel-button")
 		cancelButton.onclick = () => this._onCancel({ workspaceId });
