@@ -47,13 +47,9 @@ async function showListView() {
 
 async function showAddWorkspaceView() {
 	const newView = new DetailView({
-		onSave: async ({ name, color }) => {
-			const currentWindow = await chrome.windows.getLastFocused()
-			const currentWorkspaceId = await WorkspaceList.findWorkspaceForWindow(currentWindow.id)
-			const windowId = !currentWorkspaceId ? currentWindow.id : undefined
-			const newWorkspace = await Workspace.create({ name, color, windowId })
-			
-			await Action.openWorkspace(newWorkspace.id)
+		onSave: async ({ name, color, windowId }) => {	
+			const workspace = await Workspace.create({ name, color, windowId })
+			await Action.openWorkspace(workspace.id)
 			closePopup()
 		}
 	})

@@ -1,6 +1,7 @@
 import View from "./View.js"
 import Workspace from "../../workspace/Workspace.js"
 import WorkspaceColor from "../../workspace/WorkspaceColor.js"
+import WorkspaceList from "../../workspace/WorkspaceList.js"
 
 class DetailView extends View {
     constructor({ onSave, onRemove }) {
@@ -12,29 +13,37 @@ class DetailView extends View {
         this._heading = this.getElement("h1")
         this._nameField = this.getElement(".workspace-name")
         this._colorPicker = this.getElement(".color-picker")
+        this._useCurrentWindowSection = this.getElement(".section-window")
+        this._useCurrentWindow = this.getElement(".use-current-window")
         this._removeButton = this.getElement(".remove-button")
         this._saveButton = this.getElement(".save-button")
     }
 
     async render({ workspaceId }) {
         const workspace = await Workspace.get(workspaceId)
+        const activeWorkspaceId = await this._getActiveWorkspace()
+        const isNew = !workspace
 
-        this._heading.innerText = workspace ? "Edit Workspace" : "New Workspace"
+        this._heading.innerText = isNew ? "New Workspace" : "Edit Workspace"
 
         this._nameField.value = workspace?.name ?? ""
 
         this._renderColors()
         this._selectColor(workspace?.color ?? "grey")
 
-        this._removeButton.style.display = workspace ? "block" : "none"
+        if (isNew && !activeWorkspaceId) {
+            this._useCurrentWindowSection.style.display = "block"
+            this._useCurrentWindow.checked = true
+        } else {
+            this._useCurrentWindowSection.style.display = "none"
+            this._useCurrentWindow.checked = false
+        }
+
+        this._removeButton.style.display = isNew ? "none" : "block"
         this._removeButton.onclick = () => this._onRemove({ workspaceId })
 
-        this._saveButton.innerText = workspace ? "Done" : "Add"
-        this._saveButton.onclick = () => this._validate() && this._onSave({
-            workspaceId: workspaceId,
-            name: this._nameField.value,
-            color: this._getSelectedColor()
-        })
+        this._saveButton.innerText = isNew ? "Add" : "Done"
+        this._saveButton.onclick = () => this._handleSave(workspaceId)
 
         this._nameField.focus()
     }
@@ -43,6 +52,19 @@ class DetailView extends View {
         if (key === "Enter") {
             this._saveButton.click()
         }
+    }
+
+    async _handleSave(workspaceId) {
+        if (!this._validate()) return
+
+        const currentWindow = await chrome.windows.getCurrent()
+
+        this._onSave({
+            workspaceId: workspaceId,
+            name: this._nameField.value,
+            color: this._getSelectedColor(),
+            windowId: this._useCurrentWindow.checked ? currentWindow.id : undefined,
+        })
     }
 
     _validate() {
@@ -81,6 +103,13 @@ class DetailView extends View {
 
     _getSelectedColor() {
         return this.getElement("input[type=radio]:checked")?.value
+    }
+
+    async _getActiveWorkspace() {
+        const currentWindow = await chrome.windows.getCurrent()
+        const currentWorkspaceId = await WorkspaceList.findWorkspaceForWindow(currentWindow.id)
+
+        return currentWorkspaceId
     }
 }
 

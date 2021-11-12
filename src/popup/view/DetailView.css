@@ -1,3 +1,14 @@
+#view-detail > section {
+    display: block;
+}
+
+#view-detail .field-label {
+    display: block;
+    color: #616161;
+    font-size: .9em;
+    margin: 14px 0 4px 0;
+}
+
 #view-detail .color-picker {
     display: flex;
     padding: 4px 0;
@@ -24,6 +35,15 @@
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
+}
+
+#view-detail > .section-window {
+    display: none;
+}
+#view-detail > .section-window > label {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
 }
 
 #view-detail .remove-button {

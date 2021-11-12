@@ -31,15 +31,24 @@
 		<div id="view-detail" class="view">
 			<h1>Edit Workspace</h1>
 
-			<label>
-				<span>Name</span>
-				<input type="text" class="workspace-name" />
-			</label>
+			<section>
+				<label>
+					<span class="field-label">Name</span>
+					<input type="text" class="workspace-name" />
+				</label>
+			</section>
 
-			<label>
-				<span>Color</span>
+			<section>
+				<span class="field-label">Color</span>
 				<div class="color-picker"></div>
-			</label>
+			</section>
+
+			<section class="section-window">
+				<span class="field-label">Workspace</span>
+				<label title="Use the current window instead of creating a new one">
+					<input type="checkbox" class="use-current-window" />Create in this window
+				</label>
+			</section>
 
 			<div class="buttons">
 				<button class="button remove-button" tabindex="-1">Remove</button>
