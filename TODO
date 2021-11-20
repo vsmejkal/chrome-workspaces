@@ -13,16 +13,15 @@ infographics on list page instead of initial empty workspaces.
 [x] *•• Support keyboard shortcuts (Issue #7)
 [x] *•• Improve keyboard control
 [x] *•• Better explaining text in Remove view
-[ ] *•• 🐞 A change is not saved if the window is closed quickly (Issue #2)
+[x] *•• 🐞 A change is not saved if the window is closed quickly (Issue #2)
 [x] *•• 🐞 Workspace is not active if restored from another window
 [x] *•• 🐞 Pinned tabs are not preserved
-[ ] **• Test plan
+[x] **• Test plan
 
 # v0.6
 
 [ ] *** Automatically close other workspace (Issue #9)
 [ ] **• Send tab to a workspace
-[ ] **• Set up Patreon / Github Sponsors
 [ ] *** Onboarding page
 
 # v0.7
