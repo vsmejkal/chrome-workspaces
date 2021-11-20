@@ -213,11 +213,8 @@ const Workspace = {
 		const windowId = await Workspace.getWindowId(workspaceId)
 		if (!windowId) return
 
-		const workspace = await Workspace.get(workspaceId)
-		if (!workspace) return
-
-		const [group] = await chrome.tabGroups.query({ windowId, title: workspace.name, color: workspace.color })
-
+		const [group] = await chrome.tabGroups.query({ windowId })
+		
 		return group?.id
 	}
 }
