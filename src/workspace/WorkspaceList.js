@@ -60,7 +60,7 @@ const WorkspaceList = {
 		return list.find(item => item.workspaceId === workspaceId)?.windowId
 	},
 
-	async clearWindowMapping() {
+	async clearWindowIds() {
 		const list = await WorkspaceList.getItems()
 		for (const item of list) {
 			item.windowId = null

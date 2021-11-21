@@ -21,7 +21,6 @@ chrome.tabGroups.onCreated.addListener(handleTabGroupCreate)
 chrome.tabGroups.onUpdated.addListener(handleTabGroupUpdate)
 chrome.windows.onCreated.addListener(handleWindowOpen)
 chrome.windows.onRemoved.addListener(handleWindowClose)
-chrome.windows.onFocusChanged.addListener(handleWindowFocus, { windowTypes: [WindowType.NORMAL] })
 
 
 async function handleMessage(request, sender, sendResponse) {
@@ -152,13 +151,23 @@ async function handleWindowOpen(window) {
 	const allWindows = await chrome.windows.getAll({
 		windowTypes: [WindowType.NORMAL]
 	})
+	let lastWorkspaceId;
 
+	// Opening first window
 	if (allWindows.length === 1) {
-		await WorkspaceList.clearWindowMapping()
+		// If browser crashed, retrieve last workspace from WorkspaceList 
+		const workspaceList = await WorkspaceList.getItems()
+		lastWorkspaceId = workspaceList.find((item) => item.windowId)?.workspaceId
+
+		await WorkspaceList.clearWindowIds()
 	}
 
-	const lastWorkspaceId = await Config.get(Config.Key.LAST_WORKSPACE_ID)
-	if (!lastWorkspaceId) return
+	if (!lastWorkspaceId) {
+		lastWorkspaceId = await Config.get(Config.Key.LAST_WORKSPACE_ID)
+	}
+	if (!lastWorkspaceId) {
+		return
+	}
 
 	const lastWorkspace = await Workspace.get(lastWorkspaceId)
 	if (!lastWorkspace) return
@@ -173,16 +182,8 @@ async function handleWindowOpen(window) {
 async function handleWindowClose(windowId) {
 	const workspaceId = await WorkspaceList.findWorkspaceForWindow(windowId)
 	if (workspaceId) {
-		await WorkspaceList.update(workspaceId, null)
-	}
-}
-
-async function handleWindowFocus(windowId) {
-	if (windowId === WINDOW_ID_NONE) return
-
-	const workspaceId = await WorkspaceList.findWorkspaceForWindow(windowId)
-	if (workspaceId) {
 		await Config.set(Config.Key.LAST_WORKSPACE_ID, workspaceId)
+		await WorkspaceList.update(workspaceId, null)
 	}
 }
 

@@ -23,6 +23,7 @@ infographics on list page instead of initial empty workspaces.
 [ ] *** Automatically close other workspace (Issue #9)
 [ ] **• Send tab to a workspace
 [ ] *** Onboarding page
+[ ] *•• Improve workspace restoration after crash
 
 # v0.7
 
