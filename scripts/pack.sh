@@ -4,4 +4,4 @@
 rollup -c
 
 # Create archive
-zip -r chrome-workspaces.zip src manifest.json serviceWorkerLoader.js -x "*.d.ts"
+zip -r chrome-workspaces.zip src manifest.json serviceWorkerLoader.js -x "*.d.ts" -x ".DS_Store"
