@@ -4,12 +4,13 @@ import Config from "../storage/Config.js"
 import Action from "../Action.js"
 import WorkspaceList from "../workspace/WorkspaceList.js"
 import WorkspaceUpdateService from "../service/WorkspaceUpdateService.js"
-import MigrationService from "../service/MigrationService.js";
+import MigrationService from "../service/MigrationService.js"
 
-const { WindowType, WINDOW_ID_NONE } = chrome.windows
+const { WindowType } = chrome.windows
 
 chrome.runtime.onMessage.addListener(handleMessage)
 chrome.runtime.onInstalled.addListener(handleInstall)
+chrome.runtime.onStartup.addListener(handleStartup)
 chrome.tabs.onActivated.addListener(handleTabActivate)
 chrome.tabs.onCreated.addListener(handleTabCreate)
 chrome.tabs.onMoved.addListener(handleTabMove)
@@ -32,6 +33,19 @@ async function handleMessage(request, sender, sendResponse) {
 	}
 
 	return true
+}
+
+async function handleStartup() {
+	await WorkspaceList.clearWindowIds()
+
+	const windows = await chrome.windows.getAll({
+		windowTypes: [WindowType.NORMAL]
+	})
+
+	// We need to do it one-by-one to prevent collissions in storage
+	for (const window of windows) {
+		await handleWindowOpen(window)
+	}
 }
 
 async function handleTabActivate({ windowId }) {
@@ -148,34 +162,9 @@ async function handleWindowOpen(window) {
 		return
 	}
 
-	const allWindows = await chrome.windows.getAll({
-		windowTypes: [WindowType.NORMAL]
-	})
-	let lastWorkspaceId;
-
-	// Opening first window
-	if (allWindows.length === 1) {
-		// If browser crashed, retrieve last workspace from WorkspaceList 
-		const workspaceList = await WorkspaceList.getItems()
-		lastWorkspaceId = workspaceList.find((item) => item.windowId)?.workspaceId
-
-		await WorkspaceList.clearWindowIds()
-	}
-
-	if (!lastWorkspaceId) {
-		lastWorkspaceId = await Config.get(Config.Key.LAST_WORKSPACE_ID)
-	}
-	if (!lastWorkspaceId) {
-		return
-	}
-
-	const lastWorkspace = await Workspace.get(lastWorkspaceId)
-	if (!lastWorkspace) return
-
-	const tabGroups = await chrome.tabGroups.query({ windowId: window.id })
-
-	if (tabGroups.length === 1 && tabGroups[0].color === lastWorkspace.color && tabGroups[0].title === lastWorkspace.name) {
-		await WorkspaceList.update(lastWorkspaceId, window.id)
+	const workspaceId = await findMatchingWorkspace(window)
+	if (workspaceId) {
+		await WorkspaceList.update(workspaceId, window.id)
 	}
 }
 
@@ -209,5 +198,26 @@ async function addTabToGroup(tabId, windowId) {
 		await chrome.tabs.group({ groupId, tabIds: tabId })
 	} else {
 		await Workspace.activate(workspaceId)
+	}
+}
+
+async function findMatchingWorkspace(window) {
+	const tabGroups = await chrome.tabGroups.query({ windowId: window.id })
+	if (tabGroups.length !== 1) return
+
+	const { title, color } = tabGroups[0]
+	let workspaceIds = await WorkspaceList.getWorkspaceIds()
+	
+	const lastWorkspaceId = await Config.get(Config.Key.LAST_WORKSPACE_ID)
+	if (workspaceIds.includes(lastWorkspaceId)) {
+		// Search optimization
+		workspaceIds = [...new Set([lastWorkspaceId, ...workspaceIds])]
+	}
+
+	for (const workspaceId of workspaceIds) {
+		const workspace = await Workspace.get(workspaceId)
+		if (workspace && workspace.name === title && workspace.color === color) {
+			return workspace.id
+		}
 	}
 }

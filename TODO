@@ -17,13 +17,13 @@ infographics on list page instead of initial empty workspaces.
 [x] *•• 🐞 Workspace is not active if restored from another window
 [x] *•• 🐞 Pinned tabs are not preserved
 [x] **• Test plan
+[x] *•• Improve workspace restoration after crash
 
 # v0.6
 
-[ ] *** Automatically close other workspace (Issue #9)
+[ ] *** Option: Automatically minimize/close other workspace (Issue #9)
 [ ] **• Send tab to a workspace
 [ ] *** Onboarding page
-[ ] *•• Improve workspace restoration after crash
 
 # v0.7
 

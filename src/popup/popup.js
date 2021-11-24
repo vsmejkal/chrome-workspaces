@@ -18,7 +18,7 @@ async function render() {
 async function showListView() {
 	await showWorkspaceListView()
 
-	const workspaceList = await WorkspaceList.getItems()
+	const workspaceList = await WorkspaceList.getWorkspaceIds()
 	if (workspaceList.length === 0) {
 		await showEmptyListView()
 	}

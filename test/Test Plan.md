@@ -124,7 +124,7 @@ This document contains a list of steps to verify proper functionality of Workspa
 
 ## 6. Restore workspace
 
-### 6.1 Reopen window
+### 6.1 Restore window
 - PREQ 2.1
 - Open another browser window
 - Close `Green` workspace window
@@ -133,15 +133,17 @@ This document contains a list of steps to verify proper functionality of Workspa
 - Click the extension button
 - EXP `Green` item is active (highlighted)
 
-### 6.2 Restart browser
-- PREQ 2.1
+### 6.2 Restore multiple windows
+- PREQ 1.3
 - Go to browser `Setting > On start-up`
 - Select `Continue where you left off`
 - Press <kbd>Ctrl/Cmd + Q</kbd> to quit browser
 - Open the browser again
-- EXP `Green` workspace window is opened again
-- Click the extension button
-- EXP `Green` item is active (highlighted)
+- EXP `Green` and `Blue` workspaces are opened again
+- Click the extension button and select `Green` workspace
+- EXP Existing `Green` workspace window is focused
+- Click the extension button and select `Blue` workspace
+- EXP Existing `Blue` workspace window is focused
 
 
 ## 7. Tab operations

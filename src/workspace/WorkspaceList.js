@@ -13,9 +13,20 @@ const WorkspaceList = {
 		await Storage.set(Storage.Key.WORKSPACE_LIST, list)
 	},
 
-	async getWorkspaces() {
+	/**
+	 * @returns {Promise<Array<string>>}
+	 */
+	 async getWorkspaceIds() {
 		const list = await WorkspaceList.getItems()
-		const workspaceIds = list.map(item => item.workspaceId)
+		
+		return list.map(item => item.workspaceId)
+	},
+
+	/**
+	 * @returns {Promise<Array<import("./Workspace.js").Workspace>>}
+	 */
+	async getWorkspaces() {
+		const workspaceIds = await WorkspaceList.getWorkspaceIds()
 
 		return await Storage.getAll(workspaceIds)
 	},
