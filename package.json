@@ -10,6 +10,7 @@
   },
   "scripts": {
     "dev": "rollup -c -w",
+    "build": "rollup -c",
     "pack": "bash scripts/pack.sh"
   }
 }
