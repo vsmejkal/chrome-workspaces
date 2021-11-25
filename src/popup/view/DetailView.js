@@ -48,9 +48,10 @@ class DetailView extends View {
         this._nameField.focus()
     }
 
-    keyPressed({ key }) {
-        if (key === "Enter") {
+    keyPressed(e) {
+        if (e.key === "Enter") {
             this._saveButton.click()
+            e.preventDefault()
         }
     }
 
