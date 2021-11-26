@@ -36,6 +36,10 @@
     background-position: center center;
     background-size: cover;
 }
+#view-detail .color-picker input[type=radio].focus-visible + .color {
+    outline-style: auto;
+    outline-offset: 2px;
+}
 
 #view-detail > .section-window {
     display: none;
