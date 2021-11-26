@@ -44,7 +44,7 @@ This document contains a list of steps to verify proper functionality of Workspa
 
 ### 2.1 Open tabs
 - PREQ 1.2
-- Open another browser window
+- Open new browser window
 - Focus the `Green` workspace window
 - Open three tabs with `google.com`, `wikipedia.com`, `seznam.cz`
 - EXP Tabs are added into the `Green` tab group
@@ -53,8 +53,7 @@ This document contains a list of steps to verify proper functionality of Workspa
 - PREQ 2.1
 - Pin the Google tab
 - Click the Wikipedia tab to make it active
-- Open a new browser window
-- Close the previous `Green` window
+- Close the `Green` window
 - Click the extension button and select `Green` workspace from the popup
 - EXP New window with `Green` tab group is opened
 - EXP The tab group contains Google, Wikipedia, and Seznam tabs
@@ -135,8 +134,7 @@ This document contains a list of steps to verify proper functionality of Workspa
 
 ### 6.2 Restore multiple windows
 - PREQ 1.3
-- Go to browser `Setting > On start-up`
-- Select `Continue where you left off`
+- Go to browser `Setting > On start-up` and select `Continue where you left off`
 - Press <kbd>Ctrl/Cmd + Q</kbd> to quit browser
 - Open the browser again
 - EXP `Green` and `Blue` workspaces are opened again
@@ -191,4 +189,19 @@ This document contains a list of steps to verify proper functionality of Workspa
 - EXP `Green` item is highlighted
 - Press <kbd>Enter</kbd>
 - EXP `Green` workspace window is focused
+
+### 8.3 Edit workspace
+- PREQ 1.2
+- Click the extension button
+- Hover over `Green` item and click the three dots
+- EXP `Name` field is focused
+- Press <kbd>Tab</kbd>
+- EXP `Color` picker is focused
+- Press <kbd>Arrow Left</kbd> to select previous color
+- Press <kbd>Arrow Right</kbd> to select next color
+- Press <kbd>Tab</kbd>
+- EXP `Done` button is focused
+- Press <kbd>Enter</kbd>
+- EXP Workspace list screen is shown
+- EXP Workspace color matches the selected color
 
