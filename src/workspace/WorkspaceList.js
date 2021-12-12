@@ -1,5 +1,5 @@
 import Storage from "../storage/Storage.js"
-import { assert } from "../Utils.js";
+import { assert } from "../util/assert.js";
 
 const WorkspaceList = {
 	/**
@@ -9,8 +9,8 @@ const WorkspaceList = {
 		return await Storage.get(Storage.Key.WORKSPACE_LIST) ?? []
 	},
 
-	async setItems(list) {
-		await Storage.set(Storage.Key.WORKSPACE_LIST, list)
+	async updateItems(updater) {
+		await Storage.update(Storage.Key.WORKSPACE_LIST, (list) => updater(list ?? []))
 	},
 
 	/**
@@ -32,29 +32,26 @@ const WorkspaceList = {
 	},
 
 	async add(workspaceId, windowId) {
-		const list = await WorkspaceList.getItems()
-
-		await WorkspaceList.setItems(list.concat({ workspaceId, windowId }))
+		await WorkspaceList.updateItems((list) => {
+			return list.concat({ workspaceId, windowId })
+		})
 	},
 
 	async update(workspaceId, windowId) {
-		const list = await WorkspaceList.getItems()
-
-		for (const item of list) {
-			if (item.workspaceId === workspaceId) {
-				item.windowId = windowId
+		await WorkspaceList.updateItems((list) => {
+			for (const item of list) {
+				if (item.workspaceId === workspaceId) {
+					item.windowId = windowId
+				}
 			}
-		}
-
-		await WorkspaceList.setItems(list)
+			return list
+		})
 	},
 
 	async remove(workspaceId) {
-		const list = await WorkspaceList.getItems()
-
-		await WorkspaceList.setItems(
-			list.filter(item => item.workspaceId !== workspaceId)
-		)
+		await WorkspaceList.updateItems((list) => {
+			return list.filter(item => item.workspaceId !== workspaceId)
+		})
 	},
 
 	async findWorkspaceForWindow(windowId) {
@@ -71,13 +68,13 @@ const WorkspaceList = {
 		return list.find(item => item.workspaceId === workspaceId)?.windowId
 	},
 
-	async clearWindowIds() {
-		const list = await WorkspaceList.getItems()
-		for (const item of list) {
-			item.windowId = null
-		}
-
-		await WorkspaceList.setItems(list)
+	async initialize() {
+		await WorkspaceList.updateItems((list) => {
+			for (const item of list) {
+				item.windowId = undefined
+			}
+			return list
+		})
 	}
 }
 

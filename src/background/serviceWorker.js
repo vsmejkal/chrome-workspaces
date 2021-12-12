@@ -36,16 +36,7 @@ async function handleMessage(request, sender, sendResponse) {
 }
 
 async function handleStartup() {
-	await WorkspaceList.clearWindowIds()
-
-	const windows = await chrome.windows.getAll({
-		windowTypes: [WindowType.NORMAL]
-	})
-
-	// We need to do it one-by-one to prevent collissions in storage
-	for (const window of windows) {
-		await handleWindowOpen(window)
-	}
+	await WorkspaceList.initialize()
 }
 
 async function handleTabActivate({ windowId }) {
@@ -122,10 +113,13 @@ async function handleTabGroupCreate(group) {
 	if (workspaceGroupId !== group.id) {
 		// We do not allow other tab groups inside workspace
 		const tabs = await chrome.tabs.query({ groupId: group.id })
-		await chrome.tabs.group({
-			groupId: workspaceGroupId,
-			tabIds: tabs.map((tab) => tab.id)
-		})
+
+		if (tabs.length > 0) {
+			await chrome.tabs.group({
+				groupId: workspaceGroupId,
+				tabIds: tabs.map((tab) => tab.id)
+			})
+		}
 	}
 }
 

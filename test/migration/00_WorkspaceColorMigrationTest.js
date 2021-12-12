@@ -1,5 +1,5 @@
-import WorkspaceColorMigration from "/src/migration/00_WorkspaceColorMigration.js"
-import { assertEqual } from "/src/Utils.js"
+import WorkspaceColorMigration from "../../src/migration/00_WorkspaceColorMigration.js"
+import { assertEqual } from "../../src/util/assert.js"
 
 const WorkspaceColorMigrationTest = {
     async testColorMapping() {

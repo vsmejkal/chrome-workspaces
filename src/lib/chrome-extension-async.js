@@ -225,18 +225,11 @@
             { n: 'memory', props: ['getInfo'] },
             { n: 'storage', props: ['getInfo', 'ejectDevice', 'getAvailableCapacity'] }],
         tabCapture: ['capture', 'getCapturedTabs'],
-        tabs: [
-            'get', 'getCurrent', 'sendMessage', 'create', 'duplicate',
-            'query', 'highlight', 'update', 'move', 'reload', 'remove',
-            'detectLanguage', 'captureVisibleTab', 'executeScript',
-            'insertCSS', 'setZoom', 'getZoom', 'setZoomSettings',
-            'getZoomSettings', 'discard'],
         topSites: ['get'],
         tts: ['isSpeaking', 'getVoices', 'speak'],
         types: ['set', 'get', 'clear'],
         vpnProvider: ['createConfig', 'destroyConfig', 'setParameters', 'sendPacket', 'notifyConnectionStateChanged'],
         wallpaper: ['setWallpaper'],
         webNavigation: ['getFrame', 'getAllFrames', 'handlerBehaviorChanged'],
-        windows: ['get', 'getCurrent', 'getLastFocused', 'getAll', 'create', 'update', 'remove']
     });
 })();

@@ -1,4 +1,4 @@
-import { assert } from "../../Utils.js";
+import { assert } from "../../util/assert.js";
 
 class View {
     static #activeView = null

@@ -1,4 +1,7 @@
-import { assert } from "../Utils.js";
+import { assert } from "../util/assert.js";
+import AtomicLock from "../util/AtomicLock.js";
+
+const atomicUpdate = AtomicLock()
 
 const Key = {
 	CONFIG: "config",
@@ -27,22 +30,16 @@ const Storage = {
 		await chrome.storage.local.set({[key]: value})
 	},
 
-	async setAll(items) {
-		await chrome.storage.local.set(items)
-	},
-
 	async update(key, updater) {
-		const value = await this.get(key)
-
-		await this.set(key, updater(value))
+		await atomicUpdate(async () => {
+			const value = await this.get(key)
+			const newValue = await updater(value)
+			await this.set(key, newValue)
+		})
 	},
 
 	async remove(key) {
 		await chrome.storage.local.remove(key)
-	},
-
-	async sync() {
-
 	},
 
 	onChange: {

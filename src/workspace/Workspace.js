@@ -1,4 +1,5 @@
-import { assert, randomString, windowExists } from "../Utils.js"
+import { assert } from "../util/assert.js"
+import { randomString, windowExists } from "../util/utils.js"
 import WorkspaceList from "./WorkspaceList.js"
 import WorkspaceTab from "./WorkspaceTab.js"
 import Storage from "../storage/Storage.js"
