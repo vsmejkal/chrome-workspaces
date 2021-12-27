@@ -1,7 +1,7 @@
 import { assert } from "../util/assert.js";
 import AtomicLock from "../util/AtomicLock.js";
 
-const atomicUpdate = AtomicLock()
+const updateLock = AtomicLock()
 
 const Key = {
 	CONFIG: "config",
@@ -31,7 +31,7 @@ const Storage = {
 	},
 
 	async update(key, updater) {
-		await atomicUpdate(async () => {
+		await updateLock(async () => {
 			const value = await this.get(key)
 			const newValue = await updater(value)
 			await this.set(key, newValue)

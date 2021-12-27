@@ -1,0 +1,25 @@
+body {
+    margin: 8px 20px 20px 20px;
+}
+
+dl {
+    margin: 0;
+}
+
+dt {
+    font-weight: 600;
+}
+
+dd {
+    margin-inline-start: 0;
+}
+
+dd.radiogroup > label {
+    display: inline-block;
+    margin-block-start: 8px;
+    margin-inline-end: 8px;
+}
+
+dd.radiogroup input[type="radio"] {
+    transform: translateY(2px);
+}

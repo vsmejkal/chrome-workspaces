@@ -7,10 +7,10 @@ import RemoveView from "./view/RemoveView.js";
 import DebugView from "./view/DebugView.js";
 import EmptyListView from "./view/EmptyListView.js";
 
-// Bootstrap and render the workspace list
-document.addEventListener("DOMContentLoaded", render);
 
-async function render() {
+document.addEventListener("DOMContentLoaded", renderPopup);
+
+async function renderPopup() {
 	showListView()
 	registerDebugView()
 }

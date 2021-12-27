@@ -1,25 +1,4 @@
-# v0.5 Create workspace from window
-
-The existing button to add a new empty workspace is replaced by button
-that transforms the current window into a new workspace. Also we have a new
-infographics on list page instead of initial empty workspaces.
-
-[x] **• Create workspace from the current window (Issue #3)
-[x] *•• Improve Add new workspace button
-[x] **• Infographics for empty workspace list
-[x] *•• Do not create initial empty workspaces
-[x] *•• Add attached tab to group
-[x] **• Disable custom tab groups inside workspace
-[x] *•• Support keyboard shortcuts (Issue #7)
-[x] *•• Improve keyboard control
-[x] *•• Better explaining text in Remove view
-[x] *•• 🐞 A change is not saved if the window is closed quickly (Issue #2)
-[x] *•• 🐞 Workspace is not active if restored from another window
-[x] *•• 🐞 Pinned tabs are not preserved
-[x] **• Test plan
-[x] *•• Improve workspace restoration after crash
-
-# v0.6
+# v0.6 Options & Onboarding page
 
 [ ] *** Option: Automatically minimize/close other workspace (Issue #9)
 [ ] **• Send tab to a workspace

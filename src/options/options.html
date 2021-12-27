@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link href="options.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+		<script src="../lib/chrome-extension-async.js"></script>
+		<script src="options.js" type="module"></script>
+		<title>Workspaces Options</title>
+	</head>
+
+	<body>
+		<dl>
+			<dt>Other workspaces:</dt>
+			<dd class="radiogroup">
+				<label>
+					<input type="radio" name="otherWorkspaces" value="keep_open" />
+					  Keep open
+				</label>
+		
+				<label>
+					<input type="radio" name="otherWorkspaces" value="minimize" />
+					  Minimize
+				</label>
+		
+				<label>
+					<input type="radio" name="otherWorkspaces" value="close" />
+					  Close
+				</label>
+			</dd>
+		</dl>
+	</body>
+</html>
