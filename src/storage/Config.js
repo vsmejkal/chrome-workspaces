@@ -5,7 +5,7 @@ const Key = {
     OPENING_WORKSPACE: "openingWorkspace",
 }
 
-const DefaultValue = {
+const defaultValue = {
     [Key.OPENING_WORKSPACE]: false
 }
 
@@ -14,13 +14,18 @@ const Config = {
 
     async get(key) {
         const config = await Storage.get(Storage.Key.CONFIG) ?? {}
-        return config[key] ?? DefaultValue[key] ?? null
+        if (key in config) {
+            return config[key]
+        } else {
+            return defaultValue[key] ?? null
+        }
     },
 
     async set(key, value) {
-        const config = await Storage.get(Storage.Key.CONFIG) ?? {}
-        config[key] = value
-        await Storage.set(Storage.Key.CONFIG, config)
+        await Storage.update(Storage.Key.CONFIG, (config = {}) => {
+            config[key] = value
+            return config
+        })
     }
 }
 

@@ -1,10 +1,8 @@
 import { assert } from "../util/assert.js"
-import { randomString, windowExists } from "../util/utils.js"
+import { randomString } from "../util/utils.js"
 import WorkspaceList from "./WorkspaceList.js"
 import WorkspaceTab from "./WorkspaceTab.js"
 import Storage from "../storage/Storage.js"
-import Config from "../storage/Config.js"
-import TabSuspendService from "../service/TabSuspendService.js"
 
 /**
  * @typedef {'grey'|'blue'|'red'|'yellow'|'green'|'pink'|'purple'|'cyan'} WorkspaceColor
@@ -127,58 +125,6 @@ const Workspace = {
 			await WorkspaceList.remove(workspaceId)
 			await Storage.remove(workspaceId)
 		}
-	},
-
-	/**
-	 * Focus workspace window
-	 * @param {string} workspaceId 
-	 */
-	async focus(workspaceId) {
-		const windowId = await Workspace.getWindowId(workspaceId)
-
-		if (windowId) {
-			await chrome.windows.update(windowId, { focused: true })
-		}
-	},
-
-	/**
-	 * Open a workspace.
-	 * @param {string} workspaceId
-	 */
-	async open(workspaceId) {
-		const windowId = await Workspace.getWindowId(workspaceId)
-
-		try {
-			await Config.set(Config.Key.OPENING_WORKSPACE, true)
-			
-			if (await windowExists(windowId)) {
-				await Workspace.activate(workspaceId)
-				await Workspace.focus(workspaceId)
-			} else {
-				await Workspace._doOpen(workspaceId)
-			}
-		} finally {
-			await Config.set(Config.Key.OPENING_WORKSPACE, false)
-		}
-	 },
-
-	async _doOpen(workspaceId) {
-		const workspace = await Workspace.get(workspaceId)
-		const window = await chrome.windows.create({
-			url: workspace.tabs.map(tab => tab.url),
-			focused: true
-		})
-
-		workspace.tabs.forEach(({ url, active = false, pinned = false}, index) => {
-			const tabId = window.tabs[index].id
-			if (url.startsWith("http")) {
-				TabSuspendService.scheduleSuspend(tabId)
-			}
-			chrome.tabs.update(tabId, { active, pinned })
-		})
-
-		await WorkspaceList.update(workspace.id, window.id)
-		await Workspace.activate(workspaceId)
 	},
 
 	/**

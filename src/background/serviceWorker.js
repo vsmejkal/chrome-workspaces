@@ -5,6 +5,7 @@ import Action from "../Action.js"
 import WorkspaceList from "../workspace/WorkspaceList.js"
 import WorkspaceUpdateService from "../service/WorkspaceUpdateService.js"
 import MigrationService from "../service/MigrationService.js"
+import WorkspaceOpenService from "../service/WorkspaceOpenService.js"
 
 const { WindowType } = chrome.windows
 
@@ -29,7 +30,7 @@ async function handleMessage(request, sender, sendResponse) {
 	sendResponse({ status: "ok" })
 
 	if (request.type === Action.Type.OPEN_WORKSPACE) {
-		await Workspace.open(request.workspaceId)
+		await WorkspaceOpenService.open(request.workspaceId)
 	}
 
 	return true
