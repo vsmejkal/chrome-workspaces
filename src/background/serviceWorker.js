@@ -6,6 +6,9 @@ import WorkspaceList from "../workspace/WorkspaceList.js"
 import WorkspaceUpdateService from "../service/WorkspaceUpdateService.js"
 import MigrationService from "../service/MigrationService.js"
 import WorkspaceOpenService from "../service/WorkspaceOpenService.js"
+import ContextMenuService from "../service/ContextMenuService.js"
+
+ContextMenuService.initialize()
 
 const { WindowType } = chrome.windows
 
@@ -134,20 +137,16 @@ async function handleTabGroupUpdate(group) {
 	const workspaceGroupId = await Workspace.getGroupId(workspaceId)
 	if (workspaceGroupId !== group.id) return;
 
-	const workspace = await Workspace.get(workspaceId)
-	if (!workspace) return;
-
 	if (!group.title) {
 		// Group title is empty -> reset with the workspace name
 		await Workspace.activate(workspaceId)
 		return
 	}
 
-	if (workspace.name !== group.title || workspace.color !== group.color) {
-		workspace.name = group.title
-		workspace.color = group.color
-		await Workspace.save(workspace)
-	}
+	await Workspace.update(workspaceId, {
+		name: group.title,
+		color: group.color,
+	})
 }
 
 async function handleWindowOpen(window) {
@@ -182,6 +181,8 @@ async function handleInstall({ reason, previousVersion }) {
 		// TODO: Onboarding page & support
 	}
 }
+
+// ----------------------------------------------------------------------------
 
 async function addTabToGroup(tabId, windowId) {
 	const workspaceId = await WorkspaceList.findWorkspaceForWindow(windowId)

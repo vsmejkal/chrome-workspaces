@@ -27,8 +27,9 @@ const WorkspaceList = {
 	 */
 	async getWorkspaces() {
 		const workspaceIds = await WorkspaceList.getWorkspaceIds()
+		const workspaces = await Storage.getAll(workspaceIds)
 
-		return await Storage.getAll(workspaceIds)
+		return workspaces.filter(Boolean)
 	},
 
 	async add(workspaceId, windowId) {

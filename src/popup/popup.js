@@ -60,10 +60,7 @@ async function showAddWorkspaceView() {
 async function showEditWorkspaceView(workspaceId) {
 	const editView = new DetailView({
 		onSave: async ({ workspaceId, name, color }) => {
-			const workspace = await Workspace.get(workspaceId)
-			workspace.name = name
-			workspace.color = color
-			await Workspace.save(workspace)
+			await Workspace.update(workspaceId, { name, color })
 			showListView()
 		},
 		onRemove: async ({ workspaceId }) => {

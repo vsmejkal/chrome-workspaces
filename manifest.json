@@ -29,6 +29,7 @@
     "default_popup": "src/popup/popup.html"
   },
   "permissions": [
+    "contextMenus",
     "storage",
     "tabs",
     "tabGroups"

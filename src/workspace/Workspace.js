@@ -3,6 +3,7 @@ import { randomString } from "../util/utils.js"
 import WorkspaceList from "./WorkspaceList.js"
 import WorkspaceTab from "./WorkspaceTab.js"
 import Storage from "../storage/Storage.js"
+import ContextMenuService from "../service/ContextMenuService.js"
 
 /**
  * @typedef {'grey'|'blue'|'red'|'yellow'|'green'|'pink'|'purple'|'cyan'} WorkspaceColor
@@ -19,10 +20,11 @@ import Storage from "../storage/Storage.js"
 const Workspace = {
 	/**
 	 * Create and save a new workspace.
-	 * @param {string} name Title of the workspace
-	 * @param {WorkspaceColor} color Color of the workspace
-	 * @param {WorkspaceTab[]} [tabs] List of the workspace tabs
-	 * @param {number} [windowId] Window ID of the workspace
+	 * @param {Object} args
+	 * @param {string} args.name Title of the workspace
+	 * @param {WorkspaceColor} args.color Color of the workspace
+	 * @param {WorkspaceTab[]} [args.tabs] List of the workspace tabs
+	 * @param {number} [args.windowId] Window ID of the workspace
 	 * @returns {Promise<Workspace>}
 	 */
 	async create({ name, color, tabs, windowId }) {
@@ -33,7 +35,7 @@ const Workspace = {
 			tabs = [WorkspaceTab.createEmpty()]
 		}
 
-		const workspaceId = `${Storage.Key.WORKSPACE_PREFIX}${randomString(8)}`
+		const workspaceId = await generateWorkspaceId()
 		const workspace = { id: workspaceId, name, color, tabs }
 
 		await Workspace.save(workspace)
@@ -41,6 +43,24 @@ const Workspace = {
 
 		return workspace
 	},
+
+	/**
+	 * Update workspace properties.
+	 * @param {string} workspaceId ID of the workspace
+	 * @param {Object} props Updated properties
+	 * @param {string} [props.name] Title of the workspace
+	 * @param {WorkspaceColor} [props.color] Color of the workspace
+	 */
+	 async update(workspaceId, props) {
+		const workspace = await Workspace.get(workspaceId)
+		if (!workspace) return
+
+		if (["name", "color"].some((prop) => prop in props && props[prop] !== workspace[prop])) {
+			await Workspace.save({ ...workspace, ...props })
+		}
+
+		ContextMenuService.update(workspaceId)
+	 },
 
 	/**
 	 * Create tab group with workspace tabs
@@ -124,6 +144,8 @@ const Workspace = {
 		} finally {
 			await WorkspaceList.remove(workspaceId)
 			await Storage.remove(workspaceId)
+
+			ContextMenuService.update()
 		}
 	},
 
@@ -164,6 +186,21 @@ const Workspace = {
 		
 		return group?.id
 	}
+}
+
+async function generateWorkspaceId(attempt = 0) {
+	const workspaceId = `${Storage.Key.WORKSPACE_PREFIX}${randomString(8)}`
+	const existingWorkspace = await Workspace.get(workspaceId)
+
+	if (existingWorkspace) {
+		if (attempt < 10) {
+			return await generateWorkspaceId(attempt + 1)
+		} else {
+			throw new Error(`Could not generate unique workspace ID: ${workspaceId}`)
+		}
+	}
+
+	return workspaceId
 }
 
 export default Workspace
