@@ -8,9 +8,11 @@ import MigrationService from "../service/MigrationService.js"
 import WorkspaceOpenService from "../service/WorkspaceOpenService.js"
 import ContextMenuService from "../service/ContextMenuService.js"
 
-ContextMenuService.initialize()
-
 const { WindowType } = chrome.windows
+
+ContextMenuService.initialize()
+Workspace.onUpdate.subscribe(() => ContextMenuService.update())
+Workspace.onRemove.subscribe(() => ContextMenuService.update())
 
 chrome.runtime.onMessage.addListener(handleMessage)
 chrome.runtime.onInstalled.addListener(handleInstall)
@@ -32,8 +34,11 @@ async function handleMessage(request, sender, sendResponse) {
 	// Always send response
 	sendResponse({ status: "ok" })
 
-	if (request.type === Action.Type.OPEN_WORKSPACE) {
-		await WorkspaceOpenService.open(request.workspaceId)
+	switch (request.type) {
+		case Action.Type.OPEN_WORKSPACE: {
+			await WorkspaceOpenService.open(request.workspaceId)
+			break
+		}
 	}
 
 	return true

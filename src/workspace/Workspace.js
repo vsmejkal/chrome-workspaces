@@ -3,7 +3,7 @@ import { randomString } from "../util/utils.js"
 import WorkspaceList from "./WorkspaceList.js"
 import WorkspaceTab from "./WorkspaceTab.js"
 import Storage from "../storage/Storage.js"
-import ContextMenuService from "../service/ContextMenuService.js"
+import { Observable } from "../util/Observable.js"
 
 /**
  * @typedef {'grey'|'blue'|'red'|'yellow'|'green'|'pink'|'purple'|'cyan'} WorkspaceColor
@@ -18,6 +18,9 @@ import ContextMenuService from "../service/ContextMenuService.js"
  */
 
 const Workspace = {
+	onUpdate: new Observable(),
+	onRemove: new Observable(),
+
 	/**
 	 * Create and save a new workspace.
 	 * @param {Object} args
@@ -59,7 +62,7 @@ const Workspace = {
 			await Workspace.save({ ...workspace, ...props })
 		}
 
-		ContextMenuService.update(workspaceId)
+		Workspace.onUpdate.notify(workspaceId)
 	 },
 
 	/**
@@ -144,8 +147,7 @@ const Workspace = {
 		} finally {
 			await WorkspaceList.remove(workspaceId)
 			await Storage.remove(workspaceId)
-
-			ContextMenuService.update()
+			Workspace.onRemove.notify(workspaceId)
 		}
 	},
 

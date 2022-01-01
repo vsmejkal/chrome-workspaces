@@ -41,24 +41,6 @@ const Storage = {
 	async remove(key) {
 		await chrome.storage.local.remove(key)
 	},
-
-	onChange: {
-		_observers: [],
-
-		subscribe(observer) {
-			this._observers.push(observer)
-		},
-
-		notify(key, value) {
-			this._observers.forEach(observer => observer(key, value))
-		}
-	}
 }
-
-chrome.storage.onChanged.addListener(function (changes) {
-	for (let key in changes) {
-		Storage.onChange.notify(key, changes[key].newValue)
-	}
-})
 
 export default Storage

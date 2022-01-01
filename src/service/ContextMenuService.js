@@ -1,4 +1,5 @@
 import WorkspaceList from "../workspace/WorkspaceList.js"
+import TabMoveService from "./TabMoveService.js"
 
 const MoveToWorkspaceItemId = "move_to_workspace"
 const MoveToWorkspaceLabel_SingleTab = "Move tab to workspace"
@@ -40,13 +41,8 @@ async function handleTabSelect({ tabIds }) {
     await chrome.contextMenus.update(MoveToWorkspaceItemId, { title })
 }
 
-async function handleAction(data) {
-    const tabs = await chrome.tabs.query({
-        currentWindow: true,
-        highlighted: true,
-    })
-
-	console.log("ContextMenuAction", data, tabs)
+async function handleAction({ menuItemId: workspaceId }) {
+    await TabMoveService.moveTabsToWorkspace(workspaceId)
 }
 
 export default { initialize, update }
