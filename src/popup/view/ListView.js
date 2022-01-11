@@ -55,6 +55,10 @@ class ListView extends View {
         item.appendChild(itemName)
         item.appendChild(itemButton)
 
+        if (name.length > 50) {
+            item.title = name
+        }
+
         return item
     }
 
