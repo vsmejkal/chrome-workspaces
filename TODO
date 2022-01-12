@@ -1,8 +1,9 @@
 # v0.6 Options & Onboarding page
 
 [*] *** Option: Automatically minimize/close other workspace (Issue #9)
-[*] **• Move tab to workspace
+[*] **- Move tab to workspace
 [ ] *** Onboarding page
+[*] *-- Workspace list - responsive width 
 
 # v0.7
 

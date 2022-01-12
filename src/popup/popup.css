@@ -6,7 +6,6 @@
 @import url(./view/DebugView.css);
 
 :root {
-    --width: 230px;
     --border-radius: 4px;
     --color-ui-primary: #2979ff;
     --color-ui-primary-dark: #2962ff;
@@ -30,7 +29,8 @@
 }
 
 body {
-    width: var(--width);
+    min-width: 220px;
+    max-width: 400px;
     margin: 0;
     padding: 0;
     color: #1A202C;
