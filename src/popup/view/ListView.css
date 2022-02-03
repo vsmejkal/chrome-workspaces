@@ -26,7 +26,7 @@
     opacity: 0.9;
 }
 #view-list .item:hover {
-    background: var(--item-bg-color);
+    background: var(--color-ui-neutral-50);
 }
 
 #view-list .item-selected, #view-list .item-selected:hover {
@@ -36,10 +36,10 @@
 
 #view-list .item-color {
     flex-shrink: 0;
-    margin-right: 10px;
-    width: 20px;
-    height: 20px;
-    border-radius: 4px;
+    margin-inline: 2px 10px;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
     background-color: var(--item-color);
     opacity: 0.95;
 }
@@ -50,6 +50,11 @@
     overflow: hidden;
     font-size: 105%;
     text-overflow: ellipsis;
+}
+#view-list .item-selected .item-name {
+    color: var(--item-color);
+    font-weight: 600;
+    text-shadow: 0 1px 4px #ffffff80;
 }
 
 #view-list .item-edit-button {
@@ -72,6 +77,14 @@
     visibility: visible;
     opacity: 0.5;
     transition: visibility 0s 0.5s, opacity 0.2s 0.5s;
+}
+
+#view-list .new-button {
+    color: #444;
+}
+
+#view-list .new-button:hover {
+    border-color: var(--color-ui-neutral-50);
 }
 
 #view-list .buttons {
