@@ -1,14 +1,16 @@
 import View from "./View.js"
 import WorkspaceList from "../../workspace/WorkspaceList.js"
 import WorkspaceColor from "../../workspace/WorkspaceColor.js"
+import sortable from "../../lib/sortable.js"
 
 class ListView extends View {
-    constructor({ onAddItem, onEditItem, onOpenItem }) {
+    constructor({ onAddItem, onEditItem, onOpenItem, onMoveItem }) {
         super("#view-list")
 
         this._onAddItem = onAddItem
         this._onEditItem = onEditItem
         this._onOpenItem = onOpenItem
+        this._onMoveItem = onMoveItem
 
         this._listElement = this.getElement(".workspace-list")
         this._addButton = this.getElement(".new-button")
@@ -27,6 +29,8 @@ class ListView extends View {
             const item = this._renderItem({ ...workspace, selected })
             this._listElement.appendChild(item)
         }
+
+        sortable(this._listElement, { onDrop: this._onMoveItem })
     }
 
     _renderItem({ id, name, color = "gray", selected }) {
