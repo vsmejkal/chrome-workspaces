@@ -8,7 +8,7 @@ This document contains a list of steps to verify proper functionality of Workspa
 
 ---
 
-## 1. Create workspace
+## 1. Create and list workspaces
 
 ### 1.1 Show initial screen
 - PREQ Extension is freshly installed
@@ -37,7 +37,12 @@ This document contains a list of steps to verify proper functionality of Workspa
 ### 1.4 Show workspace list
 - PREQ 1.3
 - Click the extension button
-- EXP `Green` and `Blue` workspaces are in the list
+- EXP `Green` and `Blue` items are in the list
+
+### 1.5 Reorder workspaces
+- PREQ 1.4
+- Drag `Green` item and drop it on `Blue` item
+- EXP `Green` item is on the second position
 
 
 ## 2. Save workspace
