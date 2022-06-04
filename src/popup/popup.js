@@ -30,7 +30,16 @@ async function showListView() {
 			onOpenItem: async (workspaceId) => {
 				await Action.openWorkspace(workspaceId)
 				closePopup()
-			} 
+			},
+			onMoveItem: async (fromIndex, toIndex) => {
+				let items = await WorkspaceList.getItems()
+				const element = items[fromIndex];
+				items.splice(fromIndex, 1);
+				items.splice(toIndex, 0, element);
+				await WorkspaceList.updateItems((_) => {
+					return items
+				})
+			}
 		})
 	
 		await listView.show()
