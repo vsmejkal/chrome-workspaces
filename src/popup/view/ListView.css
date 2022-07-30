@@ -83,10 +83,6 @@
     color: #444;
 }
 
-#view-list .new-button:hover {
-    border-color: var(--color-ui-neutral-50);
-}
-
 #view-list .buttons {
     margin-top: 10px;
 }

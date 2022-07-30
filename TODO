@@ -1,24 +1,23 @@
 # v0.6 Options & Onboarding page
 
-[*] *** Option: Automatically minimize/close other workspace (Issue #9)
-[*] **- Move tab to workspace
-[ ] *** Onboarding page
-[*] *-- Workspace list - responsive width 
+[*] Option: Automatically minimize/close other workspace (Issue #9)
+[*] Move tab to workspace
+[*] Onboarding page
+[*] Workspace list - responsive width 
+[*] Drag to order workspaces (Issue #8)
 
 # v0.7
 
-[ ] *** Drag to order workspaces (Issue #8)
-[ ] **• Dark theme
+[ ] Dark theme
+[ ] What`s New page
 
 # Backlog
 
-[ ] *** Synchronization
-[ ] *** Translations
-[ ] *•• Get rid of chrome-extension-async lib
-[ ] *** E2E tests
-[ ] *•• Mark open workspaces in the list
-[ ] *•• Show dialog to remove workspace when the last tab is closed
-[ ] **• Better design
-[ ] **• Intro video
-[ ] **• Use shadow DOM with scoped CSS for views
-[ ] **• Show info page instead of blank tab in empty workspace
+[ ] Synchronization
+[ ] Translations
+[ ] Get rid of chrome-extension-async lib
+[ ] E2E tests
+[ ] Mark open workspaces in the list
+[ ] Show dialog to remove workspace when the last tab is closed
+[ ] Intro video
+[ ] Show info page instead of blank tab in empty workspace

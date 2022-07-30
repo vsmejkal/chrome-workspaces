@@ -183,7 +183,9 @@ async function handleInstall({ reason, previousVersion }) {
 	}
 
 	if (reason === "install") {
-		// TODO: Onboarding page & support
+		await chrome.tabs.create({
+			url: chrome.runtime.getURL("src/welcome/welcome.html")
+		})
 	}
 }
 

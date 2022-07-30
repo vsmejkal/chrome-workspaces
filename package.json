@@ -5,7 +5,7 @@
   "repository": "git@github.com:vsmejkal/chrome-workspaces.git",
   "author": "Vojtech Smejkal",
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
     "rollup": "^2.45.2"
   },
   "scripts": {
