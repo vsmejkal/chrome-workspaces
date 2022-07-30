@@ -210,3 +210,9 @@ This document contains a list of steps to verify proper functionality of Workspa
 - EXP Workspace list screen is shown
 - EXP Workspace color matches the selected color
 
+## 9. Installation
+
+### 9.1 Show Welcome page
+- PREQ Workspaces extension is not installed
+- Install extension from unpacked folder or ZIP file
+- EXP Welcome page is opened
