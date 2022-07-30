@@ -8,23 +8,31 @@ This document contains a list of steps to verify proper functionality of Workspa
 
 ---
 
-## 1. Create and list workspaces
+## 1. Installation
 
-### 1.1 Show initial screen
+### 1.1 Show Welcome page after installation
+- PREQ Workspaces extension is not installed
+- Install extension from unpacked folder or ZIP file
+- EXP Welcome page is opened
+
+
+## 2. Create and list workspaces
+
+### 2.1 Show initial screen
 - PREQ Extension is freshly installed
 - Click the extension button
 - EXP Initial placeholder screen with `Create Workspace` button is shown
 
-### 1.2 Create first workspace
-- PREQ 1.1
+### 2.2 Create first workspace
+- PREQ 2.1
 - Click `Create Workspace` button
 - EXP `New Workspace` screen is shown
 - Set Name=`Green`, Color=`green`, Create in this window=`true`
 - Click `Add` button
 - EXP New green tab group with title `Green` is created containing all tabs of the current window
 
-### 1.3 Create second workspace
-- PREQ 1.2
+### 2.3 Create second workspace
+- PREQ 2.2
 - Click the extension button
 - EXP `Green` workspace is in the list
 - Click `New` button
@@ -34,28 +42,28 @@ This document contains a list of steps to verify proper functionality of Workspa
 - Click `Add` button
 - EXP New window is created containing blue tab group with title `Blue`
 
-### 1.4 Show workspace list
-- PREQ 1.3
+### 2.4 Show workspace list
+- PREQ 2.3
 - Click the extension button
 - EXP `Green` and `Blue` items are in the list
 
-### 1.5 Reorder workspaces
-- PREQ 1.4
+### 2.5 Reorder workspaces
+- PREQ 2.4
 - Drag `Green` item and drop it on `Blue` item
 - EXP `Green` item is on the second position
 
 
-## 2. Save workspace
+## 3. Save workspace
 
-### 2.1 Open tabs
-- PREQ 1.2
+### 3.1 Open tabs
+- PREQ 2.2
 - Open new browser window
 - Focus the `Green` workspace window
 - Open three tabs with `google.com`, `wikipedia.com`, `seznam.cz`
 - EXP Tabs are added into the `Green` tab group
 
-### 2.2 Save and restore tabs
-- PREQ 2.1
+### 3.2 Save and restore tabs
+- PREQ 3.1
 - Pin the Google tab
 - Click the Wikipedia tab to make it active
 - Close the `Green` window
@@ -66,26 +74,26 @@ This document contains a list of steps to verify proper functionality of Workspa
 - EXP Wikipedia tab is active
 
 
-## 3. Select workspace
+## 4. Select workspace
 
-### 3.1 Switch workspace
-- PREQ 1.3
+### 4.1 Switch workspace
+- PREQ 2.3
 - Click the extension button and select `Green` workspace
 - EXP `Green` workspace window is focused
 - Click the extension button and select `Blue` workspace
 - EXP `Blue` workspace window is focused
 
-### 3.2 Open workspace
-- PREQ 3.1
+### 4.2 Open workspace
+- PREQ 4.1
 - Close the `Blue` workspace window
 - Click the extension button and select `Blue` workspace
 - EXP `Blue` workspace window is opened and focused
 
 
-## 4. Workspace properties
+## 5. Workspace properties
 
-### 4.1 Update workspace properties
-- PREQ 1.2
+### 5.1 Update workspace properties
+- PREQ 2.2
 - Click the extension button
 - Hover over `Green` item and click the three dots
 - EXP `Edit Workspace` screen is shown
@@ -93,17 +101,17 @@ This document contains a list of steps to verify proper functionality of Workspa
 - Click `Done`
 - EXP Tab group color is now red with title `Red` 
 
-### 4.2 Update tab group properties
-- PREQ 1.2
+### 5.2 Update tab group properties
+- PREQ 2.2
 - Set the `Green` tab group title to `Red` and color to red
 - Click the extension button
 - EXP Name=`Red` and Color=`red`
 
 
-## 5. Remove workspace
+## 6. Remove workspace
 
-### 5.1 Remove inactive workspace
-- PREQ 1.3
+### 6.1 Remove inactive workspace
+- PREQ 2.3
 - Close `Green` workspace window
 - Click the extension button
 - Hover over `Green` item and click the three dots
@@ -113,8 +121,8 @@ This document contains a list of steps to verify proper functionality of Workspa
 - Click the extension button
 - EXP `Green` workspace is not present in the list
 
-### 5.2 Remove active workspace
-- PREQ 1.2
+### 6.2 Remove active workspace
+- PREQ 2.2
 - Focus `Green` workspace window
 - Click the extension button
 - Hover over `Green` item and click the three dots
@@ -126,10 +134,10 @@ This document contains a list of steps to verify proper functionality of Workspa
 - EXP `Green` workspace is not present in the list
 
 
-## 6. Restore workspace
+## 7. Restore workspace
 
-### 6.1 Restore window
-- PREQ 2.1
+### 7.1 Restore window
+- PREQ 3.1
 - Open another browser window
 - Close `Green` workspace window
 - Press <kbd>Ctrl/Cmd + Shift + T</kbd>
@@ -137,8 +145,8 @@ This document contains a list of steps to verify proper functionality of Workspa
 - Click the extension button
 - EXP `Green` item is active (highlighted)
 
-### 6.2 Restore multiple windows
-- PREQ 1.3
+### 7.2 Restore multiple windows
+- PREQ 2.3
 - Go to browser `Setting > On start-up` and select `Continue where you left off`
 - Press <kbd>Ctrl/Cmd + Q</kbd> to quit browser
 - Open the browser again
@@ -149,54 +157,54 @@ This document contains a list of steps to verify proper functionality of Workspa
 - EXP Existing `Blue` workspace window is focused
 
 
-## 7. Tab operations
+## 8. Tab operations
 
-### 7.1 Open tab
-- PREQ 1.2
+### 8.1 Open tab
+- PREQ 2.2
 - Open a new tab with `example.com`
 - Close the `Green` workspace and open it again
 - `example.com` tab exists and is active
 
-### 7.2 Close tab 
-- PREQ 7.1
+### 8.2 Close tab 
+- PREQ 8.1
 - Close the `example.com` tab
 - Close the `Green` workspace and open it again
 - `example.com` tab does not exist
 
-### 7.3 Detach tab
-- PREQ 7.1
+### 8.3 Detach tab
+- PREQ 8.1
 - Detach the `example.com` tab from the `Green` workspace window
 - Close the `Green` workspace and open it again
 - `example.com` tab is not present in the `Green` workspace window
 
-### 7.4 Attach tab
-- PREQ 7.3
+### 8.4 Attach tab
+- PREQ 8.3
 - Attach the `example.com` tab from the other window back to the `Green` workspace window
 - Close the `Green` workspace and open it again
 - `example.com` tab exists and is active
 
-### 7.5 Ungroup tabs
+### 8.5 Ungroup tabs
 - TBD
 
-### 7.6 Close tab group
+### 8.6 Close tab group
 - TBD
 
-## 8. Keyboard control
+## 9. Keyboard control
 
-### 8.1 Open list of workspaces
-- PREQ 1.3
+### 9.1 Open list of workspaces
+- PREQ 2.3
 - Press <kbd>Alt/Option + W</kbd>
 - EXP Workspace list is open
 
-### 8.2 Select workspace
-- PREQ 8.1
+### 9.2 Select workspace
+- PREQ 9.1
 - Press <kbd>Arrow Down</kbd>
 - EXP `Green` item is highlighted
 - Press <kbd>Enter</kbd>
 - EXP `Green` workspace window is focused
 
-### 8.3 Edit workspace
-- PREQ 1.2
+### 9.3 Edit workspace
+- PREQ 2.2
 - Click the extension button
 - Hover over `Green` item and click the three dots
 - EXP `Name` field is focused
@@ -210,9 +218,35 @@ This document contains a list of steps to verify proper functionality of Workspa
 - EXP Workspace list screen is shown
 - EXP Workspace color matches the selected color
 
-## 9. Installation
+## 10. Context Menu
 
-### 9.1 Show Welcome page
-- PREQ Workspaces extension is not installed
-- Install extension from unpacked folder or ZIP file
-- EXP Welcome page is opened
+### 10.1 Context menu item is hidden when there are no workspaces
+- PREQ 1.1
+- Open the page context menu with secondary mouse button
+- EXP There is no `Move tabs to workspace` item
+
+### 10.2 New workspace is added to the menu
+- PREQ 2.3
+- Open the page context menu with secondary mouse button
+- EXP There is `Move tabs to workspace` submenu
+- Open the submenu
+- EXP There are two menu items: `Green` and `Blue`
+
+### 10.3 Deleted workspace is removed from the menu
+- PREQ 10.2
+- Delete the `Green` workspace
+- Open the page context menu with secondary mouse button
+- Open the `Move tabs to workspace` submenu
+- EXP There is one menu item: `Blue`
+
+### 10.4 Reordered workspace is updated in the menu
+- PREQ 10.2
+- Open the Workspace list and move `Blue` to the top of the list
+- Open the page context menu with secondary mouse button
+- EXP There are two menu items: `Blue` and `Green`
+
+### 10.5 Renamed workspace is updated in the menu
+- PREQ 10.2
+- Rename the `Blue` workspace to `Red`
+- Open the page context menu with secondary mouse button
+- EXP There are two menu items: `Green` and `Red`

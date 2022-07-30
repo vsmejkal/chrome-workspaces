@@ -3,7 +3,7 @@ import { randomString } from "../util/utils.js"
 import WorkspaceList from "./WorkspaceList.js"
 import WorkspaceTab from "./WorkspaceTab.js"
 import Storage from "../storage/Storage.js"
-import { Observable } from "../util/Observable.js"
+import Observable from "../util/Observable.js"
 
 /**
  * @typedef {'grey'|'blue'|'red'|'yellow'|'green'|'pink'|'purple'|'cyan'} WorkspaceColor
@@ -18,8 +18,7 @@ import { Observable } from "../util/Observable.js"
  */
 
 const Workspace = {
-	onUpdate: new Observable(),
-	onRemove: new Observable(),
+	onUpdate: new Observable("Workspace.onUpdate"),
 
 	/**
 	 * Create and save a new workspace.
@@ -41,8 +40,8 @@ const Workspace = {
 		const workspaceId = await generateWorkspaceId()
 		const workspace = { id: workspaceId, name, color, tabs }
 
-		await Workspace.save(workspace)
 		await WorkspaceList.add(workspaceId, windowId)
+		await Workspace.save(workspace)
 
 		return workspace
 	},
@@ -62,7 +61,7 @@ const Workspace = {
 			await Workspace.save({ ...workspace, ...props })
 		}
 
-		Workspace.onUpdate.notify(workspaceId)
+		await Workspace.onUpdate.notify(workspaceId)
 	 },
 
 	/**
@@ -147,7 +146,6 @@ const Workspace = {
 		} finally {
 			await WorkspaceList.remove(workspaceId)
 			await Storage.remove(workspaceId)
-			Workspace.onRemove.notify(workspaceId)
 		}
 	},
 

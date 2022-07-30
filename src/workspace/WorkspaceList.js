@@ -1,7 +1,10 @@
 import Storage from "../storage/Storage.js"
 import { assert } from "../util/assert.js";
+import Observable from "../util/Observable.js";
 
 const WorkspaceList = {
+	onUpdate: new Observable("WorkspaceList.onUpdate"),
+
 	/**
 	 * @returns {Promise<Array<{workspaceId: string, windowId: ?number}>>}
 	 */
@@ -11,6 +14,8 @@ const WorkspaceList = {
 
 	async updateItems(updater) {
 		await Storage.update(Storage.Key.WORKSPACE_LIST, (list) => updater(list ?? []))
+
+		await WorkspaceList.onUpdate.notify()
 	},
 
 	/**

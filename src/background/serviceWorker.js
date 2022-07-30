@@ -7,12 +7,13 @@ import WorkspaceUpdateService from "../service/WorkspaceUpdateService.js"
 import MigrationService from "../service/MigrationService.js"
 import WorkspaceOpenService from "../service/WorkspaceOpenService.js"
 import ContextMenuService from "../service/ContextMenuService.js"
+import Observable from "../util/Observable.js"
+
+globalThis.isBackground = true
 
 const { WindowType } = chrome.windows
 
 ContextMenuService.initialize()
-Workspace.onUpdate.subscribe(() => ContextMenuService.update())
-Workspace.onRemove.subscribe(() => ContextMenuService.update())
 
 chrome.runtime.onMessage.addListener(handleMessage)
 chrome.runtime.onInstalled.addListener(handleInstall)
@@ -37,6 +38,10 @@ async function handleMessage(request, sender, sendResponse) {
 	switch (request.type) {
 		case Action.Type.OPEN_WORKSPACE: {
 			await WorkspaceOpenService.open(request.workspaceId)
+			break
+		}
+		case Action.Type.NOTIFY_OBSERVERS: {
+			Observable.notify(request.eventName, request.args)
 			break
 		}
 	}

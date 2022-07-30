@@ -22,7 +22,8 @@ const Config = {
     },
 
     async set(key, value) {
-        await Storage.update(Storage.Key.CONFIG, (config = {}) => {
+        await Storage.update(Storage.Key.CONFIG, (config) => {
+            config ??= {}
             config[key] = value
             return config
         })
