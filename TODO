@@ -1,5 +1,4 @@
 # v0.6 Options & Onboarding page
-
 [*] Option: Automatically minimize/close other workspace (Issue #9)
 [*] Move tab to workspace
 [*] Onboarding page
@@ -7,12 +6,10 @@
 [*] Drag to order workspaces (Issue #8)
 
 # v0.7
-
 [ ] Dark theme
 [ ] What`s New page
 
 # Backlog
-
 [ ] Synchronization
 [ ] Translations
 [ ] Get rid of chrome-extension-async lib

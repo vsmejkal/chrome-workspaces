@@ -34,6 +34,14 @@
     opacity: 1;
 }
 
+#view-list .item.sortable__drag-start {
+    opacity: 0.6;
+}
+
+#view-list .item.sortable__drag-over {
+    outline: 2px dashed var(--color-ui-neutral-200);
+}
+
 #view-list .item-color {
     flex-shrink: 0;
     margin-inline: 2px 10px;
