@@ -33,7 +33,7 @@ class DetailView extends View {
 
         if (isNew && !activeWorkspaceId) {
             this._useCurrentWindowSection.style.display = "block"
-            this._useCurrentWindow.checked = true
+            this._useCurrentWindow.checked = false
         } else {
             this._useCurrentWindowSection.style.display = "none"
             this._useCurrentWindow.checked = false
@@ -42,7 +42,7 @@ class DetailView extends View {
         this._removeButton.style.display = isNew ? "none" : "block"
         this._removeButton.onclick = () => this._onRemove({ workspaceId })
 
-        this._saveButton.innerText = isNew ? "Add" : "Done"
+        this._saveButton.innerText = isNew ? "Create" : "Done"
         this._saveButton.onclick = () => this._handleSave(workspaceId)
 
         this._nameField.focus()
