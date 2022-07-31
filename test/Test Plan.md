@@ -14,6 +14,7 @@ This document contains a list of steps to verify proper functionality of Workspa
 - PREQ Workspaces extension is not installed
 - Install extension from unpacked folder or ZIP file
 - EXP Welcome page is opened
+- EXP There are no errors on the extension Details page
 
 
 ## 2. Create and list workspaces
@@ -28,7 +29,7 @@ This document contains a list of steps to verify proper functionality of Workspa
 - Click `Create Workspace` button
 - EXP `New Workspace` screen is shown
 - Set Name=`Green`, Color=`green`, Create in this window=`true`
-- Click `Add` button
+- Click `Create` button
 - EXP New green tab group with title `Green` is created containing all tabs of the current window
 
 ### 2.3 Create second workspace
@@ -39,7 +40,7 @@ This document contains a list of steps to verify proper functionality of Workspa
 - EXP `New Workspace` screen is shown
 - EXP `Create in this window` checkbox is hidden
 - Set Name=`Blue`, Color=`blue`
-- Click `Add` button
+- Click `Create` button
 - EXP New window is created containing blue tab group with title `Blue`
 
 ### 2.4 Show workspace list
@@ -59,7 +60,7 @@ This document contains a list of steps to verify proper functionality of Workspa
 - PREQ 2.2
 - Open new browser window
 - Focus the `Green` workspace window
-- Open three tabs with `google.com`, `wikipedia.com`, `seznam.cz`
+- Open three tabs with `google.com`, `wikipedia.org`, `seznam.cz`
 - EXP Tabs are added into the `Green` tab group
 
 ### 3.2 Save and restore tabs
@@ -67,16 +68,16 @@ This document contains a list of steps to verify proper functionality of Workspa
 - Pin the Google tab
 - Click the Wikipedia tab to make it active
 - Close the `Green` window
-- Click the extension button and select `Green` workspace from the popup
+- Use other window to click the extension button and select `Green` workspace from the popup
 - EXP New window with `Green` tab group is opened
 - EXP The tab group contains Google, Wikipedia, and Seznam tabs
 - EXP Google tab is pinned
 - EXP Wikipedia tab is active
 
 
-## 4. Select workspace
+## 4. Switch workspace
 
-### 4.1 Switch workspace
+### 4.1 Focus workspace
 - PREQ 2.3
 - Click the extension button and select `Green` workspace
 - EXP `Green` workspace window is focused
@@ -103,7 +104,7 @@ This document contains a list of steps to verify proper functionality of Workspa
 
 ### 5.2 Update tab group properties
 - PREQ 2.2
-- Set the `Green` tab group title to `Red` and color to red
+- Edit the `Green` tab group and set title to `Red` and color to red
 - Click the extension button
 - EXP Name=`Red` and Color=`red`
 
@@ -224,12 +225,12 @@ This document contains a list of steps to verify proper functionality of Workspa
 ### 10.1 Context menu item is hidden when there are no workspaces
 - PREQ 1.1
 - Open the page context menu with secondary mouse button
-- EXP There is no `Move tabs to workspace` item
+- EXP There is no `Move tab to workspace` item
 
 ### 10.2 New workspace is added to the menu
 - PREQ 2.3
 - Open the page context menu with secondary mouse button
-- EXP There is `Move tabs to workspace` submenu
+- EXP There is `Move tab to workspace` submenu
 - Open the submenu
 - EXP There are two menu items: `Green` and `Blue`
 
@@ -237,20 +238,30 @@ This document contains a list of steps to verify proper functionality of Workspa
 - PREQ 10.2
 - Delete the `Green` workspace
 - Open the page context menu with secondary mouse button
-- Open the `Move tabs to workspace` submenu
+- Open the `Move tab to workspace` submenu
 - EXP There is one menu item: `Blue`
 
 ### 10.4 Reordered workspace is updated in the menu
 - PREQ 10.2
 - Open the Workspace list and move `Blue` to the top of the list
 - Open the page context menu with secondary mouse button
+- Open the `Move tab to workspace` submenu
 - EXP There are two menu items: `Blue` and `Green`
 
 ### 10.5 Renamed workspace is updated in the menu
 - PREQ 10.2
 - Rename the `Blue` workspace to `Red`
 - Open the page context menu with secondary mouse button
+- Open the `Move tab to workspace` submenu
 - EXP There are two menu items: `Green` and `Red`
+
+### 10.6 Move tab to another workspace
+- PREQ 2.3
+- Open a new tab with `seznam.cz` in `Blue` workspace
+- Open the page context menu with secondary mouse button
+- Open the `Move tab to workspace` submenu
+- Click the `Green` item
+- EXP `seznam.cz` tab has been moved from `Blue` to `Green` workspace
 
 
 ## 11. Options
