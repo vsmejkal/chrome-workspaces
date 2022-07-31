@@ -9,7 +9,7 @@ const MoveToWorkspaceLabel_ManyTabs = "Move selected tabs to workspace"
 
 async function initialize() {
     chrome.contextMenus.onClicked.addListener(handleAction)
-    chrome.runtime.onInstalled.addListener(createMenuItems)
+    chrome.runtime.onInstalled.addListener(updateAll)
     chrome.tabs.onHighlighted.addListener(handleTabSelect)
 
     WorkspaceList.onUpdate.subscribe(updateAll)
@@ -46,9 +46,9 @@ async function createMenuItems() {
             title: MoveToWorkspaceLabel_SingleTab,
             contexts: ["all"],
         })
-    } catch (e) {
+    } catch (error) {
         // In case menu item already exists
-        console.error(e);
+        console.error(error);
     }
 
     for (const workspace of workspaces) {
@@ -64,7 +64,11 @@ async function createMenuItems() {
 async function handleTabSelect({ tabIds }) {
     const title = tabIds.length > 1 ? MoveToWorkspaceLabel_ManyTabs : MoveToWorkspaceLabel_SingleTab
 
-    await chrome.contextMenus.update(MoveToWorkspaceItemId, { title })
+    try {
+        await chrome.contextMenus.update(MoveToWorkspaceItemId, { title })
+    } catch {
+        // If there is no workspace the menu item might not exist 
+    }
 }
 
 async function handleAction({ menuItemId }) {
