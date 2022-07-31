@@ -218,6 +218,7 @@ This document contains a list of steps to verify proper functionality of Workspa
 - EXP Workspace list screen is shown
 - EXP Workspace color matches the selected color
 
+
 ## 10. Context Menu
 
 ### 10.1 Context menu item is hidden when there are no workspaces
@@ -250,3 +251,24 @@ This document contains a list of steps to verify proper functionality of Workspa
 - Rename the `Blue` workspace to `Red`
 - Open the page context menu with secondary mouse button
 - EXP There are two menu items: `Green` and `Red`
+
+
+## 11. Options
+
+### 11.1 Keep open other workspaces
+- PREQ 2.3
+- Open extension Options and set 'Other workspaces' to `Keep open`
+- Close `Blue` workspace and open it again
+- EXP `Green` workspace window has stayed open
+
+### 11.2 Minimize other workspaces
+- PREQ 2.3
+- Open extension Options and set 'Other workspaces' to `Minimize`
+- Close `Blue` workspace and open it again
+- EXP `Green` workspace window has been minimized
+
+### 11.2 Close other workspaces
+- PREQ 2.3
+- Open extension Options and set 'Other workspaces' to `Close`
+- Close `Blue` workspace and open it again
+- EXP `Green` workspace window has been closed
