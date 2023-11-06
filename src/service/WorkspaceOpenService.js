@@ -51,6 +51,8 @@ async function openWorkspace(workspaceId, currentWindow) {
 }
 
 async function createNewWindow(workspace, currentWindow) {
+    workspace.tabs = workspace.tabs.filter(tab => !tab.url.startsWith("file"))
+
     const createArgs = {
         url: workspace.tabs.map(tab => tab.url),
         focused: true,
