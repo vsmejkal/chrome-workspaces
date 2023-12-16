@@ -1,7 +1,4 @@
 #!/bin/bash
 
-# Bundle service worker
-rollup -c
-
-# Create archive
-zip -r chrome-workspaces.zip src manifest.json serviceWorkerLoader.js -x "*.d.ts" -x ".DS_Store"
+# Creates ZIP archive with extension
+zip -r chrome-workspaces.zip src manifest.json -x "*.d.ts" -x ".DS_Store"

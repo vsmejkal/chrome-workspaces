@@ -12,7 +12,8 @@
     "256": "src/icons/extension/icon256.png"
   },
   "background": {
-    "service_worker": "serviceWorkerLoader.js"
+    "service_worker": "src/background/serviceWorker.js",
+    "type": "module"
   },
   "options_ui": {
     "page": "src/options/options.html",
