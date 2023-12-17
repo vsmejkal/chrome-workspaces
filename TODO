@@ -1,5 +1,5 @@
 # v0.7
-[ ] Restore full-screen window (Issue #15)
+[x] Restore full-screen window (Issue #15)
 [ ] Option to keep workspaces sorted by name (Issue #19)
 [ ] file:// stops entire workspace from opening (Issue #29)
 [ ] problems creating new workspace (Issue #31)

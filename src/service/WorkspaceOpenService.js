@@ -10,22 +10,23 @@ import TabSuspendService from "./TabSuspendService.js"
  * @param {string} workspaceId
  */
 async function open(workspaceId) {
-    const windowId = await Workspace.getWindowId(workspaceId)
-    const windowExist = await windowExists(windowId)
-    const currentWindow = await getCurrentWorkspaceWindow()
+    const workspaceWindowId = await Workspace.getWindowId(workspaceId)
+    const workspaceWindowExist = await windowExists(workspaceWindowId)
+    const currentWindow = await chrome.windows.getLastFocused({ windowTypes: ["normal"] })
+    const currentWorkspaceId = await WorkspaceList.findWorkspaceForWindow(currentWindow.id)
 
     try {
         await Config.set(Config.Key.OPENING_WORKSPACE, true)
         
-        if (windowExist) {
-            await focusWorkspace(windowId, currentWindow)
+        if (workspaceWindowExist) {
+            await focusWorkspace(workspaceWindowId)
         } else {
             await openWorkspace(workspaceId, currentWindow)
         }
 
         await Workspace.activate(workspaceId)
 
-        if (currentWindow && currentWindow.id !== windowId) {
+        if (currentWorkspaceId && currentWorkspaceId !== workspaceId) {
             await handleOldWindow(currentWindow)
         }
     } finally {
@@ -33,14 +34,8 @@ async function open(workspaceId) {
     }
 }
 
-async function focusWorkspace(windowId, currentWindow) {
-    const updateArgs = { focused: true }
-
-    if (["maximized", "fullscreen"].includes(currentWindow?.state)) {
-        updateArgs.state = currentWindow.state
-    }
-    
-    await chrome.windows.update(windowId, updateArgs)
+async function focusWorkspace(windowId) {
+    await chrome.windows.update(windowId, { focused: true })
 }
 
 async function openWorkspace(workspaceId, currentWindow) {
@@ -96,15 +91,6 @@ async function handleOldWindow(window) {
     } else if (otherWorkspaces === "close") {
         await chrome.windows.remove(window.id)
     }
-}
-
-async function getCurrentWorkspaceWindow() {
-    const currentWindow = await chrome.windows.getLastFocused({
-        windowTypes: ["normal"],
-    })
-    const workspaceId = await WorkspaceList.findWorkspaceForWindow(currentWindow.id)
-    
-    return workspaceId ? currentWindow : null
 }
 
 export default { open }
