@@ -1,25 +1,23 @@
-# v0.6 Options & Onboarding page
-[*] Option: Automatically minimize/close other workspace (Issue #9)
-[*] Move tab to workspace
-[*] Onboarding page
-[*] Workspace list - responsive width 
-[*] Drag to order workspaces (Issue #8)
-
 # v0.7
+[ ] Restore full-screen window (Issue #15)
+[ ] Option to keep workspaces sorted by name (Issue #19)
+[ ] file:// stops entire workspace from opening (Issue #29)
+[ ] problems creating new workspace (Issue #31)
 [ ] Show confirmation dialog before cleaning existing Tab Groups
-
-# v0.8
-[ ] Dark theme
 [ ] Mark open workspaces in the list
     outline: 1px solid #c62828a1;
     outline-offset: 2px;
 
+# v0.8
+[ ] Dark theme
+[ ] Import & export (Issue #18)
+
 # Backlog
-[ ] What`s New page
 [ ] Synchronization
 [ ] Translations
 [ ] Get rid of chrome-extension-async lib
-[ ] E2E tests
 [ ] Show dialog to remove workspace when the last tab is closed
 [ ] Intro video
 [ ] Show info page instead of blank tab in empty workspace
+[ ] Preserve tab groups
+[ ] New window - offer to create a workspace
