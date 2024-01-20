@@ -2,21 +2,30 @@ import Options from "../storage/Options.js";
 
 document.addEventListener("DOMContentLoaded", renderOptions);
 
-async function renderOptions() {
-	await loadOptions()
+function renderOptions() {
+	loadOptions()
 	attachEventHandlers()
 }
 
 async function loadOptions() {
-	const { otherWorkspaces } = await Options.get()
+	const options = await Options.get()
 
-	document.querySelector(`input[name=otherWorkspaces][value=${otherWorkspaces}]`).checked = true
+	for (const [key, value] of Object.entries(options)) {
+		const element = document.querySelector(`input[name=${key}][value=${value}]`)
+		if (element instanceof HTMLInputElement) {
+			element.checked = true
+		}
+	}
 }
 
-function attachEventHandlers() {
-	document.querySelectorAll("input[name=otherWorkspaces]").forEach((element) => {
-		element.addEventListener("change", (e) => {
-			Options.update({ otherWorkspaces: e.target.value })
+async function attachEventHandlers() {
+	const options = await Options.get()
+
+	for (const key of Object.keys(options)) {
+		document.querySelectorAll(`input[name=${key}]`).forEach((element) => {
+			element.addEventListener("change", (e) => {
+				Options.update({ [key]: e.target.value })
+			})
 		})
-	})
+	}
 }

@@ -1,4 +1,5 @@
-import Storage from "../storage/Storage.js"
+import Options from "../storage/Options.js";
+import Storage from "../storage/Storage.js";
 import { assert } from "../util/assert.js";
 import Observable from "../util/Observable.js";
 
@@ -38,8 +39,15 @@ const WorkspaceList = {
 	},
 
 	async add(workspaceId, windowId) {
+		const { addPosition } = await Options.get();
+		const newItem = { workspaceId, windowId };
+
 		await WorkspaceList.updateItems((list) => {
-			return list.concat({ workspaceId, windowId })
+			if (addPosition === "top") {
+				return [newItem, ...list];
+			} else {
+				return [...list, newItem];
+			}
 		})
 	},
 

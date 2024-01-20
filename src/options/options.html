@@ -11,7 +11,37 @@
 
 	<body>
 		<dl>
-			<dt>Other workspaces:</dt>
+			<dt>Sorting workspaces</dt>
+			<dd class="radiogroup">
+				<label>
+					<input type="radio" name="sorting" value="manual" />
+						Manually
+				</label>
+				
+				<label>
+					<input type="radio" name="sorting" value="name" />
+						By name
+				</label>
+			</dd>
+		</dl>
+
+		<dl>
+			<dt>Adding new items</dt>
+			<dd class="radiogroup">
+				<label>
+					<input type="radio" name="addPosition" value="top" />
+						To the top
+				</label>
+
+				<label>
+					<input type="radio" name="addPosition" value="bottom" />
+						To the bottom
+				</label>
+			</dd>
+		</dl>
+
+		<dl>
+			<dt>Other workspace windows</dt>
 			<dd class="radiogroup">
 				<label>
 					<input type="radio" name="otherWorkspaces" value="keep_open" />

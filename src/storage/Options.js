@@ -3,14 +3,20 @@ import SyncStorage from "./SyncStorage.js"
 /**
 * @typedef OptionsData
 * @type {object}
-* @property {"keep_open"|"minimize"|"close"} otherWorkspaces How to handle the current workspaces when opening a new workspace.
+* @property {"top" | "bottom"} addPosition Add new items to the top or to the bottom.
+* @property {"keep_open" | "minimize" | "close"} otherWorkspaces How to handle the current workspaces when opening a new workspace.
+* @property {"manual" | "name"} sorting Workspace list sorting.
 */
 
 const Key = {
+    ADD_POSITION: "addPosition",
+    SORTING: "sorting",
     OTHER_WORKSPACES: "otherWorkspaces"
 }
 
 const defaultOptions = {
+    [Key.ADD_POSITION]: "bottom",
+    [Key.SORTING]: "manual",
     [Key.OTHER_WORKSPACES]: "keep_open"
 }
 
