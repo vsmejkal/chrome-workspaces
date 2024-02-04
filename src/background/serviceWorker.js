@@ -8,6 +8,7 @@ import WorkspaceUpdateService from "../service/WorkspaceUpdateService.js"
 import MigrationService from "../service/MigrationService.js"
 import WorkspaceOpenService from "../service/WorkspaceOpenService.js"
 import ContextMenuService from "../service/ContextMenuService.js"
+import PermissionsService from "../service/PermissionsService.js"
 import Observable from "../util/Observable.js"
 
 globalThis.isBackground = true
@@ -89,6 +90,7 @@ async function handleTabUpdate(tabId, changeInfo, tab) {
 	if (openingWorkspace) return
 
 	if ("url" in changeInfo || "pinned" in changeInfo) {
+		PermissionsService.checkLocalFileAccess(tab)
 		WorkspaceUpdateService.scheduleUpdate(tab.windowId)
 	}
 

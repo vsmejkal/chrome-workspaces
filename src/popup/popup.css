@@ -1,3 +1,4 @@
+@import url(./common.css);
 @import url(./icons.css);
 @import url(./variables.css);
 @import url(./view/EmptyListView.css);
@@ -21,10 +22,6 @@
 body {
     min-width: 220px;
     max-width: 400px;
-    margin: 0;
-    padding: 0;
-    color: #1A202C;
-    font-size: 14px;
 }
 
 h1 {

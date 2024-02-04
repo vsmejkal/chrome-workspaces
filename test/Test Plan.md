@@ -322,3 +322,18 @@ This document contains a list of steps to verify proper functionality of Workspa
 - Create a new workspace using steps in 2.3 called `Red`
 - Click the extension button
 - EXP Newly created `Red` workspace is last in the list
+
+## 12. Permissions
+
+### 12.1 Local file access
+- PREQ 2.2
+- Open a local file by dragging it into workspace tabs
+- EXP Popup window `File access not allowed` is opened with two buttons
+- Click `Open extension settings` button
+- EXP Extension settings page is opened in a new tab
+- Open another local file by dragging it into workspace tabs
+- EXP Popup window `File access not allowed` is opened
+- Click `Dismiss` button
+- EXP Popup window `File access not allowed` is closed
+- Open another local file by dragging it into workspace tabs
+- EXP No popup window is opened

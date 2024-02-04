@@ -1,7 +1,7 @@
 # v0.7
 [x] Restore full-screen window (Issue #15)
-[ ] Option to keep workspaces sorted by name (Issue #19)
-[ ] file:// stops entire workspace from opening (Issue #29)
+[x] Option to keep workspaces sorted by name (Issue #19)
+[x] file:// stops entire workspace from opening (Issue #29)
 [ ] problems creating new workspace (Issue #31)
 [ ] Show confirmation dialog before cleaning existing Tab Groups
 [ ] Mark open workspaces in the list
@@ -11,11 +11,11 @@
 # v0.8
 [ ] Dark theme
 [ ] Import & export (Issue #18)
+[ ] Get rid of chrome-extension-async lib
 
 # Backlog
 [ ] Synchronization
 [ ] Translations
-[ ] Get rid of chrome-extension-async lib
 [ ] Show dialog to remove workspace when the last tab is closed
 [ ] Intro video
 [ ] Show info page instead of blank tab in empty workspace
