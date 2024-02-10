@@ -151,7 +151,7 @@ const Workspace = {
 
 	/**
 	 * Sync window changes to workspace.
-	 * @param {unknown} windowId
+	 * @param {number} windowId
 	 */
 	async sync(windowId) {
 		const workspaceId = await WorkspaceList.findWorkspaceForWindow(windowId)

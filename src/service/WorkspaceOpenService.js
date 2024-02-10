@@ -40,9 +40,24 @@ async function focusWorkspace(windowId) {
 
 async function openWorkspace(workspaceId, currentWindow) {
     const workspace = await Workspace.get(workspaceId)
-    const newWindow = await createNewWindow(workspace, currentWindow)
+    await checkInvalidTabs(workspace)
 
+    const newWindow = await createNewWindow(workspace, currentWindow)
     await WorkspaceList.update(workspace.id, newWindow.id)
+}
+
+async function checkInvalidTabs(workspace) {
+    const allowLocalFiles = await chrome.extension.isAllowedFileSchemeAccess()
+
+    if (!allowLocalFiles) {
+        const filteredTabs = workspace.tabs.filter(tab => !tab.url.startsWith("file://"))
+        const fileTabsCount = workspace.tabs.length - filteredTabs.length
+        workspace.tabs = filteredTabs
+
+        if (fileTabsCount > 0) {
+            console.warn(`File access not allowed. Cannot open ${fileTabsCount} tabs with local files.`)
+        }
+    }
 }
 
 async function createNewWindow(workspace, currentWindow) {

@@ -35,6 +35,9 @@
     "tabs",
     "tabGroups"
   ],
+  "optional_host_permissions": [
+    "file://*/*"
+  ],
   "commands": {
     "_execute_action": {
       "suggested_key": {

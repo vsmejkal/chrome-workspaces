@@ -1,10 +1,10 @@
 # Workspaces Test Plan
-This document contains a list of steps to verify proper functionality of Workspaces. It is used mainly for manual testing before release. However, it might be also used for creating integration tests in the future.
+This document contains a list of steps to verify proper functionality of Workspaces. It is used mainly for manual testing before release. However, it might be also used for creating test automation in the future.
 
 **Used Abbreviations**
 - PREQ = Prerequisite
 - EXP = Expected result
-- TBD = To Be Defined
+- TBD = To be defined
 
 ---
 
@@ -83,12 +83,24 @@ This document contains a list of steps to verify proper functionality of Workspa
 - EXP `Green` workspace window is focused
 - Click the extension button and select `Blue` workspace
 - EXP `Blue` workspace window is focused
+- Close the `Blue` workspace window
+- EXP `Green` workspace window is focused
 
 ### 4.2 Open workspace
 - PREQ 4.1
-- Close the `Blue` workspace window
 - Click the extension button and select `Blue` workspace
 - EXP `Blue` workspace window is opened and focused
+
+### 4.3 Preserve window dimensions
+- PREQ 4.1
+- Click the extension button and select `Blue` workspace
+- EXP `Blue` workspace window is opened with the same size and position as previously focused window
+
+### 4.4 Preserve window dimensions (maximized)
+- PREQ 4.1
+- Maximize the `Green` workspace window
+- Click the extension button and select `Blue` workspace
+- EXP `Blue` workspace window is opened and maximized
 
 
 ## 5. Workspace properties
@@ -268,18 +280,60 @@ This document contains a list of steps to verify proper functionality of Workspa
 
 ### 11.1 Keep open other workspaces
 - PREQ 2.3
-- Open extension Options and set 'Other workspaces' to `Keep open`
+- Open extension Options and set 'Other workspace windows' to `Keep open`
 - Close `Blue` workspace and open it again
 - EXP `Green` workspace window has stayed open
 
 ### 11.2 Minimize other workspaces
 - PREQ 2.3
-- Open extension Options and set 'Other workspaces' to `Minimize`
+- Open extension Options and set 'Other workspace windows' to `Minimize`
 - Close `Blue` workspace and open it again
 - EXP `Green` workspace window has been minimized
 
-### 11.2 Close other workspaces
+### 11.3 Close other workspaces
 - PREQ 2.3
-- Open extension Options and set 'Other workspaces' to `Close`
+- Open extension Options and set 'Other workspace windows' to `Close`
 - Close `Blue` workspace and open it again
 - EXP `Green` workspace window has been closed
+
+### 11.4 Sort workspaces by name
+- PREQ 2.3
+- Open extension Options and set 'Sorting workspaces' to `By name`
+- Click the extension button
+- EXP `Blue` workspace is first in the list
+
+### 11.5 Sort workspaces manually
+- PREQ 11.4
+- Open extension Options and set 'Sorting workspaces' to `Manually`
+- Click the extension button
+- EXP `Green` workspace is first in the list
+- EXP Items can be reordered using drag & drop
+
+### 11.6 Adding new items to the top
+- PREQ 2.2
+- Open extension Options and set 'Adding new items' to `To the top`
+- Create a new workspace using steps in 2.3
+- Click the extension button
+- EXP Newly created `Blue` workspace is first in the list
+
+### 11.7 Adding new items to the bottom
+- PREQ 11.6
+- Open extension Options and set 'Adding new items' to `To the bottom`
+- Create a new workspace using steps in 2.3 called `Red`
+- Click the extension button
+- EXP Newly created `Red` workspace is last in the list
+
+## 12. Permissions
+
+### 12.1 Local file access
+- PREQ 2.2
+- Open a local file by dragging it into workspace tabs
+- EXP Popup window `File access not allowed` is opened with two buttons
+- Click `Open extension settings` button
+- EXP Extension settings page is opened in a new tab
+- Open another local file by dragging it into workspace tabs
+- EXP Popup window `File access not allowed` is opened
+- Click `Dismiss` button
+- EXP Popup window `File access not allowed` is closed
+- Open another local file by dragging it into workspace tabs
+- EXP No popup window is opened

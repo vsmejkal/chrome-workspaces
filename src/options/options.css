@@ -1,13 +1,9 @@
 body {
-    margin: 8px 20px 20px 20px;
+    margin: .5rem 1.5rem 1.5rem 1.5rem;
 }
 
 dl {
-    margin: 16px 0 0;
-
-    &:first-child {
-        margin-top: 0;
-    }
+    margin: 0 0 1.5rem 0;
 }
 
 dt {
@@ -18,13 +14,13 @@ dd {
     margin-inline-start: 0;
 }
 
-dd.radiogroup > label {
-    display: inline-block;
+.radiogroup > label {
+    display: block;
     margin-block-start: 8px;
     margin-inline-end: 8px;
 }
 
-dd.radiogroup input[type="radio"] {
+.radiogroup input[type="radio"] {
     transform: translateY(2px);
 }
 

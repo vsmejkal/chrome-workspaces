@@ -1,0 +1,50 @@
+@import url(../../popup/variables.css);
+@import url(../../popup/common.css);
+
+body {
+  font-size: 14px;
+  padding: 1.5rem 1rem;
+}
+
+h1 {
+  font-size: 1.5rem;
+  padding-bottom: .1rem;
+}
+
+p {
+  line-height: 160%;
+  margin-top: 1rem;
+}
+
+button {
+  padding: 5px 10px;
+  font-size: 14px;
+  border: 1px solid #e0e0e0;
+  border-radius: var(--border-radius);
+  transition: all 0.15s;
+  cursor: pointer;
+  color: #212121;
+  font-weight: 500;
+}
+
+.buttons {
+  margin-top: 1rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--color-ui-neutral-50);
+}
+
+#openExtensionSettings {
+  border: none;
+  background-color: var(--color-ui-primary);
+  color: #ffffff;
+  text-shadow: 0 1px 0 var(--color-ui-primary-dark);
+  box-shadow: 0 1px 2px var(--color-ui-primary-dark);
+}
+
+#openExtensionSettings:hover, #openExtensionSettings:active {
+  background-color: var(--color-ui-primary-dark);
+}
+
+#dismiss {
+  margin-inline-start: .75rem;
+}

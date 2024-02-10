@@ -1,0 +1,14 @@
+@import url(./variables.css);
+
+* {
+  margin: 0;
+  padding: 0;
+  accent-color: var(--color-ui-primary);
+  outline-color: var(--color-ui-primary-dark);
+  font-family: "Roboto", "Open Sans", Arial, "Lucida Grande", sans-serif;
+}
+
+body {
+  color: #1A202C;
+  font-size: 14px;
+}

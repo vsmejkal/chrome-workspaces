@@ -2,7 +2,13 @@ import View from "./View.js"
 import WorkspaceList from "../../workspace/WorkspaceList.js"
 import WorkspaceColor from "../../workspace/WorkspaceColor.js"
 import sortable from "../../lib/sortable.js"
+import Options from "../../storage/Options.js"
 
+const selectedClass = "item-selected"
+
+/**
+ * List of workspaces
+ */
 class ListView extends View {
     constructor({ onAddItem, onEditItem, onOpenItem, onMoveItem }) {
         super("#view-list")
@@ -21,6 +27,9 @@ class ListView extends View {
         const currentWindowId = (await chrome.windows.getCurrent()).id
         const currentWorkspaceId = await WorkspaceList.findWorkspaceForWindow(currentWindowId)
 
+        const { sorting } = await Options.get()
+        sortWorkspaces(workspaces, sorting)
+
         this._listElement.innerHTML = ""
         this._addButton.onclick = () => this._onAddItem()
 
@@ -30,7 +39,9 @@ class ListView extends View {
             this._listElement.appendChild(item)
         }
 
-        sortable(this._listElement, { onDrop: this._onMoveItem })
+        if (sorting === "manual") {
+            sortable(this._listElement, { onDrop: this._onMoveItem })
+        }
     }
 
     _renderItem({ id, name, color = "gray", selected }) {
@@ -80,6 +91,15 @@ class ListView extends View {
     }
 }
 
-const selectedClass = "item-selected"
+/**
+ * @param {import("../../workspace/Workspace.js").Workspace[]} workspaces 
+ * @param {import("../../storage/Options.js").OptionsData["sorting"]} sorting 
+ */
+function sortWorkspaces(workspaces, sorting) {
+    if (sorting === "name") {
+        workspaces.sort((w1, w2) => w1.name.localeCompare(w2.name))
+    }
+}
+
 
 export default ListView
