@@ -1,3 +1,5 @@
+@import url(../popup/variables.css);
+
 body {
     margin: .5rem 1.5rem 1.5rem 1.5rem;
 }
@@ -29,7 +31,18 @@ dd > button {
     margin-right: 12px;
 }
 
-dd.info {
+button {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    transition: all 0.15s;
+    cursor: pointer;
+    color: #212121;
+    font-weight: 500;
+}
+
+#import-info {
     display: none;
     color: green;
     font-weight: bold;

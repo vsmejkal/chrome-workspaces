@@ -337,3 +337,23 @@ This document contains a list of steps to verify proper functionality of Workspa
 - EXP Popup window `File access not allowed` is closed
 - Open another local file by dragging it into workspace tabs
 - EXP No popup window is opened
+
+## 13. Import & Export
+
+### 13.1 Export
+- PREQ 2.3
+- Open some pages in `Green` and `Blue` workspaces
+- Open extension Options
+- Click `Export` button
+- EXP `workspaces_backup.json` file is downloaded
+- EXP The file contains workspaces data
+
+### 13.2 Import
+- PREQ 1.1
+- Open extension Options
+- Click `Import` button and select `workspaces_backup.json` created in step 13.1
+- EXP `Success!` message is displayed below the button
+- Click the extension button
+- EXP `Green` and `Blue` workspaces are in the list
+- Open the workspaces
+- EXP Workspaces have the same tabs as created in step 13.1
