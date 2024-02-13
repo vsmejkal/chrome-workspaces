@@ -51,6 +51,10 @@
     background-color: var(--item-color);
     opacity: 0.95;
 }
+#view-list .item-opened .item-color {
+    outline: 1px solid color-mix(in srgb, var(--item-color), transparent 40%);
+    outline-offset: 2px;
+}
 
 #view-list .item-name {
     flex-grow: 1;
@@ -60,7 +64,7 @@
     text-overflow: ellipsis;
 }
 #view-list .item-selected .item-name {
-    color: var(--item-color);
+    color: #000000e0;
     font-weight: 600;
     text-shadow: 0 1px 4px #ffffff80;
 }

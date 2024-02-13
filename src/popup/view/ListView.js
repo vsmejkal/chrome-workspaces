@@ -4,8 +4,6 @@ import WorkspaceColor from "../../workspace/WorkspaceColor.js"
 import sortable from "../../lib/sortable.js"
 import Options from "../../storage/Options.js"
 
-const selectedClass = "item-selected"
-
 /**
  * List of workspaces
  */
@@ -24,6 +22,7 @@ class ListView extends View {
 
     async render() {
         const workspaces = await WorkspaceList.getWorkspaces()
+        const workspaceWindowMap = await getWorkspaceToWindowMap();
         const currentWindowId = (await chrome.windows.getCurrent()).id
         const currentWorkspaceId = await WorkspaceList.findWorkspaceForWindow(currentWindowId)
 
@@ -35,7 +34,8 @@ class ListView extends View {
 
         for (const workspace of workspaces) {
             const selected = workspace.id === currentWorkspaceId
-            const item = this._renderItem({ ...workspace, selected })
+            const opened = Boolean(workspaceWindowMap.get(workspace.id))
+            const item = this._renderItem({ ...workspace, selected, opened })
             this._listElement.appendChild(item)
         }
 
@@ -44,7 +44,7 @@ class ListView extends View {
         }
     }
 
-    _renderItem({ id, name, color = "gray", selected }) {
+    _renderItem({ id, name, color = "gray", selected, opened }) {
         const itemColor = document.createElement("div")
         itemColor.classList.add("item-color")
 
@@ -62,7 +62,8 @@ class ListView extends View {
 
         const item = document.createElement("button")
         item.classList.add("item")
-        item.classList.toggle(selectedClass, selected)
+        item.classList.toggle("item-selected", selected)
+        item.classList.toggle("item-opened", opened)
         item.onclick = () => this._onOpenItem(id)
         item.style.setProperty('--item-color', WorkspaceColor[color])
         item.style.setProperty('--item-bg-color', WorkspaceColor[color] + "24")
@@ -101,5 +102,10 @@ function sortWorkspaces(workspaces, sorting) {
     }
 }
 
+async function getWorkspaceToWindowMap() {
+    const workspaceList = await WorkspaceList.getItems();
+
+    return new Map(workspaceList.map(({ workspaceId, windowId }) => [workspaceId, windowId]));
+}
 
 export default ListView

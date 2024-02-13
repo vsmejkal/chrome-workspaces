@@ -53,6 +53,13 @@ This document contains a list of steps to verify proper functionality of Workspa
 - Drag `Green` item and drop it on `Blue` item
 - EXP `Green` item is on the second position
 
+### 2.6 Indicate open workspaces
+- PREQ 2.3
+- Close `Blue` workspace
+- Click the extension button
+- EXP `Green` item has circle around its color marking that it is opened
+- EXP `Blue` item does NOT have circle around its color
+
 
 ## 3. Save workspace
 

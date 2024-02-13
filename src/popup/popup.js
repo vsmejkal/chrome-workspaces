@@ -56,7 +56,7 @@ async function showListView() {
 
 async function showAddWorkspaceView() {
 	const newView = new DetailView({
-		onSave: async ({ name, color, windowId }) => { 
+		onSave: async ({ name, color, windowId }) => {
 			const workspace = await Workspace.create({ name, color, windowId })
 			await Action.openWorkspace(workspace.id)
 			closePopup()

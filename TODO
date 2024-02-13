@@ -3,15 +3,13 @@
 [x] Option to keep workspaces sorted by name (Issue #19)
 [x] file:// stops entire workspace from opening (Issue #29)
 [x] Import & export (Issue #18)
+[x] Mark open workspaces in the list
 [ ] Problems creating new workspace (Issue #31)
-[ ] Show confirmation dialog before cleaning existing Tab Groups
-[ ] Mark open workspaces in the list
-    outline: 1px solid #c62828a1;
-    outline-offset: 2px;
-
+  
 # v0.8
 [ ] Dark theme
 [ ] Get rid of chrome-extension-async lib
+[ ] Show confirmation dialog before cleaning existing Tab Groups
 
 # Backlog
 [ ] Synchronization
