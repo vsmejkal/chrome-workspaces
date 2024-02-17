@@ -106,5 +106,5 @@ async function registerDebugView() {
 }
 
 function closePopup() {
-	window.close()
+	requestIdleCallback(() => window.close())
 }

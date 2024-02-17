@@ -42,8 +42,8 @@ async function openWorkspace(workspaceId, currentWindow) {
     const workspace = await Workspace.get(workspaceId)
     await checkInvalidTabs(workspace)
 
-    const newWindow = await createNewWindow(workspace, currentWindow)
-    await WorkspaceList.update(workspace.id, newWindow.id)
+    const window = await createWorkspaceWindow(workspace, currentWindow)
+    await WorkspaceList.update(workspace.id, window.id)
 }
 
 async function checkInvalidTabs(workspace) {
@@ -60,7 +60,7 @@ async function checkInvalidTabs(workspace) {
     }
 }
 
-async function createNewWindow(workspace, currentWindow) {
+async function createWorkspaceWindow(workspace, currentWindow) {
     const createArgs = {
         url: workspace.tabs.map(tab => tab.url),
         focused: true,
