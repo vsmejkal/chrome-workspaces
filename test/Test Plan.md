@@ -167,7 +167,7 @@ This document contains a list of steps to verify proper functionality of Workspa
 
 ### 7.2 Restore multiple windows
 - PREQ 2.3
-- Go to browser `Setting > On start-up` and select `Continue where you left off`
+- Go to browser `Setting > On startup` and select `Continue where you left off`
 - Press <kbd>Ctrl/Cmd + Q</kbd> to quit browser
 - Open the browser again
 - EXP `Green` and `Blue` workspaces are opened again
@@ -352,13 +352,13 @@ This document contains a list of steps to verify proper functionality of Workspa
 - Open some pages in `Green` and `Blue` workspaces
 - Open extension Options
 - Click `Export` button
-- EXP `workspaces_backup.json` file is downloaded
+- EXP JSON file is downloaded
 - EXP The file contains workspaces data
 
 ### 13.2 Import
 - PREQ 1.1
 - Open extension Options
-- Click `Import` button and select `workspaces_backup.json` created in step 13.1
+- Click `Import` button and select JSON file created in step 13.1
 - EXP `Success!` message is displayed below the button
 - Click the extension button
 - EXP `Green` and `Blue` workspaces are in the list

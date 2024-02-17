@@ -4,7 +4,6 @@
 [x] file:// stops entire workspace from opening (Issue #29)
 [x] Import & export (Issue #18)
 [x] Mark open workspaces in the list
-[ ] Problems creating new workspace (Issue #31)
   
 # v0.8
 [ ] Dark theme
